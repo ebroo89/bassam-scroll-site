@@ -1,5 +1,7 @@
 /* Arabic source strings and their English display equivalents. */
 window.MB_TRANSLATIONS = {
+  "بطولة أكتوبر الشهرية للفوركس 2026":
+    "2026 October Monthly Forex Trading Championship",
   "الفئة الشهرية، شهر أكتوبر": "Monthly category, October",
   "سبع سنوات من الخبرة في التداول": "Seven years of trading experience",
   "تعلّم معي قراءة تدفّق الأوامر والأوبشن، وبناء أفضلية إحصائية للتعامل مع عشوائية السوق.":

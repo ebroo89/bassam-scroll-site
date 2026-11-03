@@ -37,7 +37,10 @@
 .hero-experience { color:var(--ink2); font:600 16px/1.6 "Cairo",sans-serif; }
 .hero-result { width:min(100%,360px); margin:0; }
 .hero-result a { display:block; }
-.hero-result img { display:block; width:100%; height:auto; }
+.hero-result-title { display:block; margin-bottom:8px; font-size:12px; line-height:1.6; font-weight:600; color:var(--ink); }
+.hero-result-table { display:block; position:relative; aspect-ratio:1076 / 176; overflow:hidden; }
+.hero-result-table img { display:block; position:absolute; width:103.159851%; max-width:none; height:auto; top:-67.045455%; left:-1.672862%; }
+.hero-result-date { display:block; margin-top:7px; font-size:10px; line-height:1.6; color:var(--ink2); }
 .hero-result figcaption { color:var(--ink2); font-size:12px; line-height:1.6; margin-top:7px; }
 .motion .hero-in:has(.hero-claim) { gap:13px; }
 html[lang="en"] .hero-claim, html[lang="en"] .hero-experience { font-family:"Jost",sans-serif; }
