@@ -3,18 +3,95 @@
 (function () {
   const C = window.MB || {};
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const text = (value) => typeof value === "string" ? value.trim() : "";
+  const normalizePhone = (value) => text(value)
+    .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 0x660))
+    .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 0x6f0))
+    .replace(/[\s().-]/g, "");
+  const httpUrl = (value) => {
+    if (!text(value)) return "";
+    try {
+      const url = new URL(value, location.href);
+      return /^https?:$/.test(url.protocol) && !url.username && !url.password ? url.href : "";
+    } catch { return ""; }
+  };
+  const assetUrl = (value) => {
+    const address = httpUrl(value);
+    if (address) return address;
+    const relative = text(value);
+    if (!relative || /^(?:[a-z][a-z0-9+.-]*:|[\\/])/i.test(relative)) return "";
+    try {
+      const base = new URL(location.href);
+      const asset = new URL(relative, base);
+      return base.protocol === "file:" && asset.protocol === "file:" && asset.host === base.host ? asset.href : "";
+    } catch { return ""; }
+  };
+  const fill = (selector, value) => {
+    $$(selector).forEach((element) => {
+      element.textContent = value;
+      element.hidden = !value;
+    });
+  };
   let seed = 9;
   const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 
   // ── Content from config ──────────────────────────────────
   const award = C.award || {};
-  if (award.title) $$("[data-award-title]").forEach((el) => (el.textContent = award.title));
+  if (C.name !== undefined) fill("[data-name]", text(C.name));
+  if (C.nameEn !== undefined) {
+    fill("[data-name-en]", text(C.nameEn));
+  }
+  if (C.brandName !== undefined || C.nameEn !== undefined) fill("[data-brand-name]", text(C.brandName) || text(C.nameEn));
+  if (award.title !== undefined) fill("[data-award-title]", text(award.title));
   const meta = [award.competition, award.year].filter(Boolean).join(" · ");
-  $$("[data-award-meta]").forEach((el) => { el.textContent = meta; el.hidden = !meta; });
+  fill("[data-award-meta]", meta);
+  fill("[data-award-note]", text(award.note) || (award.confirmed === false ? "النتيجة بانتظار التدقيق النهائي." : ""));
+  fill("[data-award-caption]", text(award.caption));
+  fill("[data-group-status]", text(C.groupStatus));
+  fill("[data-group-note]", text(C.groupNote));
+  const proof = httpUrl(award.proofUrl);
+  $$("[data-award-proof]").forEach((link) => {
+    link.hidden = !proof;
+    if (proof) link.href = proof; else link.removeAttribute("href");
+  });
+  if (C.photo !== undefined) {
+    const photo = assetUrl(C.photo);
+    $$("[data-hero-portrait] img, img[data-portrait]").forEach((image) => {
+      image.hidden = !photo;
+      if (photo) image.src = photo; else image.removeAttribute("src");
+    });
+    $$("[data-portrait-fallback]").forEach((element) => { element.hidden = !!photo; });
+  }
   const prices = C.prices || {};
   $$("[data-price]").forEach((el) => {
     const v = prices[el.dataset.price];
     el.textContent = v || "السعر حسب الطلب";
+  });
+
+  const contacts = [];
+  const whatsapp = normalizePhone(C.whatsapp).replace(/^\+/, "");
+  if (/^[1-9]\d{7,14}$/.test(whatsapp)) contacts.push(["واتساب", `https://wa.me/${whatsapp}`]);
+  [["تيليغرام", C.telegram, ["t.me", "telegram.me"]], ["إنستغرام", C.instagram, ["instagram.com", "www.instagram.com"]]].forEach(([label, value, hosts]) => {
+    const address = httpUrl(value);
+    if (!address) return;
+    const url = new URL(address);
+    if (url.protocol === "https:" && hosts.includes(url.hostname) && /^\/[a-z0-9_.]+\/?$/i.test(url.pathname)) {
+      url.search = "";
+      url.hash = "";
+      contacts.push([label, url.href]);
+    }
+  });
+  const email = text(C.email);
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) contacts.push(["البريد الإلكتروني", `mailto:${encodeURIComponent(email).replace("%40", "@")}`]);
+  $$("[data-contact-list]").forEach((container) => {
+    container.replaceChildren(...contacts.map(([label, href]) => {
+      const link = document.createElement("a");
+      link.textContent = label;
+      link.href = href;
+      if (href.startsWith("https:")) { link.target = "_blank"; link.rel = "noopener noreferrer"; }
+      return link;
+    }));
+    container.hidden = contacts.length === 0;
   });
 
   // Hero tape: time & sales style rows (illustrative), duplicated for a seamless loop
@@ -66,8 +143,38 @@
   // Nav turns solid after the hero (always solid on pages without one)
   const nav = $("#nav");
   const hasHero = !!$(".hero");
-  const onScroll = () => nav.classList.toggle("solid", !hasHero || scrollY > innerHeight * 0.6);
-  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  if (nav) {
+    const onScroll = () => nav.classList.toggle("solid", !hasHero || scrollY > innerHeight * 0.6);
+    addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    const toggle = $("[data-nav-toggle]"), links = $("[data-nav-links]");
+    if (toggle && links) {
+      const mobile = matchMedia("(max-width: 860px)");
+      let open = false;
+      const updateNav = () => {
+        const expanded = mobile.matches && open;
+        toggle.hidden = !mobile.matches;
+        toggle.setAttribute("aria-expanded", String(expanded));
+        links.hidden = mobile.matches && !expanded;
+        links.inert = links.hidden;
+        nav.classList.toggle("nav-open", expanded);
+      };
+      toggle.addEventListener("click", () => { open = !open; updateNav(); });
+      links.addEventListener("click", (event) => {
+        if (event.target.closest("a")) { open = false; updateNav(); }
+      });
+      nav.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && open) {
+          open = false;
+          updateNav();
+          toggle.focus();
+        }
+      });
+      mobile.addEventListener("change", () => { open = false; updateNav(); });
+      updateNav();
+      nav.classList.add("nav-ready");
+    }
+  }
 
   // Reveal on scroll
   const els = $$(".rv");
@@ -80,22 +187,55 @@
   const form = $("#applyForm");
   if (!form) return;
   const PROGRAMS = {
-    private: { k: "Private 1:1", title: "دورة خاصة", img: "assets/img/mentor.jpg", price: "private", text: "تدريب فردي على قراءة تدفّق الأوامر، على مستواك ووقتك." },
-    group: { k: "Group · Waitlist", title: "الدورة الجماعية", img: "assets/img/group.jpg", price: "group", text: "دفعة صغيرة بمنهج كامل. التسجيل بقائمة الانتظار." },
-    consult: { k: "Consultation", title: "استشارة", img: "assets/img/consult.jpg", price: "consult", text: "جلسة مركّزة على سؤالك: صفقة، أداة، أو طريقة قراءة." },
-    indicator: { k: "TradingView", title: "مؤشرات TradingView", img: "assets/img/indicator.jpg", price: "indicators", text: "أدوات مبنية على نفس طريقة القراءة، بتتفعّل على حسابك." },
+    private: { k: "تدريب فردي", title: "دورة خاصة", img: "assets/img/mentor.jpg", price: "private", text: "جلسات فردية لقراءة تدفّق الأوامر ومراجعة طريقة تعاملك مع السوق." },
+    group: { k: "قائمة الانتظار", title: "الدورة الجماعية", img: "assets/img/group.jpg", price: "group", text: "تعلّم قراءة الشريط والبصمة وتدفّق الأوبشن ضمن مجموعة." },
+    consult: { k: "جلسة فردية", title: "استشارة", img: "assets/img/consult.jpg", price: "consult", text: "جلسة لمناقشة سؤال محدد حول قراءة السوق أو استخدام أداة." },
+    indicator: { k: "TradingView", title: "مؤشرات TradingView", img: "assets/img/indicator.jpg", price: "indicators", text: "اطلب تفاصيل المؤشرات المتاحة ومتطلبات استخدامها على TradingView." },
   };
   const steps = $$(".step", form);
   const prog = $$("[data-progress] li");
   const back = $("[data-back]"), nextBtn = $("[data-next]"), submit = $("[data-submit]");
   const msg = $(".form-msg", form);
+  const done = $("#applyDone"), doneTitle = $("[data-done-title]");
+  const rawEndpoint = text(C.webhookUrl);
+  const endpoint = httpUrl(rawEndpoint);
+  // Relative PHP endpoints remain a preview on the simple local static server.
+  const localPreview = /^(localhost|127\.0\.0\.1|\[?::1\]?)$/.test(location.hostname) && !/^https?:/i.test(rawEndpoint);
+  const preview = !rawEndpoint || localPreview;
+  const notice = $("[data-preview-notice]");
+  if (notice) notice.hidden = !preview;
+  const submitLabel = preview ? "جرّب النموذج" : "إرسال الطلب";
+  submit.textContent = submitLabel;
   let step = 1;
+  let sending = false;
+  const errorFields = ["name", "phone", "email", "tv_user", "consent"];
+
+  const fieldError = (name, message) => {
+    const field = form.elements[name];
+    const error = $(`[data-error-for="${name}"]`, form);
+    field.classList.toggle("bad", !!message);
+    field.setAttribute("aria-invalid", String(!!message));
+    if (error) {
+      error.textContent = message;
+      error.hidden = !message;
+      const descriptions = new Set((field.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean));
+      descriptions.add(error.id);
+      field.setAttribute("aria-describedby", [...descriptions].join(" "));
+    }
+  };
+  const clearErrors = () => {
+    errorFields.forEach((name) => fieldError(name, ""));
+    msg.textContent = "";
+  };
 
   const setProgram = (v) => {
     const r = form.querySelector(`input[name=program][value="${v}"]`);
     if (!r) return;
     r.checked = true;
-    $$("[data-for]", form).forEach((el) => (el.hidden = !el.dataset.for.split(" ").includes(v)));
+    $$("[data-for]", form).forEach((el) => {
+      el.hidden = !el.dataset.for.split(" ").includes(v);
+      $$("input, select, textarea", el).forEach((field) => { field.disabled = el.hidden; });
+    });
     const p = PROGRAMS[v];
     $("[data-sum-img]").style.backgroundImage = `url(${p.img})`;
     $("[data-sum-k]").textContent = p.k;
@@ -103,97 +243,124 @@
     $("[data-sum-text]").textContent = p.text;
     $("[data-sum-price]").textContent = prices[p.price] || "السعر حسب الطلب";
   };
-  const goStep = (n) => {
+  const goStep = (n, focus = true) => {
     step = n;
     steps.forEach((s) => (s.hidden = +s.dataset.step !== n));
-    prog.forEach((li, i) => { li.classList.toggle("on", i + 1 === n); li.classList.toggle("done", i + 1 < n); });
+    prog.forEach((li, i) => {
+      li.classList.toggle("on", i + 1 === n);
+      li.classList.toggle("done", i + 1 < n);
+      if (i + 1 === n) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current");
+    });
     back.hidden = n === 1; nextBtn.hidden = n === 3; submit.hidden = n !== 3;
-    msg.textContent = "";
+    clearErrors();
+    if (focus) $("legend", steps[n - 1]).focus();
   };
-  form.addEventListener("change", (e) => { if (e.target.name === "program") setProgram(e.target.value); });
+  form.addEventListener("change", (event) => {
+    if (event.target.name === "program" && !sending) { setProgram(event.target.value); clearErrors(); }
+    if (errorFields.includes(event.target.name)) fieldError(event.target.name, "");
+  });
+  form.addEventListener("input", (event) => {
+    if (errorFields.includes(event.target.name)) { fieldError(event.target.name, ""); msg.textContent = ""; }
+  });
 
-  const mark = (names, text) => {
-    $$(".bad", form).forEach((el) => el.classList.remove("bad"));
-    if (!names.length) return true;
-    names.forEach((n) => form.elements[n].classList.add("bad"));
-    form.elements[names[0]].focus();
-    msg.textContent = text;
-    return false;
-  };
-  const checkStep = (n) => {
+  const errorsForStep = (n) => {
     const d = Object.fromEntries(new FormData(form));
+    const errors = [];
     if (n === 2) {
-      const bad = [];
-      if (!d.name || d.name.trim().length < 2) bad.push("name");
-      if (!/^\+?[\d\s-]{8,18}$/.test((d.phone || "").trim())) bad.push("phone");
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((d.email || "").trim())) bad.push("email");
-      return mark(bad, "في معلومات ناقصة أو مش صحيحة. راجع الحقول المعلّمة.");
+      if (text(d.name).length < 2) errors.push(["name", "اكتب اسمك الكامل."]);
+      if (!/^\+?\d{8,15}$/.test(normalizePhone(d.phone))) errors.push(["phone", "اكتب رقمًا صحيحًا من 8 إلى 15 رقمًا، مع رمز الدولة عند الحاجة."]);
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text(d.email))) errors.push(["email", "اكتب بريدًا إلكترونيًا صحيحًا."]);
     }
     if (n === 3) {
-      if (!mark(d.program === "indicator" && !(d.tv_user || "").trim() ? ["tv_user"] : [], "اكتب اسم المستخدم على TradingView.")) return false;
-      if (!d.consent) { msg.textContent = "لازم توافق على تنويه المخاطرة."; return false; }
+      if (d.program === "indicator" && !text(d.tv_user)) errors.push(["tv_user", "اكتب اسم المستخدم على TradingView."]);
+      if (!d.consent) errors.push(["consent", "أكد أنك قرأت تنويه المخاطرة قبل المتابعة."]);
     }
-    return true;
+    return errors;
   };
-  nextBtn.addEventListener("click", () => { if (checkStep(step)) goStep(step + 1); });
-  back.addEventListener("click", () => goStep(step - 1));
+  const showErrors = (errors) => {
+    clearErrors();
+    errors.forEach(([name, message]) => fieldError(name, message));
+    if (!errors.length) return true;
+    msg.textContent = "راجع الحقول الموضّحة.";
+    form.elements[errors[0][0]].focus();
+    return false;
+  };
+  nextBtn.addEventListener("click", () => {
+    if (!sending && showErrors(errorsForStep(step))) goStep(step + 1);
+  });
+  back.addEventListener("click", () => { if (!sending) goStep(step - 1); });
 
   // apply.html#<program> preselects the program and jumps to the details step
-  const fromHash = () => {
+  const fromHash = (focus = false) => {
     const v = location.hash.slice(1);
-    if (PROGRAMS[v]) { setProgram(v); goStep(2); } else { setProgram("private"); goStep(1); }
+    if (Object.hasOwn(PROGRAMS, v)) { setProgram(v); goStep(2, focus); } else { setProgram("private"); goStep(1, focus); }
   };
-  addEventListener("hashchange", () => { if (!form.hidden) fromHash(); });
+  addEventListener("hashchange", () => { if (!form.hidden && !sending) fromHash(true); });
   fromHash();
 
   const DONE = {
-    private: "منراجع طلبك ومنتواصل معك على واتساب لتحديد أول جلسة.",
-    group: "انضفت لقائمة الانتظار. أول ما تفتح الدفعة الجاية منبعتلك.",
-    consult: "منتواصل معك على واتساب لتثبيت موعد الاستشارة.",
-    indicator: "منتواصل معك على واتساب لتفعيل المؤشر على حسابك.",
+    private: "سنراجع طلبك ونتواصل معك لتحديد أول جلسة.",
+    group: "استلمنا طلب انضمامك إلى قائمة الانتظار. سنتواصل معك بشأن الدفعة المقبلة.",
+    consult: "سنراجع موضوع الاستشارة ونتواصل معك لتحديد الموعد.",
+    indicator: "سنراجع طلبك ونتواصل معك بتفاصيل المؤشرات المتاحة.",
+  };
+
+  const setSending = (value) => {
+    sending = value;
+    submit.disabled = value;
+    back.disabled = value;
+    nextBtn.disabled = value;
+    submit.textContent = value ? "جارٍ الإرسال…" : submitLabel;
+    form.setAttribute("aria-busy", String(value));
   };
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (step < 3) { if (checkStep(step)) goStep(step + 1); return; } // Enter key on steps 1–2
-    if (!checkStep(2)) { goStep(2); checkStep(2); return; }
-    if (!checkStep(3)) return;
+    if (sending) return;
+    if (step < 3) { if (showErrors(errorsForStep(step))) goStep(step + 1); return; }
+    const detailsErrors = errorsForStep(2);
+    if (detailsErrors.length) { goStep(2); showErrors(detailsErrors); return; }
+    if (!showErrors(errorsForStep(3))) return;
     const d = Object.fromEntries(new FormData(form));
     if (d.company) return; // honeypot
 
     const payload = {
       source: "mohammad-bassam-site",
       program: d.program,
-      name: d.name.trim(), phone: d.phone.trim(), email: d.email.trim(),
+      name: text(d.name), phone: normalizePhone(d.phone), email: text(d.email),
       country: d.country || "", level: d.level, market: d.market,
-      goal: d.goal || "", topic: d.topic || "", slot: d.program === "consult" ? d.slot : "",
-      tv_user: d.tv_user || "",
+      goal: ["private", "group"].includes(d.program) ? text(d.goal) : "",
+      topic: d.program === "consult" ? text(d.topic) : "", slot: d.program === "consult" ? d.slot : "",
+      tv_user: d.program === "indicator" ? text(d.tv_user) : "",
       page: location.href, submitted_at: new Date().toISOString(),
     };
 
-    submit.disabled = true; submit.textContent = "SENDING…";
-    const reset = () => { submit.disabled = false; submit.textContent = "SEND APPLICATION"; };
-    // The PHP relay doesn't run on the local preview server
-    const local = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && !/^https?:/.test(C.webhookUrl || "");
+    setSending(true);
+    let deadline;
     try {
-      if (C.webhookUrl && !local) {
-        const r = await fetch(C.webhookUrl, {
+      if (!preview) {
+        if (!endpoint) throw new Error("Invalid application endpoint");
+        const controller = new AbortController();
+        deadline = setTimeout(() => controller.abort(), 15000);
+        const r = await fetch(endpoint, {
           method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
+          signal: controller.signal,
         });
-        const res = await r.json().catch(() => ({}));
-        if (r.status === 429) { msg.textContent = "وصل طلبك قبل شوي. إذا بدك تعدّل شي تواصل معنا على واتساب."; reset(); return; }
-        if (!r.ok || res.ok === false) throw new Error(res.error || r.status);
-      } else {
-        console.info("[preview mode] not sent:", payload);
+        if (r.status === 429) { msg.textContent = "انتظر قليلًا ثم جرّب إرسال الطلب مرة أخرى."; return; }
+        const res = await r.json();
+        if (!r.ok || !res || res.ok !== true) throw new Error("Application not acknowledged");
       }
-      $("[data-done-text]").textContent = DONE[d.program];
+      if (doneTitle) doneTitle.textContent = preview ? "اكتملت تجربة النموذج" : "استلمنا طلبك، شكرًا.";
+      $("[data-done-text]").textContent = preview ? "هذه معاينة على هذا الجهاز فقط. لم نرسل بياناتك أو نسجّل طلبًا." : DONE[d.program];
       form.hidden = true;
-      $("#applyDone").hidden = false;
-      prog.forEach((li) => { li.classList.remove("on"); li.classList.add("done"); });
-      scrollTo({ top: 0, behavior: "smooth" });
+      done.hidden = false;
+      prog.forEach((li) => { li.classList.remove("on"); li.classList.add("done"); li.removeAttribute("aria-current"); });
+      if (doneTitle) doneTitle.focus();
     } catch (err) {
-      msg.textContent = "ما زبط الإرسال. جرّب كمان مرة أو تواصل معنا على واتساب.";
-      reset();
+      msg.textContent = "تعذر تأكيد استلام الطلب. معلوماتك باقية في النموذج، ويمكنك المحاولة مرة أخرى.";
+    } finally {
+      if (deadline !== undefined) clearTimeout(deadline);
+      setSending(false);
     }
   });
 })();
