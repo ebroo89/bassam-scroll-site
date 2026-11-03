@@ -14,7 +14,7 @@
 <a class="skip-link" href="#main-content">انتقل إلى نموذج الطلب</a>
 
 <nav id="nav" aria-label="التنقل الرئيسي"><div class="w">
-  <a href="index.html" class="lat" data-brand-name title="الصفحة الرئيسية">M · Bassam</a>
+  <div class="brand-group"><a href="index.html" class="lat" data-brand-name title="الصفحة الرئيسية">M · Bassam</a><button type="button" class="language-toggle" data-language-toggle translate="no" lang="en" aria-label="Switch to English">EN</button></div>
   <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-links">القائمة</button>
   <div class="links" id="site-links" data-nav-links><a href="index.html#reads">المنهج</a><a href="index.html#programs">البرامج</a><a href="index.html#award">الإنجاز</a></div>
   <a href="index.html" class="apply-link">العودة للموقع</a>
@@ -69,7 +69,7 @@
           <div class="fields one">
             <label class="f" data-for="consult"><span>موضوع الاستشارة (اختياري)</span><textarea name="topic" rows="3"></textarea></label>
             <label class="f" data-for="consult"><span>الوقت المناسب لك</span>
-              <select name="slot"><option>الصبح</option><option>بعد الظهر</option><option>المسا</option></select>
+              <select name="slot"><option value="الصبح">الصبح</option><option value="بعد الظهر">بعد الظهر</option><option value="المسا">المسا</option></select>
             </label>
             <label class="f" data-for="indicator"><span id="tv-user-label">اسم المستخدم على TradingView (مطلوب)</span><input name="tv_user" required dir="ltr" autocomplete="off" spellcheck="false" aria-labelledby="tv-user-label" aria-invalid="false" aria-describedby="tv-user-error"><span class="field-error" id="tv-user-error" data-error-for="tv_user" hidden></span></label>
             <p class="form-note" data-for="group" data-group-note>سجّل اهتمامك لنشاركك تفاصيل الدفعة عند فتح التسجيل.</p>
@@ -118,5 +118,7 @@
 
 <script src="config.js"></script>
 <script src="app.js"></script>
+<script src="translations.js"></script>
+<script src="i18n.js"></script>
 </body>
 </html>

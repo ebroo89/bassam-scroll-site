@@ -36,6 +36,9 @@ nav .links { display:flex; gap:36px; font-size:14px; color:var(--ink2); }
 nav .links a:hover { color:var(--ink); }
 .apply-link { font-family:"Cairo",sans-serif; font-size:13px; border:1px solid rgba(255,255,255,.3); padding:10px 20px; transition:background .3s, border-color .3s; }
 .apply-link:hover { border-color:var(--red); color:#fff; }
+.brand-group { display:flex; align-items:center; gap:18px; }
+.language-toggle { flex:none; min-height:36px; min-width:38px; padding:5px 8px; border:1px solid var(--line); background:rgba(5,6,7,.5); color:var(--ink2); font:500 12px "Cairo",sans-serif; cursor:pointer; }
+.language-toggle:hover { color:var(--ink); border-color:var(--tape-green); }
 .nav-toggle { display:none; min-height:44px; padding:8px 12px; color:var(--ink); background:transparent; border:1px solid var(--line); cursor:pointer; }
 .text-link { display:inline-flex; align-items:center; gap:12px; padding-block:10px; border-bottom:1px solid var(--mid); font-size:14px; }
 .text-link:hover { color:var(--red-text); border-color:var(--red-text); }
@@ -228,7 +231,7 @@ footer p { color:var(--dim); font-size:12.5px; max-width:520px; }
 .sum-award b { font:200 40px/1 "Jost",sans-serif; color:var(--ink); direction:ltr; }
 .sum-award sup { font-size:.32em; letter-spacing:.2em; color:var(--red-text); vertical-align:top; margin-left:2px; }
 @media (max-width:860px) {
-  .ap { padding-top:110px; padding-bottom:70px; }
+  .ap.w { padding-top:110px; padding-bottom:70px; }
   .ap-grid { grid-template-columns:1fr; gap:50px; }
   .ap-sum { position:static; order:-1; grid-template-columns:110px 1fr; column-gap:18px; align-items:center; }
   .ap-sum .sum-img { grid-row:span 3; margin:0; aspect-ratio:1; }
@@ -273,4 +276,26 @@ footer p { color:var(--dim); font-size:12.5px; max-width:520px; }
   .tape .tape-volume { opacity:.6; text-shadow:none; }
   .rv { opacity:1; transform:none; transition:none; }
   .pick span::before, .ap-progress li::before { transition:none; }
+}
+
+/* English keeps the same visual identity and uses logical reading alignment. */
+html[lang="en"] body { font-family:"Jost",sans-serif; font-size:17px; }
+html[lang="en"] .b-solid, html[lang="en"] .b-ghost,
+html[lang="en"] .apply-link, html[lang="en"] .f input,
+html[lang="en"] .f select, html[lang="en"] .f textarea { font-family:"Jost",sans-serif; }
+html[lang="en"] .sec-h h2, html[lang="en"] .read h3,
+html[lang="en"] .done h2, html[lang="en"] .ap-sum h2,
+html[lang="en"] .ap-head h1, html[lang="en"] .end h2 { font-family:"Jost",sans-serif; }
+html[lang="en"] .read .lat, html[lang="en"] .ap-head { text-align:left; }
+html[lang="en"] .fp-note { direction:ltr; }
+html[lang="en"] .f select { padding-left:0; padding-right:24px; background-position:right center; }
+html[lang="en"] .prog-cta > span, html[lang="en"] .text-link > span { transform:scaleX(-1); }
+
+@media (max-width:480px) {
+  nav .w { gap:8px; }
+  .brand-group { gap:7px; }
+  nav .brand-group .lat { font-size:11px; letter-spacing:.1em; white-space:nowrap; }
+  .language-toggle { min-width:32px; padding:5px; font-size:11px; }
+  nav .nav-toggle { padding:8px; font-size:12px; }
+  nav .apply-link { padding:9px 8px; font-size:11px; }
 }

@@ -52,19 +52,22 @@
   const revealElements = $$(".words, .up");
 
   // Keep Arabic words intact and create text nodes rather than parsing their text as HTML.
-  $$(".words").forEach((heading) => {
-    const fragment = document.createDocumentFragment();
-    heading.textContent.trim().split(/\s+/).forEach((word, index) => {
-      const wrapper = document.createElement("span");
-      const text = document.createElement("span");
-      wrapper.className = "wd";
-      text.style.setProperty("--i", index);
-      text.textContent = word;
-      wrapper.append(text);
-      fragment.append(wrapper, document.createTextNode(" "));
+  function wrapWords() {
+    $$(".words").forEach((heading) => {
+      const fragment = document.createDocumentFragment();
+      heading.textContent.trim().split(/\s+/).forEach((word, index) => {
+        const wrapper = document.createElement("span");
+        const text = document.createElement("span");
+        wrapper.className = "wd";
+        text.style.setProperty("--i", index);
+        text.textContent = word;
+        wrapper.append(text);
+        fragment.append(wrapper, document.createTextNode(" "));
+      });
+      heading.replaceChildren(fragment);
     });
-    heading.replaceChildren(fragment);
-  });
+  }
+  wrapWords();
 
   const writtenStyles = new Map();
   const values = {};
@@ -296,6 +299,10 @@
   addEventListener("resize", requestMeasure, { passive: true });
   addEventListener("load", requestMeasure, { once: true });
   addEventListener("pageshow", requestMeasure);
+  document.addEventListener("site:languagechange", () => {
+    wrapWords();
+    requestMeasure();
+  });
   document.addEventListener("visibilitychange", () => {
     if (document.hidden && frameId !== null) {
       cancelAnimationFrame(frameId);
