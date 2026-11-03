@@ -94,16 +94,41 @@
     container.hidden = contacts.length === 0;
   });
 
-  // Hero tape: time & sales style rows (illustrative), duplicated for a seamless loop
-  $$("[data-tape]").forEach((el) => {
-    let p = 21450.25, rows = "";
+  // Decorative footprint levels, duplicated with matching pulse phases.
+  const heroTapes = $$("[data-tape]");
+  heroTapes.forEach((el, streamIndex) => {
+    let rows = "";
     for (let i = 0; i < 60; i++) {
-      p += Math.round((rnd() - 0.5) * 4) * 0.25;
-      const size = Math.ceil(rnd() * rnd() * 60), big = size > 32 && el.dataset.tape === "red";
-      rows += `<span class="${big ? "b" : ""}">${p.toFixed(2)}  ${String(size).padStart(3, " ")}</span><br>`;
+      const variation = rnd(), bidWeight = rnd(), askWeight = rnd();
+      const level = i % 12, candle = Math.floor(i / 12);
+      const concentration = Math.max(0.12, 1 - Math.abs(level - (4 + candle % 3)) / 7);
+      const bid = level === 0 ? 0 : Math.round((10 + bidWeight * 130) * concentration);
+      const ask = level === 11 ? 0 : Math.round((10 + askWeight * 150) * concentration);
+      const price = (21453 + candle * 0.5 - level * 0.25).toFixed(2);
+      const delay = -(candle * 1.3 + level * 0.18 + streamIndex * 2.4);
+      const duration = 7 + variation * 2;
+      const classes = level === 0 ? "tape-row candle-start" : "tape-row";
+      rows += `<span class="${classes}" style="--pulse-delay:${delay.toFixed(2)}s;--pulse-duration:${duration.toFixed(2)}s"><span class="tape-price">${price}</span><span class="tape-volume tape-bid">${bid}</span><span class="tape-cross">×</span><span class="tape-volume tape-ask">${ask}</span></span>`;
     }
     el.innerHTML = rows + rows;
   });
+
+  if (heroTapes.length) {
+    let tapesInView = true;
+    const updateTapePlayback = () => heroTapes.forEach((el) => {
+      el.parentElement.classList.toggle("tape-paused", document.hidden || !tapesInView);
+    });
+    document.addEventListener("visibilitychange", updateTapePlayback);
+    const hero = $(".hero");
+    if (hero && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(([entry]) => {
+        tapesInView = entry.isIntersecting;
+        updateTapePlayback();
+      });
+      observer.observe(hero);
+    }
+    updateTapePlayback();
+  }
 
   // Footprint: bid × ask per price over 5 bars; imbalance = one side ≥ 3× the diagonal other side
   const fp = $("[data-fp]");

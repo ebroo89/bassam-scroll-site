@@ -3,7 +3,7 @@
 
 :root {
   --bg:#050607; --bg2:#0a0c0e; --ink:#f2f2f2; --ink2:#c4c6c9; --mid:#a0a7b0; --dim:#9299a2;
-  --line:rgba(255,255,255,.16); --red:#d91414; --red-text:#ff7373;
+  --line:rgba(255,255,255,.16); --red:#d91414; --red-text:#ff7373; --tape-green:#079a7f;
 }
 * { box-sizing:border-box; margin:0; padding:0; }
 html { scroll-behavior:smooth; }
@@ -46,13 +46,25 @@ nav .links a:hover { color:var(--ink); }
 .hero { position:relative; min-height:100vh; display:grid; place-items:center; text-align:center; overflow:hidden;
   background:radial-gradient(80% 60% at 50% 40%, #1a222b 0%, #0b0f13 55%, var(--bg) 100%); }
 .hero::after { content:""; position:absolute; inset:auto 0 0 0; height:30%; background:linear-gradient(0deg,var(--bg),transparent); }
-.tape { position:absolute; top:0; bottom:0; width:120px; overflow:hidden; opacity:.55; direction:ltr;
+.tape { position:absolute; top:0; bottom:0; width:156px; overflow:hidden; opacity:.55; direction:ltr; pointer-events:none;
+  --tape-ink:#7a2a2a; --tape-lit:#e44545; --tape-glow:rgba(217,20,20,.5);
   mask-image:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent); -webkit-mask-image:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent); }
 .tape.l { left:7%; } .tape.r { right:7%; opacity:.3; }
-.tape div { font:400 11px/2 "IBM Plex Mono",monospace; color:#7a2a2a; animation:tape 26s linear infinite; }
-.tape.r div { animation-duration:34s; color:#3d4a52; }
-.tape div span.b { color:var(--red); }
+.tape > div { display:flow-root; font:400 11px/2 "IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--tape-ink); animation:tape 26s linear infinite; }
+.tape.r { --tape-ink:#3d4a52; --tape-lit:#98a9b6; --tape-glow:rgba(152,169,182,.35); }
+.tape.r > div { animation-duration:34s; }
+.tape-row { display:grid; grid-template-columns:64px 30px 10px 30px; align-items:center; gap:2px; min-height:22px; }
+.tape-row.candle-start { padding-top:16px; }
+.tape-price { font-size:9px; opacity:.5; }
+.tape-volume { text-align:right; opacity:.2; animation:footprint-pulse var(--pulse-duration) ease-in-out var(--pulse-delay) infinite; }
+.tape-ask { --tape-ink:#07584a; --tape-lit:var(--tape-green); --tape-glow:rgba(7,154,127,.75); }
+.tape-cross { text-align:center; opacity:.25; font-size:9px; }
+.tape-paused > div, .tape-paused .tape-volume { animation-play-state:paused; }
 @keyframes tape { from { transform:translateY(0); } to { transform:translateY(-50%); } }
+@keyframes footprint-pulse {
+  0%, 12%, 72%, 100% { opacity:.18; color:var(--tape-ink); text-shadow:none; }
+  30%, 42% { opacity:1; color:var(--tape-lit); text-shadow:0 0 7px var(--tape-glow); }
+}
 .hero-in { position:relative; z-index:2; display:grid; justify-items:center; gap:26px; padding:0 20px; }
 .hero h1 { font-size:clamp(38px,6.4vw,92px); line-height:1.1; color:rgba(255,255,255,.96); }
 .hero .ar-name { font:500 26px "Cairo",sans-serif; color:var(--ink2); margin-top:-8px; }
@@ -257,7 +269,8 @@ footer p { color:var(--dim); font-size:12.5px; max-width:520px; }
 }
 @media (prefers-reduced-motion:reduce) {
   html { scroll-behavior:auto; }
-  .tape div, .step, .done { animation:none; }
+  .tape > div, .tape .tape-volume, .step, .done { animation:none; }
+  .tape .tape-volume { opacity:.6; text-shadow:none; }
   .rv { opacity:1; transform:none; transition:none; }
   .pick span::before, .ap-progress li::before { transition:none; }
 }
