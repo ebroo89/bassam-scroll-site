@@ -1,5 +1,13 @@
 /* Arabic source strings and their English display equivalents. */
 window.MB_TRANSLATIONS = {
+  "الفئة الشهرية، شهر أكتوبر": "Monthly category, October",
+  "سبع سنوات من الخبرة في التداول": "Seven years of trading experience",
+  "تعلّم معي قراءة تدفّق الأوامر والأوبشن، وبناء أفضلية إحصائية للتعامل مع عشوائية السوق.":
+    "Learn to read order flow and options with me, and build a statistical edge for navigating market randomness.",
+  "عرض نتيجة بطولة أكتوبر على الموقع الرسمي":
+    "View the October championship result on the official website",
+  "نتيجة محمد بسام في بطولة أكتوبر الشهرية للفوركس 2026":
+    "Muhammad Bassam’s result in the October 2026 Monthly Forex Trading Championship",
   "محمد بسام | قراءة تدفّق الأوامر والأوبشن":
     "Muhammad Bassam | Order Flow & Options Flow",
   "تعرّف إلى منهج محمد بسام في قراءة شريط الصفقات وبصمة الشمعة وتدفّق الأوبشن، واختر التدريب أو الاستشارة المناسبة لك.":

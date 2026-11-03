@@ -4,7 +4,7 @@
   const textSources = new WeakMap();
   const attributeSources = new WeakMap();
   const headingSources = new Map();
-  const attributes = ["aria-label", "placeholder", "title", "content"];
+  const attributes = ["aria-label", "placeholder", "title", "content", "alt"];
   const ignored = "script, style, textarea, code, [translate='no']";
   const storageKey = "bassam-language";
   let language = "ar";
@@ -80,7 +80,9 @@
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     while (walker.nextNode()) translateText(walker.currentNode);
     root
-      .querySelectorAll?.("[aria-label], [placeholder], [title], meta[content]")
+      .querySelectorAll?.(
+        "[aria-label], [placeholder], [title], meta[content], [alt]",
+      )
       .forEach(translateAttributes);
   }
 

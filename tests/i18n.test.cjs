@@ -29,7 +29,7 @@ function createPage({ url = 'https://example.invalid/index.html', saved = 'ar', 
       setAttribute(name, next) { this.attributes.set(name, next); },
       addEventListener(name, handler) { this.handlers.set(name, handler); },
       querySelectorAll() {
-        return descendants(this).filter(child => ['aria-label', 'placeholder', 'title', 'content'].some(name => child.hasAttribute(name)));
+        return descendants(this).filter(child => ['aria-label', 'placeholder', 'title', 'content', 'alt'].some(name => child.hasAttribute(name)));
       },
       closest(selector) {
         if (selector === '.words' && this.hasAttribute('data-words')) return this;
@@ -61,7 +61,8 @@ function createPage({ url = 'https://example.invalid/index.html', saved = 'ar', 
   const slot = element('option', 'الصبح', { value: 'الصبح' });
   const title = element('title', 'محمد بسام | قراءة تدفّق الأوامر والأوبشن');
   const meta = element('meta', '', { content: 'التنقل الرئيسي' });
-  for (const node of [heading, copy, summary, error, toggle, link, input, notes, slot, title, meta]) html.append(node);
+  const photo = element('img', '', { alt: 'نتيجة محمد بسام في بطولة أكتوبر الشهرية للفوركس 2026' });
+  for (const node of [heading, copy, summary, error, toggle, link, input, notes, slot, title, meta, photo]) html.append(node);
   const documentHandlers = new Map();
   const document = {
     nodeType: 9,
@@ -100,7 +101,7 @@ function createPage({ url = 'https://example.invalid/index.html', saved = 'ar', 
   vm.runInContext(dictionary, context);
   vm.runInContext(source, context);
   return {
-    document, location, heading, copy, summary, error, input, notes, slot, title, meta, link, toggle,
+    document, location, heading, copy, summary, error, input, notes, slot, title, meta, photo, link, toggle,
     click() { toggle.handlers.get('click')(); },
     mutate(node) { observer([{ type: 'childList', addedNodes: node.childNodes }]); },
     wrapHeading() {
@@ -176,4 +177,12 @@ test('blocked local storage keeps the language toggle usable', () => {
   assert.doesNotThrow(() => page.click());
   assert.equal(page.document.documentElement.lang, 'en');
   assert.equal(page.toggle.textContent, 'عربي');
+});
+
+test('competition image descriptions follow the selected language', () => {
+  const page = createPage();
+  page.click();
+  assert.equal(page.photo.getAttribute('alt'), 'Muhammad Bassam’s result in the October 2026 Monthly Forex Trading Championship');
+  page.click();
+  assert.equal(page.photo.getAttribute('alt'), 'نتيجة محمد بسام في بطولة أكتوبر الشهرية للفوركس 2026');
 });
