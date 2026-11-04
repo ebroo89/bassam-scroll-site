@@ -4,8 +4,8 @@ window.MB_TRANSLATIONS = {
     "2026 October Monthly Forex Trading Championship",
   "الفئة الشهرية، شهر أكتوبر": "Monthly category, October",
   "سبع سنوات من الخبرة في التداول": "Seven years of trading experience",
-  "تعلّم معي قراءة تدفّق الأوامر والأوبشن، وبناء أفضلية إحصائية للتعامل مع عشوائية السوق.":
-    "Learn to read order flow and options with me, and build a statistical edge for navigating market randomness.",
+  "تعلّم معي قراءة تدفّق الأوامر وتدفق الأوبشن، وبناء أفضلية إحصائية للتعامل مع عشوائية السوق.":
+    "Learn to read order flow and options flow with me, and build a statistical edge for navigating market randomness.",
   "عرض نتيجة بطولة أكتوبر على الموقع الرسمي":
     "View the October championship result on the official website",
   "نتيجة محمد بسام في بطولة أكتوبر الشهرية للفوركس 2026":
