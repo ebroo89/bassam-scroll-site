@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "sections": {
+    "hero": true,
+    "edge": true,
+    "reads": true,
+    "programs": true,
+    "rules": true,
+    "contact": true
+  },
+  "programs": {
+    "group": true,
+    "private": true,
+    "consult": true,
+    "indicator": true
+  },
+  "courses": {
+    "foundations": false,
+    "order-flow": false,
+    "options-flow": false,
+    "quant": false,
+    "psychology": false,
+    "edge": false,
+    "zero-intermediate": false,
+    "order-options": false,
+    "champ": true
+  }
+}

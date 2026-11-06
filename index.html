@@ -2,190 +2,305 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Muhammad Bassam | Order Flow &amp; Options Flow Trader</title>
-<meta name="description" content="محمد بسام، متداول Order Flow و Options Flow، الحاصل على المركز الأول في مسابقة التداول العالمية.">
+<title>محمد بسام | قراءة تدفّق الأوامر والأوبشن</title>
+<meta name="description" content="تعرّف إلى منهج محمد بسام ومسار From Zero to Champ، واستكشف التدريب الخاص والاستشارات وأدوات التداول القادمة.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#050607">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@200;300;400;500&family=Cairo:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="motion.css">
+<link rel="stylesheet" href="edge.css">
+<link rel="stylesheet" href="market-section.css">
+<link rel="stylesheet" href="courses.css">
+<link rel="stylesheet" href="learning-guide.css">
+<link rel="stylesheet" href="brand.css">
 </head>
 <body class="motion">
+<a class="skip-link" href="#main-content">انتقل إلى المحتوى</a>
 
 <div class="progress-bar" aria-hidden="true"><i data-progress-bar></i></div>
 
-<nav id="nav"><div class="w">
-  <a href="index.html" class="lat">M · Bassam</a>
-  <div class="links"><a href="#reads">المنهج</a><a href="#programs">البرامج</a><a href="#award">الإنجاز</a></div>
-  <a href="apply.html" class="apply-link">APPLY</a>
+<nav id="nav" aria-label="التنقل الرئيسي"><div class="w">
+  <div class="brand-group"><a href="index.html" class="lat" data-brand-name title="الصفحة الرئيسية">محمد بسام</a><button type="button" class="language-toggle" data-language-toggle translate="no" lang="en" aria-label="Switch to English">EN</button></div>
+  <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-links">القائمة</button>
+  <div class="links" id="site-links" data-nav-links><a href="#reads">المنهج</a><a href="#programs">البرامج</a><a href="#edge">بناء الأفضلية</a></div>
+  <a href="apply.html" class="apply-link">اختر برنامجك</a>
 </div></nav>
 
 <!-- 1 · Hero: pinned; the name opens up and hands over to the statement -->
-<div class="pin pin-hero" data-pin="hero">
+<div class="pin pin-hero" data-pin="hero" data-site-section="hero">
   <header class="hero">
     <div class="tape l" aria-hidden="true"><div data-tape="red"></div></div>
     <div class="tape r" aria-hidden="true"><div data-tape="grey"></div></div>
-    <div class="hero-portrait" data-hero-portrait aria-hidden="true"><img src="assets/img/bassam.jpg" alt=""></div>
+    <div class="hero-portrait" data-hero-portrait aria-hidden="true"><img src="assets/img/bassam.jpg" data-portrait width="540" height="588" fetchpriority="high" alt=""></div>
     <div class="hero-in" data-hero-in>
-      <h1 class="lat" data-hero-name>Muhammad <br>Bassam</h1>
+      <h1 class="lat" data-hero-name data-name-en>Muhammad <br>Bassam</h1>
       <span class="rule" data-hero-rule></span>
       <span class="lab" data-hero-fade>Order Flow <em>&amp;</em> Options Flow Trader</span>
-      <span class="ar-name" data-hero-fade>محمد بسام · بقرأ السوق من جوّا</span>
-      <span class="award" data-hero-fade><b class="ln">1<sup>ST</sup></b><i aria-hidden="true"></i><span data-award-title>المركز الأول في مسابقة التداول العالمية</span></span>
+      <span class="ar-name" data-hero-fade data-name>محمد بسام</span>
+      <p class="hero-claim" data-hero-fade>أول عربي يفوز ببطولة العالم للتداول</p>
+      <figure class="hero-result" data-hero-fade>
+        <a data-award-proof href="https://www.worldcupchampionships.com/world-cup-trading-championship-standings" target="_blank" rel="noopener noreferrer" aria-label="عرض نتيجة بطولة أكتوبر على الموقع الرسمي">
+          <span class="hero-result-title">بطولة أكتوبر الشهرية للفوركس 2026</span>
+          <span class="hero-result-table"><img src="assets/img/ranking.png" width="1110" height="390" alt="نتيجة محمد بسام في بطولة أكتوبر الشهرية للفوركس 2026"></span>
+          <span class="hero-result-date" data-award-caption>1–30 أكتوبر 2026 · بانتظار التدقيق النهائي</span>
+        </a>
+        <figcaption>الفئة الشهرية، شهر أكتوبر</figcaption>
+      </figure>
+      <p class="hero-experience" data-hero-fade>سبع سنوات من الخبرة في التداول</p>
+      <p class="hero-copy" data-hero-fade>تعلّم معي قراءة تدفّق الأوامر وتدفق الأوبشن، وبناء أفضلية إحصائية للتعامل مع عشوائية السوق.</p>
+      <div class="hero-actions" data-hero-fade><a class="b-solid" href="#programs">استكشف البرامج</a><a class="text-link" href="#edge">تعرّف إلى المنهج <span aria-hidden="true">↙</span></a></div>
     </div>
-    <p class="hero-say" data-hero-say aria-hidden="true"><span class="say-in">الشمعة بتقلّك <span>وين</span> راح السعر.<br>تدفّق الأوامر بيقلّك <span>ليش</span>.</span></p>
+    <p class="hero-say" data-hero-say aria-hidden="true"><span class="say-in"><span class="say-lead">اقرأ ما وراء</span><span class="say-focus">حركة السعر.</span></span></p>
     <span class="scroll"></span>
   </header>
 </div>
 
-<main>
-  <!-- 2 · Award right after the hero (his main proof): pinned; the photo opens from a slit and the 1 lands -->
-  <section id="award" class="pin pin-award" data-pin="award">
-    <div class="award-stage">
-      <div class="aw-left">
-        <div class="aw-photo" data-aw-photo><i></i></div>
-        <!-- The official ranking: the proof, framed like a document -->
-        <figure class="aw-rank" data-aw-rank>
-          <span class="rank-tag lab">Official Ranking</span>
-          <img src="assets/img/ranking.png" alt="ترتيب بطولة أكتوبر الشهرية 2026: المركز الأول Muhammad Bassam" loading="lazy">
-          <figcaption>١ – ٣٠ أكتوبر ٢٠٢٦ · النتيجة النهائية بانتظار التدقيق</figcaption>
-        </figure>
+<main id="main-content" tabindex="-1">
+  <!-- Edge-building process. Copy reviewed against CFA Institute, Bailey et al., and CME Group on 2026-11-04. -->
+  <section id="edge" data-site-section="edge" class="edge-section" data-edge aria-labelledby="edge-title">
+    <div class="w">
+<div class="edge-heading">
+        <h2 id="edge-title">أساعدك على بناء نظام تداول، واختبار <em>وجود أفضلية إحصائية.</em></h2>
+        <p>نبدأ بفرضية وقواعد واضحة، ثم نقيّم الأداء والمخاطر بعد التكاليف، ونراجع النتائج لاختبار التعديلات.</p>
       </div>
-      <div class="aw-copy" data-aw-copy>
-        <span class="lab">Achievement</span>
-        <div class="aw-one" data-aw-one><span>1</span><small>ST</small></div>
-        <h2 data-award-title>المركز الأول في مسابقة التداول العالمية</h2>
-        <p class="award-meta lab" data-award-meta hidden></p>
-        <p>بين متداولين من كل العالم وتحت نفس الشروط. مش وعد بأرباح لحدا، بس دليل إن طريقة القراءة هاي انجرّبت تحت ضغط حقيقي.</p>
-      </div>
+      <section class="edge-process" aria-label="حلقة بناء الأفضلية" id="edge-process">
+        <div class="edge-loop" data-edge-loop>
+          <svg class="edge-routes" data-edge-routes aria-hidden="true">
+            <path class="edge-track" data-edge-path="0"/><path class="edge-track" data-edge-path="1"/><path class="edge-track" data-edge-path="2"/><path class="edge-track" data-edge-path="3"/>
+            <path class="edge-arrow" data-edge-arrow="0"/><path class="edge-arrow" data-edge-arrow="1"/><path class="edge-arrow" data-edge-arrow="2"/><path class="edge-arrow" data-edge-arrow="3"/>
+            <path class="edge-trail edge-moving" data-edge-trail/><circle class="edge-packet edge-moving" data-edge-packet r="2.5"/>
+          </svg>
+          <div class="edge-nodes">
+            <button class="edge-node" type="button" data-edge-stage="0" aria-pressed="true"><span class="edge-symbol"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M7 3h14v22H7zM11 8h6M11 12h3M11 17l2 2 4-4"/></svg></span><span class="edge-node-label">فرضية قابلة للاختبار</span><span class="edge-node-description" data-edge-description>نحدّد ما نتوقّعه، وكيف نقيسه.</span></button>
+            <button class="edge-node" type="button" data-edge-stage="1" aria-pressed="false"><span class="edge-symbol"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 7h18M5 14h18M5 21h18"/><circle cx="10" cy="7" r="2.5" fill="var(--bg)"/><circle cx="18" cy="14" r="2.5" fill="var(--bg)"/><circle cx="12" cy="21" r="2.5" fill="var(--bg)"/></svg></span><span class="edge-node-label">قواعد التنفيذ</span><span class="edge-node-description" data-edge-description>دخول وخروج ومخاطرة تُحدَّد قبل الاختبار.</span></button>
+            <button class="edge-node" type="button" data-edge-stage="2" aria-pressed="false"><span class="edge-symbol"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 23h19M8 19v-5m6 5V6m6 13V10"/></svg></span><span class="edge-node-label">اختبار إحصائي</span><span class="edge-node-description" data-edge-description>نقيّم الأداء والمخاطر بعد التكاليف، ونتحقّق خارج العينة.</span></button>
+            <button class="edge-node" type="button" data-edge-stage="3" aria-pressed="false"><span class="edge-symbol"><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="m18 18 6 6M8 12l3 3 5-6"/></svg></span><span class="edge-node-label">نقيس ونراجع ونطوّر</span><span class="edge-node-description" data-edge-description>نراجع النتائج، ونقرّر الإبقاء أو التعديل أو الاستبعاد.</span></button>
+          </div>
+          <p class="edge-caption">كل تعديل يُختبر ببيانات لم تدخل في تطويره</p>
+        </div>
+        <div class="edge-controls">
+          <p class="edge-detail" data-edge-detail aria-live="off"><span data-edge-detail-stage="0">نحدّد الفرضية ومقياس النتيجة قبل اختبار النظام.</span><span data-edge-detail-stage="1" hidden>نحدّد قواعد الدخول والخروج والمخاطرة وافتراضات التنفيذ قبل قياس الأداء.</span><span data-edge-detail-stage="2" hidden>نقدّر الأداء والمخاطر وعدم اليقين بعد تكاليف التنفيذ، ونختبر على بيانات لم تُستخدم في تطوير النظام، مع مراعاة تعدد التجارب.</span><span data-edge-detail-stage="3" hidden>نوثّق النتائج والتجارب، ونقرّر الإبقاء أو التعديل أو الاستبعاد. كل تعديل يخضع لاختبار جديد على بيانات لم تدخل في تطويره.</span></p>
+        </div>
+      </section>
     </div>
   </section>
 
-  <!-- 3 · Marquee words driven by scroll -->
-  <div class="marquee" aria-hidden="true">
-    <div class="mq-row" data-mq="1"><span>Tape · Footprint · Options Flow · Tape · Footprint · Options Flow ·</span></div>
-    <div class="mq-row out" data-mq="-1"><span>Read the Order Flow · Read the Order Flow · Read the Order Flow ·</span></div>
+  <!-- Market environment, context and execution. Scroll-driven local visualization. -->
+  <section id="reads" data-site-section="reads" class="market-section" data-market-section aria-labelledby="market-title">
+  <div class="market-pin" data-market-pin>
+    <div class="w market-inner">
+      <div class="market-heading">
+        <h2 id="market-title">قراءة السوق تبدأ بفهم بيئته.</h2>
+      </div>
+      <div class="market-experience">
+        <div class="market-steps" role="group" aria-label="اختر المرحلة">
+          <button class="market-step" data-market-step="0" type="button" aria-pressed="true" aria-controls="market-panel-0">
+            <span class="market-number" aria-hidden="true">01</span>
+            <span class="market-step-copy">
+              <span class="market-step-title">بيئة السوق</span>
+              <span class="market-question">في أي بيئة أتداول؟</span>
+            </span>
+          </button>
+          <button class="market-step" data-market-step="1" type="button" aria-pressed="false" aria-controls="market-panel-1">
+            <span class="market-number" aria-hidden="true">02</span>
+            <span class="market-step-copy">
+              <span class="market-step-title">خريطة السياق</span>
+              <span class="market-question">أين أراقب استجابة السعر؟</span>
+            </span>
+          </button>
+          <button class="market-step" data-market-step="2" type="button" aria-pressed="false" aria-controls="market-panel-2">
+            <span class="market-number" aria-hidden="true">03</span>
+            <span class="market-step-copy">
+              <span class="market-step-title">قرار التنفيذ</span>
+              <span class="market-question">متى تتوافق القراءة مع خطتي؟</span>
+            </span>
+          </button>
+        </div>
+        <div class="market-visual-column">
+          <div class="market-stage">
+            <section class="market-panel" data-market-panel="0" id="market-panel-0" aria-hidden="false" aria-labelledby="market-panel-title-0">
+              <h3 class="market-panel-title" id="market-panel-title-0">بيئة السوق</h3>
+              <div class="market-graphic" role="img" aria-label="تصوّر متحرك لسطح التقلب الضمني، ببيانات افتراضية"></div>
+            </section>
+            <section class="market-panel" data-market-panel="1" id="market-panel-1" aria-hidden="true" aria-labelledby="market-panel-title-1">
+              <h3 class="market-panel-title" id="market-panel-title-1">خريطة السياق</h3>
+              <div class="market-graphic" role="img" aria-label="خريطة افتراضية لمستويات السعر وسيناريوهات حركته"></div>
+            </section>
+            <section class="market-panel" data-market-panel="2" id="market-panel-2" aria-hidden="true" aria-labelledby="market-panel-title-2">
+              <h3 class="market-panel-title" id="market-panel-title-2">قرار التنفيذ</h3>
+              <div class="market-graphic" role="img" aria-label="تصوّر افتراضي لتدفق الصفقات وتوزيع حجم التداول داخل شموع الفوتبرنت"></div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <div class="market-scene-footer">
+        <div class="market-progress" aria-hidden="true">
+          <span data-market-progress aria-current="true"></span>
+          <span data-market-progress></span>
+          <span data-market-progress></span>
+        </div>
+      </div>
+    </div>
   </div>
+</section>
 
-  <!-- 4 · What he reads: pinned, three panels change as you scroll -->
-  <section id="reads" class="pin pin-reads" data-pin="reads">
-    <div class="reads-stage">
-      <div class="w reads-in">
-        <div class="reads-head">
-          <span class="lab">What I Read</span>
-          <h2 class="words">مش الشموع بس. اللي ورا الشموع.</h2>
-        </div>
-        <div class="steps-bar" aria-hidden="true"><i></i><i></i><i></i></div>
-        <div class="panels">
-          <article class="panel" data-panel>
-            <span class="giant lat">Tape</span>
-            <span class="pn lat">01</span><h3>شريط الصفقات</h3>
-            <p>كل صفقة بتنفّذ لحظتها: السعر والحجم والجهة. منه بتشوف السرعة والضغط قبل ما يبيّن على الشارت.</p>
-          </article>
-          <article class="panel" data-panel>
-            <span class="giant lat">Footprint</span>
-            <span class="pn lat">02</span><h3>بصمة الشمعة</h3>
-            <p>جوّا كل شمعة: قديش انباع وقديش انشرى على كل سعر. هون بتبيّن الاختلالات ومناطق الامتصاص.</p>
-          </article>
-          <article class="panel" data-panel>
-            <span class="giant lat">Options</span>
-            <span class="pn lat">03</span><h3>تدفّق الأوبشن</h3>
-            <p>وين الحجم الكبير عم يتمركز بالأوبشن، وكيف ممكن يأثّر على حركة العقود الآجلة.</p>
-          </article>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5 · Footprint: cells light up bar by bar with the scroll -->
-  <section class="sec fp-sec"><div class="w">
-    <div class="fp-wrap" style="margin-top:0">
-      <div>
-        <div class="fp" data-fp data-fp-scrub aria-label="Footprint توضيحي"></div>
-        <p class="fp-note">رسم توضيحي بأرقام مولّدة · مش بيانات حقيقية ومش توصية.</p>
-      </div>
-      <div class="fp-copy">
-        <span class="lab">Footprint · Bid × Ask</span>
-        <h3 class="words">بتشوف مين عم يضغط، على كل سعر.</h3>
-        <p class="up">كل خانة فيها البيع × الشرا على هداك السعر. لما جهة وحدة تتفوّق بقوة على التانية بيصير «اختلال»، وهاي من أوائل الإشارات اللي بنتعلّم نقرأها.</p>
-        <div class="legend up"><span><i style="background:rgba(217,20,20,.4)"></i>اختلال</span><span><i style="background:#1b2026"></i>أعلى حجم</span></div>
-      </div>
-    </div>
-  </div></section>
-
-  <!-- 6 · Programs: pinned; each program takes the whole screen in turn, with its own CTA -->
-  <section id="programs" class="pin pin-progs" data-pin="progs">
+  <!-- Programme categories with photograph-led course and bundle cards. -->
+  <section id="programs" data-site-section="programs" class="course-programs" data-program-layout="cards">
     <div class="progs-stage">
       <div class="progs-top w">
-        <div><span class="lab">Work With Me</span><h2>البرامج</h2></div>
-        <div class="progs-count"><span class="lat" data-prog-now>01</span><em class="lat">/ 04</em><div class="progs-bar" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
+        <div><h2>اختر طريقة التعلّم المناسبة لك.</h2><p class="programs-intro" data-programs-intro>تعلّم ضمن From Zero to Champ، أو اختر التدريب الخاص أو الاستشارة بحسب هدفك.</p></div>
+        <div class="program-jump" role="group" aria-label="انتقل إلى برنامج"><button type="button" data-program-tab="group" aria-pressed="true">From Zero to Champ</button><button type="button" data-program-tab="private" aria-pressed="false">تدريب خاص</button><button type="button" data-program-tab="consult" aria-pressed="false">استشارات</button><button type="button" data-program-tab="indicator" aria-pressed="false">مؤشرات</button></div>
+<details class="learning-guide" data-learning-guide>
+  <summary>
+    <span>ساعدني أختار<small>سؤالان لتحديد نقطة البداية</small></span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+  </summary>
+  <form class="learning-guide-form" novalidate>
+    <fieldset data-guide-question>
+      <legend tabindex="-1">أين أنت الآن في التداول؟</legend>
+      <div class="guide-options guide-experience">
+        <label><input type="radio" name="guide-experience" value="new"><span>أبدأ من الصفر</span></label>
+        <label><input type="radio" name="guide-experience" value="basic"><span>أعرف الأساسيات</span></label>
+        <label><input type="radio" name="guide-experience" value="experienced"><span>لدي خبرة في التطبيق</span></label>
+      </div>
+    </fieldset>
+    <fieldset data-guide-question hidden>
+      <legend tabindex="-1">ما الذي تريد العمل عليه؟</legend>
+      <div class="guide-options">
+        <label><input type="radio" name="guide-goal" value="foundations"><span>أرتّب أساسياتي</span></label>
+        <label><input type="radio" name="guide-goal" value="orderflow"><span>أقرأ السيولة وتدفّق الأوامر</span></label>
+        <label><input type="radio" name="guide-goal" value="options"><span>أفهم تدفّق الأوبشن</span></label>
+        <label><input type="radio" name="guide-goal" value="quant"><span>أختبر نظامًا وأطوّر أتمتته</span></label>
+        <label><input type="radio" name="guide-goal" value="private"><span>أتعلّم بشكل فردي</span></label>
+        <label><input type="radio" name="guide-goal" value="consult"><span>أناقش سؤالًا محدّدًا</span></label>
+      </div>
+    </fieldset>
+    <section class="guide-result" data-guide-result hidden aria-live="polite">
+      <p>نقطة البداية المقترحة لك</p>
+      <h3 data-guide-title tabindex="-1"></h3>
+      <p data-guide-reason></p>
+      <small>اقتراح مبدئي مبني على إجاباتك. راجع المحتوى والمتطلبات قبل التسجيل.</small>
+      <button type="button" class="b-solid" data-guide-open>استكشف هذا الخيار</button>
+    </section>
+    <div class="guide-controls">
+      <button type="button" class="b-ghost" data-guide-back hidden>رجوع</button>
+      <button type="submit" class="b-solid" data-guide-next disabled>متابعة</button>
+    </div>
+  </form>
+</details>
+
       </div>
       <div class="progs-deck">
-      <article class="prog" data-prog>
-        <div class="prog-img"><i style="background-image:url(assets/img/mentor.jpg)"></i><span class="prog-n lat">01</span></div>
+      <p data-no-offers hidden>لا توجد برامج متاحة للتسجيل حاليًا.</p>
+      <article class="prog prog-group on" data-program-panel="group">
         <div class="prog-copy">
-          <span class="lab">Private 1:1</span>
-          <h3>دورة خاصة</h3>
-          <p>تدريب فردي على قراءة تدفّق الأوامر، على مستواك ووقتك.</p>
-          <ul><li>جلسات فردية مباشرة معي</li><li>المنهج بيمشي على مستواك وسرعتك</li><li>منقرأ السوق سوا على شارتات حقيقية</li></ul>
-          <div class="prog-foot">
-            <div class="prog-price"><span class="lab">Price</span><b data-price="private"></b></div>
-            <a class="prog-cta " href="apply.html#private">سجّل الآن<span aria-hidden="true">←</span></a>
+          <div class="course-catalog" data-course-catalog>
+            <div data-course-browse>
+              <h3 data-course-heading>From Zero to Champ</h3>
+              <p class="course-intro" data-course-intro>تعلّم مباشر مع محتوى مسجّل. دفعات تُفتح كل ثلاثة أشهر تقريبًا.</p>
+              <div class="course-tabs" hidden role="group" aria-label="تصفّح الدورات والباقات">
+                <button type="button" data-course-type="course" aria-pressed="false">الدورات</button>
+                <button type="button" data-course-type="bundle" aria-pressed="true">الباقات</button>
+              </div>
+              <div class="course-list" data-course-list data-course-type="bundle" data-count="1">
+
+
+<article class="course-card">
+  <div class="course-cover course-card-image" style="--cover-count:3"><img src="assets/img/courses-foundations.jpg" alt="" width="1200" height="800" loading="lazy"><img src="assets/img/courses-order-flow.jpg" alt="" width="1200" height="800" loading="lazy"><img src="assets/img/courses-options-flow.jpg" alt="" width="1200" height="800" loading="lazy"><span class="course-availability">التسجيل مفتوح</span></div>
+  <div class="course-card-copy"><p class="course-card-level">المسار الشامل مع متابعة إضافية</p><h4>From Zero to Champ</h4><p class="course-card-summary">ابنِ قراءتك خطوة بخطوة من السعر والشموع إلى السيولة وسياق الأوبشن، وطوّر طريقة عملك مع متابعة جماعية.</p>
+    <div class="course-card-footer"><div class="course-card-pricing"><s dir="ltr" title="السعر قبل الخصم">$4,500</s><strong dir="ltr">$2,490</strong><span class="course-discount" dir="ltr" title="خصم">−45%</span></div><a href="apply.html?course=champ#group">سجّل الآن</a></div>
+  </div>
+</article>
+</div>
+              <p class="course-price-note">الأسعار بالدولار الأمريكي.</p>
+            </div>
+
           </div>
         </div>
       </article>
-      <article class="prog" data-prog>
-        <div class="prog-img"><i style="background-image:url(assets/img/group.jpg)"></i><span class="prog-n lat">02</span></div>
+      <article class="prog on service-panel" data-program-panel="private" hidden>
+        <div class="prog-img service-image"><i style="background-image:url(assets/img/private-training-v1.jpg)"></i></div>
         <div class="prog-copy">
-          <span class="lab">Group · Waitlist</span>
-          <h3>الدورة الجماعية</h3>
-          <p>دفعة صغيرة بمنهج كامل، من الأساس لقراءة الشريط والبصمة والأوبشن.</p>
-          <ul><li>عدد محدود بكل دفعة</li><li>منهج كامل خطوة بخطوة</li><li>الأولوية بالدفعة الجاية لمين سجّل بكير</li></ul>
-          <div class="prog-foot">
-            <div class="prog-price"><span class="lab">Price</span><b data-price="group"></b></div>
-            <a class="prog-cta wait" href="apply.html#group">انضم لقائمة الانتظار<span aria-hidden="true">←</span></a>
+          <h3>تدريب خاص</h3>
+          <p class="service-lead">طوّر قراءتك للسوق وطريقتك في التنفيذ.</p>
+          <p>نبدأ من مستواك وأمثلتك، ونحدّد ما تحتاجه في فهم السوق أو تنفيذ خطتك. تتعلّم المنهج بشكل فردي، وتراجع معي قراراتك وقواعدك وما تواجهه أثناء التطبيق.</p>
+          <h4 class="service-subheading">ماذا تطوّر معي؟</h4>
+          <ul><li>تربط قراءة السوق بسبب واضح للدخول أو الانتظار</li><li>تصوغ شروط الدخول والخروج وإلغاء الفكرة قبل التنفيذ</li><li>تراجع قراراتك لتحدّد ما يحتاج إلى تطوير في القراءة أو القواعد أو الالتزام</li><li>تضع أولويات للتدرّب عليها، وتراجع تقدّمك من خلال تطبيقك</li></ul>
+          <div class="service-fit"><h4>يناسبك إذا</h4><p>تريد شرحًا يناسب مستواك، أو مراجعة مفصّلة لطريقتك الحالية، مع وقت مخصّص لأسئلتك وأمثلتك.</p></div>
+          <div class="service-availability private-schedule">
+            <div class="private-schedule-heading"><span class="private-booked-mark" aria-hidden="true">✓</span><strong data-private-status>مواعيد هذا الشهر مكتملة</strong></div>
+            <p data-private-note>اختر من الأشهر القادمة لننسّق موعدك معك.</p>
+            <div class="private-months" data-private-months role="group" aria-label="اختر شهر التدريب"></div>
+            <p class="private-selection" data-private-selection aria-live="polite" hidden><span>الشهر المطلوب:</span> <b data-private-selected-month translate="no"></b></p>
           </div>
+          <div class="prog-foot">
+            <div class="prog-price"><span>سعر التدريب</span><div class="course-offer-line"><s dir="ltr" data-private-original>$10,000</s><span class="course-discount" data-private-discount>خصم نحو 20%</span></div><b dir="ltr" data-price="private">$7,990</b></div>
+            <a class="prog-cta" data-private-apply href="apply.html#private"><span data-private-action>نسّق موعدًا قادمًا</span><span aria-hidden="true">←</span></a>
+          </div>
+          <p class="service-terms">ننسّق محاور التدريب وعدد الجلسات ومدتها ونطاق المتابعة قبل تأكيد الموعد.</p>
         </div>
       </article>
-      <article class="prog" data-prog>
-        <div class="prog-img"><i style="background-image:url(assets/img/consult.jpg)"></i><span class="prog-n lat">03</span></div>
+      <article class="prog on service-panel" data-program-panel="consult" hidden>
+        <div class="prog-img service-image"><i style="background-image:url(assets/img/consult-review.jpg)"></i></div>
         <div class="prog-copy">
-          <span class="lab">Consultation</span>
-          <h3>استشارة</h3>
-          <p>جلسة مركّزة على سؤالك أنت: صفقة، أداة، أو طريقة قراءة.</p>
-          <ul><li>جلسة وحدة على موضوع واحد</li><li>بتبعت سؤالك قبل الجلسة</li><li>بتطلع بخطوات واضحة تشتغل عليها</li></ul>
+          <h3>استشارات</h3>
+          <p class="service-lead">جهّز سؤالك، ولنناقشه معًا.</p>
+          <p class="consult-duration"><span aria-hidden="true">◷</span> <span>مدة الاستشارة 90 دقيقة</span></p>
+          <p>احجز جلسة خاصة لطرح سؤالك أو مناقشة الموضوع الذي يشغلك في التداول. نخصّص الوقت لما تريد فهمه، ونراجع معًا ما لديك من أفكار أو أمثلة.</p>
+          <div class="service-fit"><h4>قبل الجلسة</h4><p>حدّد ما تريد مناقشته، وجهّز سؤالك وأي مثال أو ملاحظات تساعد على توضيحه.</p></div>
+          <div class="service-fit"><h4>ماذا يحدث بعد التسجيل؟</h4><p>بعد التسجيل، يتواصل معك أحد أفراد الفريق لجمع المعلومات اللازمة وتنسيق موعد الجلسة.</p></div>
           <div class="prog-foot">
-            <div class="prog-price"><span class="lab">Price</span><b data-price="consult"></b></div>
-            <a class="prog-cta " href="apply.html#consult">احجز استشارة<span aria-hidden="true">←</span></a>
+            <div class="prog-price"><span>السعر</span><b data-price="consult"></b></div>
+            <a class="prog-cta" data-consult-apply href="apply.html#consult">احجز استشارة<span aria-hidden="true">←</span></a>
           </div>
+          <p class="service-terms">ينسّق الفريق معك الموعد وما يلزم تحضيره قبل الجلسة.</p>
         </div>
       </article>
-      <article class="prog" data-prog>
-        <div class="prog-img"><i style="background-image:url(assets/img/indicator.jpg)"></i><span class="prog-n lat">04</span></div>
+      <article class="prog on service-panel" data-program-panel="indicator" hidden>
+        <div class="prog-img service-image"><i style="background-image:url(assets/img/indicator-tools-v1.jpg)"></i></div>
         <div class="prog-copy">
-          <span class="lab">TradingView</span>
-          <h3>مؤشرات TradingView</h3>
-          <p>أدوات مبنية على نفس طريقة القراءة اللي بعلّمها.</p>
-          <ul><li>مبنية على تدفّق الأوامر</li><li>بتتفعّل على حسابك بـ TradingView</li><li>بتحتاج بس اسم المستخدم تبعك</li></ul>
+          <h3>مؤشرات وأدوات التداول</h3>
+          <p class="service-lead">راقب شروطك، واقرأ البيانات التي تدعم قرارك.</p>
+          <p>مؤشرات لعرض إشارات نماذج التداول، وقراءة الأوبشن فلو، وتنظيم متابعة السوق. اختر النوع الذي يهمّك لتصلك تفاصيل الإطلاق.</p>
+          <div class="consult-focus" role="group" aria-label="اختر نوع الأداة"><button type="button" data-indicator-type="signals" aria-pressed="true">إشارات مبنية على قواعد</button>
+<button type="button" data-indicator-type="options" aria-pressed="false">أدوات الأوبشن فلو</button>
+<button type="button" data-indicator-type="context" aria-pressed="false">أدوات قراءة السوق</button></div>
+          <p class="consult-preview" data-indicator-preview aria-live="polite">راقب نماذج تداول بقواعد محدّدة للتفعيل وإلغاء الفكرة، واربط الإشارات بخطتك ومخاطرتك قبل التنفيذ.</p>
+          <div class="service-fit"><h4>قبل اختيار الأداة</h4><p>نوضّح لكل أداة وظيفتها، والمنصة المتوافقة، والبيانات المطلوبة، وشروط استخدام إشاراتها.</p></div>
           <div class="prog-foot">
-            <div class="prog-price"><span class="lab">Price</span><b data-price="indicators"></b></div>
-            <a class="prog-cta " href="apply.html#indicator">اطلب المؤشر<span aria-hidden="true">←</span></a>
+            <div class="prog-price"><span>الإتاحة</span><b>قريبًا</b></div>
+            <a class="prog-cta" data-indicator-apply href="apply.html?tool=signals#indicator">سجّل اهتمامك بالأدوات<span aria-hidden="true">←</span></a>
           </div>
+          <p class="service-terms">سجّل اهتمامك لتصلك تفاصيل الإتاحة ومتطلبات الاستخدام عند الإطلاق.</p>
         </div>
       </article>
       </div>
     </div>
   </section>
 
-  <!-- 7 · Rules: a red line runs across and switches each rule on -->
-  <section class="sec rules-sec" data-rules><div class="w">
-    <div class="sec-h"><div><span class="lab">Principles</span><h2 class="words">القواعد</h2></div><p class="up">القراءة الصح بلا انضباط ما بتنفع. هدول التلت قواعد اللي بيمشي عليهم كل شي.</p></div>
-    <div class="rules-line" aria-hidden="true"><i data-rules-line></i></div>
-    <div class="rules">
-      <div data-rule><span class="lat">I</span><h4>الخطة قبل الدخول</h4><p>وين بدخل، وين بطلع غلطان، ووين الهدف. كله مكتوب قبل الصفقة.</p></div>
-      <div data-rule><span class="lat">II</span><h4>المخاطرة بتحدد الحجم</h4><p>حجم الصفقة بيطلع من الخسارة اللي بتقبلها، مش من الحماس.</p></div>
-      <div data-rule><span class="lat">III</span><h4>المراجعة بعد كل صفقة</h4><p>رابحة أو خاسرة، بترجع لشريط الصفقات وبتشوف شو قرأت صح وشو لأ.</p></div>
+  <!-- 7 · Common questions before choosing the course -->
+  <section class="sec faq-sec" id="faq" data-site-section="rules" aria-labelledby="faq-heading"><div class="w faq-layout">
+    <div class="faq-heading"><h2 id="faq-heading">أسئلة شائعة.</h2><p>ما تحتاج إلى معرفته قبل التسجيل.</p></div>
+    <div class="faq-list">
+      <details class="faq-item" open>
+        <summary><span>ماذا يشمل مسار From Zero to Champ؟</span><svg class="faq-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12H19"/><path class="faq-plus" d="M12 5V19"/></svg></summary>
+        <div class="faq-answer"><p>يشمل المسار خمسة محاور:</p>
+          <ul><li>التأسيس</li><li>السيولة وتدفّق الأوامر</li><li>تدفّق الأوبشن</li><li>الانضباط النفسي في التداول</li><li>بناء الأفضلية الإحصائية</li></ul></div>
+      </details>
+      <details class="faq-item">
+        <summary><span>هل يناسبني المسار إذا كنت مبتدئًا؟</span><svg class="faq-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12H19"/><path class="faq-plus" d="M12 5V19"/></svg></summary>
+        <div class="faq-answer"><p>نعم. يبدأ المسار بالتأسيس وفهم بنية السوق وقراءة الشموع، ثم يتدرّج إلى السيولة وتدفّق الأوامر والأوبشن.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary><span>هل الدراسة مباشرة أم مسجّلة؟</span><svg class="faq-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12H19"/><path class="faq-plus" d="M12 5V19"/></svg></summary>
+        <div class="faq-answer"><p>تجمع الدراسة بين لقاءات مباشرة ومحتوى مسجّل، مع متابعة جماعية.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary><span>ماذا يحدث بعد إرسال طلب التسجيل؟</span><svg class="faq-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12H19"/><path class="faq-plus" d="M12 5V19"/></svg></summary>
+        <div class="faq-answer"><p>يتواصل معك الفريق لاستكمال التسجيل وتوضيح الخطوة التالية.</p></div>
+      </details>
     </div>
   </div></section>
 
@@ -193,21 +308,37 @@
   <div class="band-m" data-band aria-hidden="true"><i></i></div>
 
   <!-- 9 · End -->
-  <section class="end w" data-end>
+  <section class="end w" data-end data-site-section="contact">
     <span class="rule" data-end-rule></span>
-    <span class="lab">Apply</span>
-    <h2 class="words">اقرأ السوق من جوّا.</h2>
-    <a href="apply.html" class="up">APPLY NOW</a>
+    <h2 class="words">خذ الخطوة التالية.</h2>
+    <p class="up">تعرّف إلى ما ستتعلّمه في From Zero to Champ، أو احجز استشارة لمناقشة سؤالك.</p>
+    <div class="end-actions up">
+      <a href="course.html?course=champ&amp;lang=ar" class="end-primary"><span>استكشف From Zero to Champ</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4M10 6L4 12L10 18"/></svg></a>
+      <a href="apply.html?lang=ar#consult" class="end-secondary">احجز استشارة</a>
+    </div>
   </section>
 </main>
 
 <footer><div class="w">
-  <span class="lat">Muhammad Bassam</span>
-  <p>التداول بالأسواق المالية فيه مخاطرة عالية، وممكن تخسر جزء من رأس مالك أو كله. المحتوى تعليمي ومش نصيحة استثمارية.</p>
+  <span class="lat" data-name-en>Muhammad Bassam</span>
+  <div class="contact-links" data-contact-list hidden></div>
+  <p>التداول ينطوي على مخاطر خسارة رأس المال. المحتوى والتدريب لأغراض تعليمية، والنتائج السابقة لا تضمن نتائج مستقبلية.</p>
 </div></footer>
 
 <script src="config.js"></script>
+<script src="site-visibility.js"></script>
+<script src="visibility.js"></script>
 <script src="app.js"></script>
+<script src="translations.js"></script>
+<script src="i18n.js"></script>
+<script src="learning-guide.js"></script>
 <script src="motion.js"></script>
+<script src="edge.js"></script>
+<script src="market-surface-motion.js"></script>
+<script src="market-strike-motion.js"></script>
+<script src="footprint-visual.js"></script>
+<script src="market-footprint-motion.js"></script>
+<script src="market-section.js"></script>
+<script src="brand.js"></script>
 </body>
 </html>

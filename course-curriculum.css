@@ -1,0 +1,24 @@
+/* The curriculum uses the approved course artwork without separate enrollment offers. */
+.champ-curriculum { margin-top:64px; }
+.champ-curriculum[hidden] { display:none !important; }
+.champ-curriculum .curriculum-heading { margin:0 0 26px; font:600 28px/1.6 "Cairo",sans-serif; color:var(--ink); }
+.champ-curriculum .curriculum-modules { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+.champ-curriculum .curriculum-module { min-width:0; background:var(--bg2); border:1px solid var(--line); }
+.champ-curriculum .curriculum-module img { display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; }
+.champ-curriculum .curriculum-module-copy { padding:22px 24px; }
+.champ-curriculum .curriculum-module h3 { font:600 21px/1.6 "Cairo",sans-serif; margin:0 0 10px; color:var(--ink); text-wrap:balance; }
+.champ-curriculum .curriculum-module p { margin:0; font-size:14px; line-height:1.9; color:var(--ink2); }
+.champ-curriculum .curriculum-module ul { margin:18px 0 0; padding:0; list-style:none; border:0; }
+.champ-curriculum .curriculum-module li { position:relative; font-size:13px; line-height:1.9; padding:10px 16px 10px 0; border-top:1px solid var(--line); color:var(--ink2); }
+.champ-curriculum .curriculum-module li::before { content:""; position:absolute; inset-inline-start:0; top:23px; width:5px; height:1px; background:var(--red); }
+.champ-curriculum .curriculum-module:last-child { grid-column:1 / -1; display:grid; grid-template-columns:1fr 1fr; align-items:center; }
+.champ-curriculum .curriculum-module:last-child img { aspect-ratio:4/3; height:100%; }
+html[lang="en"] .champ-curriculum .curriculum-module li { padding-inline:16px 0; }
+@media (max-width:760px) {
+  .champ-curriculum { margin-top:42px; }
+  .champ-curriculum .curriculum-heading { font-size:24px; }
+  .champ-curriculum .curriculum-modules { grid-template-columns:1fr; gap:20px; }
+  .champ-curriculum .curriculum-module:last-child { display:block; grid-column:auto; }
+  .champ-curriculum .curriculum-module:last-child img { aspect-ratio:16/9; height:auto; }
+  .champ-curriculum .curriculum-module-copy { padding:20px; }
+}

@@ -1,133 +1,204 @@
-/* Scroll scenes for motion.html. Every scene reads a 0→1 progress from the scroll position;
-   values are eased toward their target each frame so the motion feels smooth, never jumpy.
-   The page scrolls natively — nothing here hijacks the wheel. */
+/* Scroll scenes use native scrolling. Geometry is measured after input changes,
+   then interpolation runs only until the visible state has settled. */
 (function () {
-  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
-  const seg = (p, a, b) => clamp((p - a) / (b - a));           // sub-range of a progress
-  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const body = document.body;
+  if (!body || !body.classList.contains("motion")) return;
 
-  // Split headings into words (Arabic letters must stay joined, so words, not letters)
-  $$(".words").forEach((h) => {
-    let i = 0;
-    h.innerHTML = h.textContent.trim().split(/\s+/).map((w) => `<span class="wd"><span style="--i:${i++}">${w}</span></span>`).join(" ");
-  });
-
-  // One-shot reveals
-  const io = new IntersectionObserver((ents) => ents.forEach((en) => {
-    if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
-  }), { rootMargin: "0px 0px -12% 0px" });
-  $$(".words, .up").forEach((el) => (calm ? el.classList.add("in") : io.observe(el)));
-  if (calm) { $$("[data-panel], [data-prog]").forEach((p) => p.classList.add("on")); return; }
-
-  // Progress helpers
-  const pinP = (el) => { const r = el.getBoundingClientRect(); return clamp(-r.top / (r.height - innerHeight)); };
-  const passP = (el) => { const r = el.getBoundingClientRect(); return clamp((innerHeight - r.top) / (innerHeight + r.height)); };
-  const enterP = (el, k = 0.85) => { const r = el.getBoundingClientRect(); return clamp((innerHeight - r.top) / (innerHeight * k)); };
-
-  const S = {};                                                  // smoothed values
-  const lerp = (key, target, f = 0.14) => (S[key] = S[key] === undefined ? target : S[key] + (target - S[key]) * f);
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const narrowViewport = matchMedia("(max-width: 1024px)");
+  const shortViewport = matchMedia("(max-height: 740px)");
+  const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+  const segment = (progress, start, end) => clamp((progress - start) / (end - start));
+  const ease = (value) => 1 - Math.pow(1 - value, 3);
 
   const bar = $("[data-progress-bar]");
-  const heroPin = $('[data-pin="hero"]'), heroIn = $("[data-hero-in]"), name = $("[data-hero-name]"),
-    rule = $("[data-hero-rule]"), fades = $$("[data-hero-fade]"), say = $("[data-hero-say]"), tapes = $$(".pin-hero .tape");
-  const mq = $$("[data-mq]"), marquee = $(".marquee");
-  const readsPin = $('[data-pin="reads"]'), panels = $$("[data-panel]"), segs = $$(".steps-bar i");
-  const fp = $("[data-fp-scrub]");
-  const progPin = $('[data-pin="progs"]'), progs = $$("[data-prog]"), progImgs = $$("[data-prog] .prog-img i"),
-    progNow = $("[data-prog-now]"), progSegs = $$(".progs-bar i");
-  const awPin = $('[data-pin="award"]'), awPhoto = $("[data-aw-photo]"), awImg = $("[data-aw-photo] i"),
-    awOne = $("[data-aw-one]"), awCopy = $$("[data-aw-copy] > *"), awRank = $("[data-aw-rank]");
+  const heroPin = $('[data-pin="hero"]');
+  const heroInner = $("[data-hero-in]");
+  const heroName = $("[data-hero-name]");
+  const heroRule = $("[data-hero-rule]");
+  const heroFades = $$("[data-hero-fade]");
+  const heroSaying = $("[data-hero-say]");
   const portrait = $("[data-hero-portrait] img");
-  const rulesSec = $("[data-rules]"), rulesLine = $("[data-rules-line]"), rules = $$("[data-rule]");
-  const band = $("[data-band] i"), endRule = $("[data-end-rule]"), end = $("[data-end]");
+  const tapes = $$(".pin-hero .tape");
+  const band = $("[data-band] i");
+  const end = $("[data-end]");
+  const endRule = $("[data-end-rule]");
+  const revealElements = $$(".words, .up");
 
-  let fpCells = [];
-  const frame = () => {
-    // Page progress bar
-    const max = document.documentElement.scrollHeight - innerHeight;
-    bar.style.width = (lerp("page", scrollY / max, 0.2) * 100).toFixed(2) + "%";
+  // Keep Arabic words intact and create text nodes rather than parsing their text as HTML.
+  function wrapWords() {
+    $$(".words").forEach((heading) => {
+      const fragment = document.createDocumentFragment();
+      heading.textContent.trim().split(/\s+/).forEach((word, index) => {
+        const wrapper = document.createElement("span");
+        const text = document.createElement("span");
+        wrapper.className = "wd";
+        text.style.setProperty("--i", index);
+        text.textContent = word;
+        wrapper.append(text);
+        fragment.append(wrapper, document.createTextNode(" "));
+      });
+      heading.replaceChildren(fragment);
+    });
+  }
+  wrapWords();
 
-    // 1 · Hero: name opens up and fades, rule runs edge to edge, statement takes over
-    const h = lerp("hero", pinP(heroPin));
-    const a = ease(seg(h, 0, 0.55));
-    name.style.letterSpacing = (0.16 + a * (innerWidth > 980 ? 0.06 : 0.5)).toFixed(3) + "em";   // desktop: small, so the name never spreads over his face
-    name.style.opacity = 1 - seg(h, 0.15, 0.55);
-    name.style.filter = `blur(${(seg(h, 0.2, 0.55) * 8).toFixed(1)}px)`;
-    portrait.style.transform = `translateY(${(-a * 30).toFixed(1)}px) scale(${(1 + a * 0.06).toFixed(3)})`;
-    portrait.style.opacity = (1 - seg(h, 0.35, 0.7) * 0.85).toFixed(3);
-    heroIn.style.transform = `translateY(${(-a * 60).toFixed(1)}px) scale(${(1 - a * 0.08).toFixed(3)})`;
-    rule.style.width = (56 + ease(seg(h, 0, 0.45)) * (innerWidth - 56)).toFixed(0) + "px";
-    rule.style.opacity = 1 - seg(h, 0.5, 0.7);
-    // the award plaque is the last fade, so it stays on screen longest
-    fades.forEach((f, i) => { const t = seg(h, 0.02 + i * 0.12, 0.22 + i * 0.15); f.style.opacity = 1 - t; f.style.transform = `translateY(${(-t * 30).toFixed(1)}px)`; });
-    const s = seg(h, 0.5, 0.8);
-    say.style.opacity = s * (1 - seg(h, 0.92, 1));
-    say.style.transform = `scale(${(0.92 + ease(s) * 0.08).toFixed(3)})`;
-    tapes.forEach((t, i) => (t.style.transform = `translateX(${((i ? 1 : -1) * a * 120).toFixed(1)}px)`));
+  const writtenStyles = new Map();
+  const values = {};
+  let flowing = false;
+  let frameId = null;
+  let needsMeasure = true;
+  let measurements;
+  let settling = false;
 
-    // 2 · Marquee rows move opposite ways with the scroll
-    const m = lerp("mq", passP(marquee));
-    mq.forEach((r) => (r.style.transform = `translateX(${(+r.dataset.mq * (m * 40 - 20)).toFixed(2)}%)`));
+  function paint(element, property, value) {
+    if (!element) return;
+    const next = String(value);
+    if (element.style[property] === next) return;
+    element.style[property] = next;
+    if (!writtenStyles.has(element)) writtenStyles.set(element, new Set());
+    writtenStyles.get(element).add(property);
+  }
 
-    // 3 · Reads: three panels, one per third of the pinned scroll
-    const rp = lerp("reads", pinP(readsPin), 0.2);
-    const idx = Math.min(2, Math.floor(rp * 3));
-    panels.forEach((p, i) => { p.classList.toggle("on", i === idx); p.classList.toggle("past", i < idx); });
-    segs.forEach((g, i) => g.style.setProperty("--f", (clamp(rp * 3 - i) * 100).toFixed(1) + "%"));
-
-    // 4 · Footprint: light the bars one by one as the grid enters
-    if (fp) {
-      if (!fpCells.length) fpCells = $$(".c", fp);
-      const fpp = enterP(fp, 0.9);
-      fpCells.forEach((c, i) => c.classList.toggle("lit", fpp * 6 > (i % 5) + 0.6));
+  function interpolate(key, target, speed = 0.14) {
+    const previous = values[key] ?? target;
+    const next = previous + (target - previous) * speed;
+    if (Math.abs(target - next) > 0.0005) {
+      settling = true;
+      values[key] = next;
+    } else {
+      values[key] = target;
     }
+    return values[key];
+  }
 
-    // 5 · Programs: each one wipes up over the last; the one underneath sinks back
-    const slot = clamp((lerp("progs", pinP(progPin), 0.16) - 0.04) / 0.9) * (progs.length - 1);
-    progs.forEach((pr, i) => {
-      const r = i ? ease(clamp((slot - (i - 1)) / 0.75)) : 1;                  // how far this one has come in
-      const next = i < progs.length - 1 ? ease(clamp((slot - i) / 0.75)) : 0; // how far the next one covers it
-      if (i) pr.style.clipPath = `inset(${((1 - r) * 100).toFixed(2)}% 0 0 0)`;
-      pr.style.transform = `scale(${(1 - next * 0.06).toFixed(3)})`;
-      pr.style.filter = `brightness(${(1 - next * 0.65).toFixed(3)})`;
-      progImgs[i].style.transform = `scale(${(1.25 - r * 0.25).toFixed(3)}) translateY(${(next * 6).toFixed(2)}%)`;
-      pr.classList.toggle("on", slot > i - 0.6);
+  function progress(element, type = "pin", factor = 0.85) {
+    if (!element) return 0;
+    const rect = element.getBoundingClientRect();
+    if (type === "pass") return clamp((innerHeight - rect.top) / (innerHeight + rect.height));
+    if (type === "enter") return clamp((innerHeight - rect.top) / (innerHeight * factor));
+    return rect.height > innerHeight ? clamp(-rect.top / (rect.height - innerHeight)) : 0;
+  }
+
+  function measure() {
+    const distance = document.documentElement.scrollHeight - innerHeight;
+    const snapshot = { width: innerWidth, page: distance > 0 ? clamp(scrollY / distance) : 0 };
+    if (flowing) return snapshot;
+    return Object.assign(snapshot, {
+      hero: progress(heroPin),
+      band: progress(band?.parentElement, "pass"),
+      end: progress(end, "enter", 0.8),
     });
-    const cur = Math.min(progs.length - 1, Math.floor(slot + 0.4));
-    progNow.textContent = "0" + (cur + 1);
-    progSegs.forEach((g, i) => g.classList.toggle("on", i <= cur));
+  }
 
-    // 6 · Award: photo opens from a slit, image settles, the "1" lands, copy rises
-    const w = lerp("aw", pinP(awPin));
-    const open = ease(seg(w, 0, 0.45));
-    awPhoto.style.clipPath = `inset(${((1 - open) * 46).toFixed(2)}% 0 ${((1 - open) * 46).toFixed(2)}% 0)`;
-    awImg.style.transform = `scale(${(1.35 - open * 0.35 + seg(w, 0.6, 1) * 0.06).toFixed(3)})`;
-    const one = ease(seg(w, 0.2, 0.6));
-    awOne.style.transform = `scale(${(2.4 - one * 1.4).toFixed(3)})`;
-    awOne.style.opacity = one;
-    const rk = ease(seg(w, 0.3, 0.6));
-    awRank.style.opacity = rk; awRank.style.transform = `translateY(${((1 - rk) * 60).toFixed(1)}px)`;
-    awCopy.forEach((c, i) => {
-      if (c === awOne) return;
-      const t = ease(seg(w, 0.35 + i * 0.06, 0.6 + i * 0.06));
-      c.style.opacity = t; c.style.transform = `translateY(${((1 - t) * 40).toFixed(1)}px)`;
+  function render(snapshot) {
+    paint(bar, "transform", `scaleX(${flowing ? snapshot.page : interpolate("page", snapshot.page, 0.2)})`);
+    if (flowing) return;
+
+    const hero = interpolate("hero", snapshot.hero);
+    const opening = ease(segment(hero, 0, 0.55));
+    paint(heroName, "letterSpacing", (0.16 + opening * (snapshot.width > 980 ? 0.06 : 0.5)).toFixed(3) + "em");
+    paint(heroName, "opacity", 1 - segment(hero, 0.15, 0.55));
+    paint(heroName, "filter", `blur(${(segment(hero, 0.2, 0.55) * 8).toFixed(1)}px)`);
+    paint(portrait, "transform", `translateY(${(-opening * 30).toFixed(1)}px) scale(${(1 + opening * 0.06).toFixed(3)})`);
+    paint(portrait, "opacity", (1 - segment(hero, 0.35, 0.7) * 0.85).toFixed(3));
+    paint(heroInner, "transform", `translateY(${(-opening * 60).toFixed(1)}px) scale(${(1 - opening * 0.08).toFixed(3)})`);
+    if (heroInner) heroInner.inert = hero >= 0.7;
+    // The divider recedes with the identity; it never sweeps across the page.
+    paint(heroRule, "transform", `scaleX(${(1 - opening * 0.45).toFixed(3)})`);
+    paint(heroRule, "opacity", 1 - ease(segment(hero, 0.02, 0.24)));
+    heroFades.forEach((element, index) => {
+      const offset = index / Math.max(heroFades.length - 1, 1) * 0.36;
+      const amount = segment(hero, 0.02 + offset, 0.3 + offset);
+      paint(element, "opacity", 1 - amount);
+      paint(element, "transform", `translateY(${(-amount * 30).toFixed(1)}px)`);
     });
+    const saying = ease(segment(hero, 0.46, 0.72));
+    paint(heroSaying, "opacity", saying * (1 - ease(segment(hero, 0.92, 1))));
+    paint(heroSaying, "transform", `translateY(${((1 - saying) * 16).toFixed(1)}px)`);
+    paint(heroSaying, "filter", `blur(${((1 - saying) * 3).toFixed(1)}px)`);
+    tapes.forEach((tape, index) => paint(tape, "transform", `translateX(${((index ? 1 : -1) * opening * 120).toFixed(1)}px)`));
 
-    // 7 · Rules: the red line runs across and switches each rule on
-    const rl = lerp("rules", enterP(rulesSec, 1.1));
-    rulesLine.style.width = (ease(rl) * 100).toFixed(1) + "%";
-    rules.forEach((r, i) => r.classList.toggle("on", rl > 0.25 + i * 0.25));
+    const bandProgress = interpolate("band", snapshot.band);
+    paint(band, "transform", `translateY(${((bandProgress - 0.5) * 16).toFixed(2)}%) scale(${(1.3 - bandProgress * 0.3).toFixed(3)})`);
+    paint(endRule, "width", (ease(interpolate("end", snapshot.end)) * 220).toFixed(0) + "px");
+  }
 
-    // 8 · Band: zoom out + drift
-    const b = lerp("band", passP(band.parentElement));
-    band.style.transform = `translateY(${((b - 0.5) * 16).toFixed(2)}%) scale(${(1.3 - b * 0.3).toFixed(3)})`;
+  function frame() {
+    frameId = null;
+    if (needsMeasure) {
+      measurements = measure();
+      needsMeasure = false;
+    }
+    settling = false;
+    render(measurements);
+    if (settling) schedule();
+  }
 
-    // 9 · End rule grows
-    endRule.style.width = (ease(lerp("end", enterP(end, 0.8))) * 220).toFixed(0) + "px";
+  function schedule() {
+    if (frameId === null && !document.hidden) frameId = requestAnimationFrame(frame);
+  }
 
-    requestAnimationFrame(frame);
-  };
-  requestAnimationFrame(frame);
+  function requestMeasure() {
+    needsMeasure = true;
+    schedule();
+  }
+
+  function updateMode() {
+    flowing = reducedMotion.matches || narrowViewport.matches || shortViewport.matches;
+    body.classList.toggle("motion-reduced", reducedMotion.matches);
+    body.classList.toggle("motion-flow", flowing);
+    for (const [element, properties] of writtenStyles) {
+      for (const property of properties) element.style[property] = "";
+    }
+    writtenStyles.clear();
+    for (const key of Object.keys(values)) delete values[key];
+    if (heroInner) heroInner.inert = false;
+    if (flowing) {
+      revealElements.forEach((element) => element.classList.add("in"));
+    }
+    requestMeasure();
+  }
+
+  if (typeof IntersectionObserver === "function") {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -12% 0px" });
+    revealElements.forEach((element) => observer.observe(element));
+  } else {
+    revealElements.forEach((element) => element.classList.add("in"));
+  }
+
+  [reducedMotion, narrowViewport, shortViewport].forEach((query) => query.addEventListener("change", updateMode));
+  addEventListener("scroll", requestMeasure, { passive: true });
+  addEventListener("resize", requestMeasure, { passive: true });
+  addEventListener("load", requestMeasure, { once: true });
+  addEventListener("pageshow", requestMeasure);
+  document.addEventListener("site:languagechange", () => {
+    wrapWords();
+    requestMeasure();
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && frameId !== null) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    } else if (!document.hidden) {
+      requestMeasure();
+    }
+  });
+  document.fonts?.ready.then(requestMeasure);
+  if (typeof ResizeObserver === "function") {
+    const observer = new ResizeObserver(requestMeasure);
+    [heroPin, end].filter(Boolean).forEach((element) => observer.observe(element));
+  }
+
+  body.classList.add("motion-ready");
+  updateMode();
 })();
