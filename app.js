@@ -432,12 +432,27 @@
         footer.append(pricing, action);
         copy.append(level, title, summary);
         copy.append(footer);
+        // pay.js shows this only for offers that can be paid with crypto.
+        const payment = document.createElement("a");
+        payment.className = "pay-button course-card-pay";
+        payment.dataset.payLink = "";
+        payment.dataset.payOffer = course.id;
+        payment.hidden = true;
+        const coin = document.createElement("span");
+        coin.className = "pay-coin";
+        coin.setAttribute("aria-hidden", "true");
+        coin.textContent = "₮";
+        const payLabel = document.createElement("span");
+        payLabel.textContent = "ادفع بالكريبتو (USDT)";
+        payment.append(coin, payLabel);
+        copy.append(payment);
         card.append(button, image, copy);
         return card;
       }));
       $$("[data-course-type]", catalogue).forEach((button) => {
         button.setAttribute("aria-pressed", String(button.dataset.courseType === courseType));
       });
+      if (typeof window !== "undefined") window.MB_PAY_LINKS?.();
     };
 
     catalogue.addEventListener("click", (event) => {

@@ -126,6 +126,7 @@
     updateLinks();
     $("#applyForm")?.addEventListener("change", updateLinks);
     document.addEventListener("site:languagechange", updateLinks);
+    window.MB_PAY_LINKS = updateLinks; // app.js re-renders course cards and calls this afterwards
 
     const page = $("[data-pay-page]");
     if (!page) return;

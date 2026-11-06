@@ -407,7 +407,7 @@ window.MB_TRANSLATIONS = {
   "المبلغ": "Amount",
   "المبلغ بعملة USDT يساوي السعر المعروض بالدولار الأمريكي.": "The USDT amount equals the price shown in US dollars.",
   "تفضّل التواصل قبل الدفع؟ قدّم طلبك": "Prefer to talk before paying? Apply instead",
-  "أو ادفع مباشرة بالكريبتو (USDT)": "Or pay directly with crypto (USDT)",
+  "ادفع بالكريبتو (USDT)": "Pay with crypto (USDT)",
   "وضع التجربة": "Test mode",
   "العنوان المعروض تجريبي وغير صالح للتحويل، والنموذج لا يرسل أي بيانات. لا تحوّل أي مبلغ.": "The address shown is a test placeholder and cannot receive transfers, and the form sends no data. Do not transfer any money.",
   "تجريبي · لا تحوّل عليه": "Test · do not send"
