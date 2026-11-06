@@ -12,3 +12,6 @@ __pycache__/
 !.env.example
 .DS_Store
 Thumbs.db
+
+# Private relay settings (n8n address)
+/api/relay-config.php

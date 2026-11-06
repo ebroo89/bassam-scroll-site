@@ -12,6 +12,17 @@ SPEC.loader.exec_module(export)
 
 
 class ExportSiteTests(unittest.TestCase):
+    def test_php_relays_ship_without_the_private_n8n_address(self):
+        root = Path(__file__).resolve().parents[1]
+        for name in ["api/apply.php", "api/book.php", "api/relay-config.example.php"]:
+            self.assertNotRegex((root / name).read_text(encoding="utf-8"), r"\d+\.\d+\.\d+\.\d+:5678", name)
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "public"
+            export.export_site(output)
+            self.assertTrue((output / "api/apply.php").is_file())
+            self.assertTrue((output / "api/book.php").is_file())
+            self.assertFalse((output / "api/relay-config.php").exists())
+
     def test_export_is_public_only_and_versions_existing_resources(self):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary) / "public"
