@@ -21,11 +21,6 @@
 .program-jump button:hover { border-color:rgba(255,255,255,.34); color:var(--ink); }
 .program-jump button[aria-pressed="true"], .program-jump button[aria-current="true"] { border-color:var(--red); background:var(--tint-3); color:#fff; }
 
-/* "Help me choose" */
-.learning-guide { border:1px solid var(--line); background:var(--surface); padding-inline:22px; transition:border-color .2s; }
-.learning-guide:hover, .learning-guide[open] { border-color:var(--red-line); }
-.learning-guide[open] { background:linear-gradient(180deg, var(--tint), transparent 60%), var(--surface); }
-
 /* Course offer card */
 .course-card { background:linear-gradient(155deg, var(--tint-2), var(--tint) 42%, transparent 78%), var(--surface); border-color:var(--red-line); box-shadow:var(--lift); }
 @media (hover:hover) { .course-card:hover { border-color:var(--red); box-shadow:0 26px 50px -24px rgba(0,0,0,.95); } }
@@ -88,7 +83,6 @@
 }
 @media (max-width:760px) {
   .program-jump button { padding:9px 14px; }
-  .learning-guide { padding-inline:16px; }
   #programs .service-panel .prog-foot, .course-catalog .prog-foot { padding:18px 16px; }
   .ap-sum { padding:16px; }
   .help-sec { padding-bottom:40px; }
@@ -99,5 +93,5 @@
   .course-enroll h2 { font-size:24px; }
 }
 @media (prefers-reduced-motion:reduce) {
-  .program-jump button, .learning-guide, .faq-item summary, .course-card-footer a.course-card-action, .help-button { transition:none; }
+  .program-jump button, .faq-item summary, .course-card-footer a.course-card-action, .help-button { transition:none; }
 }
