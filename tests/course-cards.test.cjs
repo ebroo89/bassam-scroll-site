@@ -145,11 +145,8 @@ for (const lang of ['ar', 'en']) {
     assert.equal(page.document.title, 'From Zero to Champ | Muhammad Bassam');
     assert.equal(page.nodes.get('[data-course-price]').textContent, '$2,490');
     assert.equal(page.nodes.get('[data-course-original]').textContent, '$4,500');
-    const enrollment = new URL(page.nodes.get('[data-course-apply]').href);
-    assert.equal(enrollment.pathname, '/apply.html');
-    assert.equal(enrollment.searchParams.get('course'), 'champ');
-    assert.equal(enrollment.searchParams.get('lang'), lang);
-    assert.equal(enrollment.hash, '#group');
+    // Enrolment happens in the pay box at the end of the page, after the curriculum.
+    assert.equal(page.nodes.get('[data-course-apply]').href, '#course-enroll');
     assert.equal(page.nodes.get('[data-champ-curriculum]').hidden, false);
     assert.deepEqual(Array.from(page.nodes.get('[data-curriculum-modules]').children, card => card.dataset.curriculumModule),
       ['foundations', 'order-flow', 'options-flow', 'psychology', 'edge']);

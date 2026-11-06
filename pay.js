@@ -138,6 +138,16 @@
     $("[data-pay-flow]").hidden = !offer;
     if (!offer) return;
 
+    // The only way out of the page leads back to where the visitor came from: the course page or the programmes.
+    const backLink = $("[data-pay-back]");
+    if (backLink && offer.id === "champ") {
+      const course = new URL("course.html", window.location.href);
+      course.searchParams.set("course", offer.id);
+      course.searchParams.set("lang", lang());
+      backLink.href = course.href;
+      backLink.textContent = "رجوع للدورة";
+    }
+
     const pay = C.cryptoPayment || {};
     const asset = text(pay.asset) || "USDT", network = text(pay.network) || "TRC20";
     $("[data-sum-img]").style.backgroundImage = `url(${offer.img})`;

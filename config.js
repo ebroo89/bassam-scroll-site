@@ -239,6 +239,10 @@ window.MB = {
   // Empty means a clearly labelled local demonstration with no delivery.
   webhookUrl: "",
 
+  // Programmes offered on the application form. The course and consultations are paid on pay.html instead;
+  // older links with #group or #consult still open their form.
+  applicationPrograms: ["private", "indicator"],
+
   // Crypto payment (pay.html). It stays a labelled preview that shows no wallet until BOTH the TRC20
   // address and the proof endpoint are set. The endpoint must store the receipt and return JSON { ok: true }.
   cryptoPayment: {

@@ -36,6 +36,14 @@
 #programs .service-panel .prog-foot, .course-catalog .prog-foot { max-width:none; padding:20px 22px; background:var(--tint); border:1px solid var(--red-line); }
 .prog-foot:has(.pay-button) { flex-wrap:wrap; }
 .prog-foot .pay-button { flex:1 0 100%; width:100%; margin:4px 0 0; }
+/* Course page: the single enrolment box, after the curriculum */
+.course-enroll { margin-top:72px; padding:32px; background:linear-gradient(160deg, var(--tint-2), var(--tint) 45%, transparent 85%), var(--surface); border:1px solid var(--red-line); box-shadow:var(--lift); scroll-margin-top:100px; }
+.course-enroll h2 { font:600 28px/1.4 "Cairo",sans-serif; color:var(--ink); margin:0; }
+.course-enroll:lang(en) h2 { font-family:"Jost",sans-serif; font-weight:500; }
+.course-enroll > p { margin-top:10px; color:var(--ink2); line-height:1.9; max-width:62ch; }
+.course-page .course-enroll .prog-foot { margin-top:22px; padding:0; background:none; border:0; }
+/* Consultation: booking and paying are one action */
+.prog-foot .pay-button-main { flex:none; width:auto; margin:0; margin-inline-start:auto; }
 .service-fit { padding:16px 18px; background:var(--surface); border:1px solid var(--line); }
 .service-fit + .service-fit { margin-top:0; }
 .private-schedule { padding:18px; background:var(--surface); border:1px solid var(--line); }
@@ -62,12 +70,15 @@
 
 @media (max-width:600px) {
   #programs .service-panel .prog-foot .pay-button { flex:none; }
+  .prog-foot .pay-button-main { width:100%; }
 }
 @media (max-width:760px) {
   .program-jump button { padding:9px 14px; }
   .learning-guide { padding-inline:16px; }
   #programs .service-panel .prog-foot, .course-catalog .prog-foot { padding:18px 16px; }
   .ap-sum { padding:16px; }
+  .course-enroll { margin-top:52px; padding:22px 18px; }
+  .course-enroll h2 { font-size:24px; }
 }
 @media (prefers-reduced-motion:reduce) {
   .program-jump button, .learning-guide, .faq-item summary, .course-card-footer a.course-card-action { transition:none; }

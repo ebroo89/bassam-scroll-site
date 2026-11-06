@@ -330,11 +330,8 @@
       item.textContent = topic;
       return item;
     }));
-    const link = new URL("apply.html", location.href);
-    link.searchParams.set("course", course.id);
-    link.searchParams.set("lang", document.documentElement.lang || "ar");
-    link.hash = "group";
-    $("[data-course-apply]", page).href = link.href;
+    // Enrolment is the pay box at the end of the page, after the curriculum.
+    $("[data-course-apply]", page).href = "#course-enroll";
     $("[data-course-detail]", page).hidden = false;
     if (typeof window !== "undefined") window.MB_CURRICULUM?.show(course.id);
   };
@@ -423,28 +420,12 @@
         action.className = "course-card-action";
         action.id = `course-${course.id}-action`;
         action.setAttribute("aria-labelledby", `${title.id} ${action.id}`);
-        const application = new URL("apply.html", location.href);
-        application.searchParams.set("course", course.id);
-        application.searchParams.set("lang", document.documentElement?.lang || "ar");
-        application.hash = "group";
-        action.href = application.href;
-        action.textContent = offer.action;
+        // One way in: the course page holds the details and the payment.
+        action.href = courseLink(course.id);
+        action.textContent = "تفاصيل الدورة";
         footer.append(pricing, action);
         copy.append(level, title, summary);
         copy.append(footer);
-        // pay.js shows this only for offers that can be paid with crypto.
-        const payment = document.createElement("a");
-        payment.className = "pay-button course-card-pay";
-        payment.dataset.payLink = "";
-        payment.dataset.payOffer = course.id;
-        payment.hidden = true;
-        const coin = document.createElement("span");
-        coin.className = "pay-coin";
-        coin.setAttribute("aria-hidden", "true");
-        const payLabel = document.createElement("span");
-        payLabel.textContent = "ادفع بالكريبتو (USDT)";
-        payment.append(coin, payLabel);
-        copy.append(payment);
         card.append(button, image, copy);
         return card;
       }));
@@ -498,6 +479,9 @@
   const form = $("#applyForm");
   if (!form) return;
   const availablePrograms = ["group", "private", "consult", "indicator"].filter(programVisible);
+  // Step 1 lists only the programmes still requested by form (config.applicationPrograms).
+  const onForm = (id) => !Array.isArray(C.applicationPrograms) || C.applicationPrograms.includes(id);
+  $$("[data-program-choice]", form).forEach((choice) => { if (!onForm(choice.dataset.programChoice)) choice.hidden = true; });
   if (!availablePrograms.length) {
     form.hidden = true;
     $(".ap-sum")?.setAttribute("hidden", "");
@@ -676,7 +660,7 @@
     const v = location.hash.slice(1);
     const hiddenChoice = visibility && ((v && !programVisible(v)) || (requestedCourse && !visibility.isCourseVisible(requestedCourse)));
     if (hiddenChoice) fill("[data-visibility-notice]", "هذا الخيار غير متاح حاليًا. اختر من البرامج المتاحة أدناه.");
-    const selected = Object.hasOwn(PROGRAMS, v) && programVisible(v) ? v : (visibility ? availablePrograms[0] : "private");
+    const selected = Object.hasOwn(PROGRAMS, v) && programVisible(v) ? v : (visibility ? availablePrograms.find(onForm) || availablePrograms[0] : "private");
     setProgram(selected);
     goStep(Object.hasOwn(PROGRAMS, v) && !hiddenChoice ? 2 : 1, focus);
   };
