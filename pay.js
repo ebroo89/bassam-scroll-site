@@ -182,7 +182,8 @@
     const transfer = $("[data-pay-step='1']"), form = $("#payForm"), done = $("#payDone");
     const prog = $$("[data-progress] li");
     const msg = $(".form-msg", form), submit = $("[data-submit]", form), back = $("[data-back]", form);
-    const submitLabel = mode.live ? "أرسل إثبات الدفع" : "جرّب النموذج";
+    // Same label in every mode; the test/preview notice and the result screen say that nothing was sent.
+    const submitLabel = "أرسل إثبات الدفع";
     submit.textContent = submitLabel;
     const fieldNames = ["name", "email", "phone", "txid", "receipt", "consent"];
     let sending = false;
