@@ -27,6 +27,12 @@ Public pages load `config.js` -> `site-visibility.js` -> `visibility.js` -> `app
 
 `app.js` handles shared configuration, cards, service choices and forms. `motion.*` handles hero/end transitions; `edge.*` the process loop; `market-section.*` the three illustration panels. Market values are synthetic educational illustrations, with no live feed connection. `learning-guide.js` uses local deterministic recommendations and can substitute a visible bundle only when it covers the required content.
 
+## Crypto payment
+
+`pay.html?offer=champ|private|consult` shows the USDT (TRC20) amount and wallet, then a proof-of-payment form (name, email, phone, optional TxID, receipt upload, confirmation). Amounts come from the existing prices: the `champ` course price and `prices.private` / `prices.consult`. An offer is payable only when it is listed in `cryptoPayment.offers`, visible, open and has a fixed price. `pay.js` also sets the "pay with crypto" links (`data-pay-link`) on the home, course and application pages and hides them for offers that cannot be paid.
+
+The wallet is shown only when both the address and the proof endpoint are configured, so nobody can pay without being able to send the proof. Success requires a JSON `{ "ok": true }` acknowledgement; the page never says the payment is confirmed. The endpoint (an n8n webhook to GoHighLevel, kept outside this repository) must store the receipt and re-validate every field.
+
 ## Editing content and visibility
 
 Edit identity, prices, course records, dated availability, contacts and the submission URL in `config.js`. Some marketing and interface copy lives directly in HTML/JS. Add the matching English entry in `translations.js` whenever Arabic source text changes, including dynamic states and accessibility labels. `i18n.js` performs exact-source translation, observes inserted content, maintains RTL/LTR, and preserves language through `?lang=` and the optional `bassam-language` local-storage preference. Check both directions and switch languages after interacting with controls.

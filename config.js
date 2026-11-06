@@ -239,6 +239,17 @@ window.MB = {
   // Empty means a clearly labelled local demonstration with no delivery.
   webhookUrl: "",
 
+  // Crypto payment (pay.html). It stays a labelled preview that shows no wallet until BOTH the TRC20
+  // address and the proof endpoint are set. The endpoint must store the receipt and return JSON { ok: true }.
+  cryptoPayment: {
+    asset: "USDT",
+    network: "TRC20 (Tron)",
+    address: "",
+    webhookUrl: "",
+    // Offers with a fixed price that can be paid: "champ" (course price), "private" and "consult" (prices above).
+    offers: ["champ", "private", "consult"],
+  },
+
   // Contact
   whatsapp: "",   // international format without +, e.g. "9715xxxxxxxx"
   telegram: "",   // e.g. "https://t.me/xxxx"

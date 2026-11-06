@@ -9,13 +9,14 @@ import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_FILES = (
-    ".nojekyll", "index.html", "course.html", "apply.html",
+    ".nojekyll", "index.html", "course.html", "apply.html", "pay.html",
     "app.js", "config.js", "translations.js", "i18n.js", "brand.js", "brand.css",
     "style.css", "motion.js", "motion.css", "edge.js", "edge.css",
     "courses.css", "course-page.css", "course-curriculum.js", "course-curriculum.css",
     "learning-guide.js", "learning-guide.css", "site-visibility.js", "visibility.js",
     "market-section.js", "market-section.css", "market-surface-motion.js",
     "market-strike-motion.js", "market-footprint-motion.js", "footprint-visual.js",
+    "pay.js", "pay.css",
 )
 ASSET_TYPES = {".jpg", ".jpeg", ".png", ".webp", ".svg", ".ico", ".woff", ".woff2"}
 LOCAL_RESOURCE = re.compile(r'((?:src|href)=")([^"?]+\.(?:js|css))(?:\?[^"#]*)?(")')
