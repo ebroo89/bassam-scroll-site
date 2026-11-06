@@ -258,7 +258,7 @@ window.MB = {
   cryptoPayment: {
     asset: "USDT",
     network: "TRC20 (Tron)",
-    address: "",
+    address: "TGfvW2PFG4GQoypQX4ofuAWD2oXaVbNjag",
     webhookUrl: "",
     // Demo only: shows this placeholder (deliberately not a valid TRON address) while no real address is set.
     // Remove both lines, or set test: false, before launch.

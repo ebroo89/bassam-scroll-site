@@ -58,7 +58,11 @@ test('hidden, unlisted or unpriced offers cannot be paid for', () => {
 test('the wallet is shown only when both address and endpoint are configured', () => {
   assert.equal(pay.payMode(siteConfig(), LIVE_LOCATION).live, false);
   assert.equal(pay.payMode(siteConfig({ address: ADDRESS }), LIVE_LOCATION).live, false);
-  assert.equal(pay.payMode(siteConfig({ webhookUrl: 'https://n8n.example.com/webhook/pay' }), LIVE_LOCATION).live, false);
+  assert.equal(pay.payMode(siteConfig({ address: '', webhookUrl: 'https://n8n.example.com/webhook/pay' }), LIVE_LOCATION).live, false);
+  // The real wallet is in config.js, but with no endpoint it is never shown: nobody can pay without being able to send the proof.
+  const withoutEndpoint = pay.payMode(siteConfig({ webhookUrl: '' }), LIVE_LOCATION);
+  assert.equal(withoutEndpoint.live, false);
+  assert.notEqual(withoutEndpoint.address, siteConfig().cryptoPayment.address);
   assert.equal(pay.payMode(siteConfig({ address: 'not-an-address', webhookUrl: 'https://n8n.example.com/webhook/pay' }), LIVE_LOCATION).live, false);
   const live = pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'https://n8n.example.com/webhook/pay' }), LIVE_LOCATION);
   assert.deepEqual(live, { live: true, test: false, address: ADDRESS, endpoint: 'https://n8n.example.com/webhook/pay' });
