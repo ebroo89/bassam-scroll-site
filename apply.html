@@ -3,20 +3,22 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>تقديم طلب | محمد بسام</title>
-<meta name="description" content="قدّم طلبك للتدريب مع محمد بسام: دورة خاصة، الدورة الجماعية، استشارة، أو مؤشرات TradingView.">
+<meta name="description" content="قدّم طلبك لمسار From Zero to Champ أو التدريب الخاص أو الاستشارات، وسجّل اهتمامك بأدوات التداول القادمة.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#050607">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@200;300;400;500&family=Cairo:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="courses.css">
+<link rel="stylesheet" href="brand.css">
 </head>
 <body class="apply-page">
 <a class="skip-link" href="#main-content">انتقل إلى نموذج الطلب</a>
 
 <nav id="nav" aria-label="التنقل الرئيسي"><div class="w">
-  <div class="brand-group"><a href="index.html" class="lat" data-brand-name title="الصفحة الرئيسية">M · Bassam</a><button type="button" class="language-toggle" data-language-toggle translate="no" lang="en" aria-label="Switch to English">EN</button></div>
+  <div class="brand-group"><a href="index.html" class="lat" data-brand-name title="الصفحة الرئيسية">محمد بسام</a><button type="button" class="language-toggle" data-language-toggle translate="no" lang="en" aria-label="Switch to English">EN</button></div>
   <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-links">القائمة</button>
-  <div class="links" id="site-links" data-nav-links><a href="index.html#reads">المنهج</a><a href="index.html#programs">البرامج</a><a href="index.html#award">الإنجاز</a></div>
+  <div class="links" id="site-links" data-nav-links><a href="index.html#reads">المنهج</a><a href="index.html#programs">البرامج</a><a href="index.html#edge">بناء الأفضلية</a></div>
   <a href="index.html" class="apply-link">العودة للموقع</a>
 </div></nav>
 
@@ -27,6 +29,7 @@
     <p>اختر البرنامج وأدخل معلومات التواصل والتفاصيل التي تريد مناقشتها.</p>
   </header>
   <p class="preview-notice" data-preview-notice role="note" hidden><strong>وضع المعاينة</strong>يمكنك تجربة خطوات النموذج. تبقى المعلومات على هذا الجهاز، ولا ترسل طلبًا فعليًا.</p>
+  <p class="form-note" data-visibility-notice role="status" hidden></p>
   <noscript><p class="form-note">فعّل JavaScript في متصفحك لتعبئة النموذج والتنقل بين خطواته.</p></noscript>
 
   <ol class="ap-progress" data-progress aria-label="خطوات تقديم الطلب">
@@ -41,11 +44,12 @@
         <fieldset class="step" data-step="1">
           <legend tabindex="-1">أي برنامج يهمّك؟</legend>
           <div class="pick">
-            <label><input type="radio" name="program" value="private" checked><span style="--img:url(assets/img/mentor.jpg)"><em>01</em><b>دورة خاصة</b><small>فردي ومباشر</small></span></label>
-            <label><input type="radio" name="program" value="group"><span style="--img:url(assets/img/group.jpg)"><em>02</em><b>الدورة الجماعية</b><small>قائمة الانتظار</small></span></label>
-            <label><input type="radio" name="program" value="consult"><span style="--img:url(assets/img/consult.jpg)"><em>03</em><b>استشارة</b><small>جلسة مركّزة</small></span></label>
-            <label><input type="radio" name="program" value="indicator"><span style="--img:url(assets/img/indicator.jpg)"><em>04</em><b>مؤشرات</b><small>على TradingView</small></span></label>
+            <label data-program-choice="private"><input type="radio" name="program" value="private" checked><span style="--img:url(assets/img/private-training-v1.jpg)"><em>01</em><b>تدريب خاص</b><small>فردي ومباشر</small></span></label>
+            <label data-program-choice="group"><input type="radio" name="program" value="group"><span style="--img:url(assets/img/group.jpg)"><em>02</em><b>From Zero to Champ</b><small>تعلّم مباشر ومحتوى مسجّل</small></span></label>
+            <label data-program-choice="consult"><input type="radio" name="program" value="consult"><span style="--img:url(assets/img/consult-review.jpg)"><em>03</em><b>استشارات</b><small>جلسة مركّزة</small></span></label>
+            <label data-program-choice="indicator"><input type="radio" name="program" value="indicator"><span style="--img:url(assets/img/indicator-tools-v1.jpg)"><em>04</em><b>مؤشرات</b><small>أدوات التداول</small></span></label>
           </div>
+          <label class="f" data-for="group"><span>المسار التدريبي</span><select name="course"><option value="champ">From Zero to Champ</option></select></label>
         </fieldset>
 
         <fieldset class="step" data-step="2" hidden>
@@ -67,12 +71,15 @@
         <fieldset class="step" data-step="3" hidden>
           <legend tabindex="-1">تفاصيل الطلب</legend>
           <div class="fields one">
-            <label class="f" data-for="consult"><span>موضوع الاستشارة (اختياري)</span><textarea name="topic" rows="3"></textarea></label>
+            <label class="f" data-for="consult"><span>سؤالك أو الموضوع الذي تريد مناقشته (اختياري)</span><textarea name="topic" rows="3"></textarea></label>
             <label class="f" data-for="consult"><span>الوقت المناسب لك</span>
               <select name="slot"><option value="الصبح">الصبح</option><option value="بعد الظهر">بعد الظهر</option><option value="المسا">المسا</option></select>
             </label>
-            <label class="f" data-for="indicator"><span id="tv-user-label">اسم المستخدم على TradingView (مطلوب)</span><input name="tv_user" required dir="ltr" autocomplete="off" spellcheck="false" aria-labelledby="tv-user-label" aria-invalid="false" aria-describedby="tv-user-error"><span class="field-error" id="tv-user-error" data-error-for="tv_user" hidden></span></label>
-            <p class="form-note" data-for="group" data-group-note>سجّل اهتمامك لنشاركك تفاصيل الدفعة عند فتح التسجيل.</p>
+            <label class="f" data-for="indicator"><span>أي نوع من الأدوات يهمّك؟ (اختياري)</span><select name="indicator_interest"><option value="">أريد المساعدة في الاختيار</option><option value="signals">إشارات مبنية على قواعد</option><option value="options">أدوات الأوبشن فلو</option><option value="context">أدوات قراءة السوق</option></select></label>
+            <label class="f" data-for="indicator"><span id="tv-user-label">اسم المستخدم على TradingView (اختياري)</span><input name="tv_user" dir="ltr" autocomplete="off" spellcheck="false" aria-labelledby="tv-user-label" aria-invalid="false" aria-describedby="tv-user-error"><small>أضفه إذا كنت تستخدم TradingView. نؤكّد متطلبات المنصة لكل أداة عند توفرها.</small><span class="field-error" id="tv-user-error" data-error-for="tv_user" hidden></span></label>
+            <p class="form-note" data-for="group" data-group-note>تعرّف إلى محتوى المسار وتفاصيل التسجيل.</p>
+            <label class="f" data-for="private"><span>الشهر المفضّل للتدريب (اختياري)</span><select name="preferred_month"><option value="">ننسّق الشهر لاحقًا</option></select><small>يؤكّد الفريق الموعد معك بعد مراجعة الطلب.</small></label>
+            <p class="form-note" data-for="consult">مدة الاستشارة 90 دقيقة. يتواصل معك أحد أفراد الفريق بعد التسجيل لجمع المعلومات اللازمة وتنسيق الموعد.</p>
             <label class="f" data-for="private group"><span>هدفك من التدريب (اختياري)</span><textarea name="goal" rows="3"></textarea></label>
             <label class="consent"><input type="checkbox" name="consent" required aria-invalid="false" aria-describedby="consent-error"><span>أفهم أن التداول ينطوي على مخاطرة، وأن التدريب لا يضمن الأرباح. (مطلوب)</span></label>
             <p class="field-error" id="consent-error" data-error-for="consent" hidden></p>
@@ -102,7 +109,10 @@
       <span data-sum-k></span>
       <h2 data-sum-title></h2>
       <p data-sum-text></p>
-      <div class="sum-price"><span>السعر</span><span data-sum-price></span></div>
+      <div class="service-availability" data-sum-private-availability hidden><strong data-private-status>مواعيد هذا الشهر مكتملة</strong><p data-private-note>اختر من الأشهر القادمة لننسّق موعدك معك.</p></div>
+      <p class="course-benefits" data-sum-course-benefits hidden></p>
+      <div class="course-offer-line"><s dir="ltr" data-sum-course-original title="السعر قبل الخصم" hidden></s><span class="course-discount" dir="ltr" data-sum-course-discount title="خصم" hidden></span></div>
+      <div class="sum-price"><span data-sum-price-label>السعر</span><span data-sum-price></span></div>
       <div class="sum-award"><b aria-hidden="true">1<sup>ST</sup></b><span data-award-title>المركز الأول في بطولة أكتوبر الشهرية للفوركس 2026</span></div>
       <p data-award-note>بحسب الترتيب المنشور، والنتيجة بانتظار التدقيق النهائي.</p>
       <a class="text-link" data-award-proof href="https://www.worldcupchampionships.com/world-cup-trading-championship-standings" target="_blank" rel="noopener noreferrer">راجع المصدر الرسمي <span aria-hidden="true">↗</span></a>
@@ -117,8 +127,11 @@
 </div></footer>
 
 <script src="config.js"></script>
+<script src="site-visibility.js"></script>
+<script src="visibility.js"></script>
 <script src="app.js"></script>
 <script src="translations.js"></script>
 <script src="i18n.js"></script>
+<script src="brand.js"></script>
 </body>
 </html>

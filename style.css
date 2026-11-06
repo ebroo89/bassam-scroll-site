@@ -1,5 +1,4 @@
-/* Muhammad Bassam — brand site (follows muhammad-bassam.com): near-black, Cormorant caps,
-   Jost labels, one thin red line. Shared by index.html and apply.html. */
+/* Shared site foundation: near-black surfaces, Cormorant headings and Jost labels. */
 
 :root {
   --bg:#050607; --bg2:#0a0c0e; --ink:#f2f2f2; --ink2:#c4c6c9; --mid:#a0a7b0; --dim:#9299a2;
@@ -18,12 +17,12 @@ input, textarea { caret-color:var(--red-text); }
 section[id], article[id] { scroll-margin-top:100px; }
 .skip-link { position:fixed; top:12px; right:20px; z-index:100; padding:10px 20px; color:var(--bg); background:var(--ink); transform:translateY(-160%); }
 .skip-link:focus { transform:none; }
-.ln, .big1, .list .n, .lat { font-variant-numeric:lining-nums; }
-.hero .award sup { font-size:.4em; letter-spacing:.2em; vertical-align:top; color:var(--red-text); margin-left:3px; }
+ .lat { font-variant-numeric:lining-nums; }
+
 .lat { font-family:"Cormorant Garamond",serif; font-weight:300; letter-spacing:.16em; text-transform:uppercase; direction:ltr; }
 .lab { font-family:"Jost",sans-serif; font-size:11px; letter-spacing:.42em; text-transform:uppercase; color:var(--mid); direction:ltr; display:inline-block; }
 .lab em { color:var(--red); font-style:normal; }
-.ar { font-family:"Cairo",sans-serif; }
+
 .rule { display:block; width:56px; height:1px; background:var(--red); }
 .w { max-width:1220px; margin:0 auto; padding:0 44px; }
 
@@ -71,74 +70,31 @@ nav .links a:hover { color:var(--ink); }
 .hero-in { position:relative; z-index:2; display:grid; justify-items:center; gap:26px; padding:0 20px; }
 .hero h1 { font-size:clamp(38px,6.4vw,92px); line-height:1.1; color:rgba(255,255,255,.96); }
 .hero .ar-name { font:500 26px "Cairo",sans-serif; color:var(--ink2); margin-top:-8px; }
-.hero .award { margin-top:18px; display:inline-flex; align-items:center; gap:14px; font-size:15px; color:var(--ink2); }
-.hero .award b { font:300 28px "Jost",sans-serif; color:var(--ink); direction:ltr; }
+
 .scroll { position:absolute; bottom:34px; left:50%; width:1px; height:56px; background:linear-gradient(var(--dim),transparent); z-index:2; }
 
 /* Sections */
 .sec { padding:130px 0; border-top:1px solid var(--line); }
-.sec-h { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:end; margin-bottom:70px; }
-.sec-h h2 { font:500 clamp(40px,4.6vw,64px)/1.15 "Cairo",sans-serif; }
-.sec-h p { color:var(--mid); max-width:460px; justify-self:end; }
-.sec-h .lab { margin-bottom:18px; }
 
-/* What he reads */
-.reads { display:grid; grid-template-columns:repeat(3,1fr); }
-.read { padding:0 34px 0; border-inline-start:1px solid var(--line); }
-.read:first-child { border:0; padding-inline-start:0; }
-.read .lat { font-size:26px; letter-spacing:.12em; color:var(--ink); display:block; text-align:right; }
-.read h3 { font:500 26px "Cairo",sans-serif; margin:6px 0 10px; }
-.read p { color:var(--mid); font-size:15px; }
-
-/* Footprint */
-.fp-wrap { display:grid; grid-template-columns:1.1fr 1fr; gap:70px; align-items:center; margin-top:110px; }
-.fp { direction:ltr; font:400 12.5px "IBM Plex Mono",monospace; display:grid; grid-template-columns:70px repeat(5,1fr); gap:3px; }
-.fp .px { color:var(--dim); text-align:right; padding:7px 10px 7px 0; }
-.fp .c { padding:7px 6px; text-align:center; background:#0e1114; color:#8b9097; transition:background .3s,color .3s; cursor:default; }
-.fp .c.imb { color:#fff; background:rgba(217,20,20,.22); box-shadow:inset 0 0 0 1px rgba(217,20,20,.5); }
-.fp .c.poc { color:var(--ink); background:#1b2026; }
-.fp .c:hover { background:#252b33; color:#fff; }
-.fp-head { color:var(--dim); text-align:center; font-size:10.5px; letter-spacing:.2em; padding-bottom:6px; }
-.fp-note { font-size:12px; color:var(--dim); margin-top:14px; direction:rtl; }
-.fp-copy h2, .fp-copy h3 { font:500 clamp(30px,3vw,40px)/1.4 "Cairo",sans-serif; margin:16px 0 18px; }
-.fp-copy p { color:var(--mid); max-width:440px; }
-.legend { display:flex; gap:22px; margin-top:24px; font-size:13px; color:var(--ink2); }
-.legend i { display:inline-block; width:12px; height:12px; margin-inline-end:8px; vertical-align:-1px; }
-
-/* Programs list */
-.list a { display:grid; grid-template-columns:90px 1.1fr 1.3fr 160px; gap:30px; align-items:center; padding:34px 0; border-top:1px solid var(--line); position:relative; transition:padding .4s; }
-.list a:last-child { border-bottom:1px solid var(--line); }
-.list a::before { content:""; position:absolute; top:-1px; right:0; height:1px; width:0; background:var(--red); transition:width .6s cubic-bezier(.2,.7,.2,1); }
-.list a:hover::before { width:100%; }
-.list a:hover { padding-inline-start:18px; }
-.list .n { font:300 30px "Cormorant Garamond",serif; color:var(--dim); direction:ltr; text-align:right; }
-.list h3 { font:500 32px "Cairo",sans-serif; }
-.list p { color:var(--mid); font-size:15px; }
-.list .st { font-family:"Jost"; font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:var(--ink2); text-align:left; direction:ltr; }
-.list .st.wait::before { content:""; display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--red); margin-right:10px; vertical-align:2px; }
-.list .peek { position:fixed; width:260px; aspect-ratio:4/3; pointer-events:none; z-index:20; background:center/cover; filter:grayscale(1) contrast(1.05) brightness(.85); opacity:0; transition:opacity .3s; }
-
-/* Award */
-.award-s { background:var(--bg2); }
-.split { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
-.split .ph { aspect-ratio:4/5; background:url(assets/img/trophy.jpg) center/cover; filter:grayscale(1) contrast(1.08) brightness(.82); position:relative; }
-.split .ph::after { content:""; position:absolute; inset:18px; border:1px solid rgba(255,255,255,.12); }
-.split h2 { font:500 clamp(42px,4.6vw,62px)/1.2 "Cairo",sans-serif; margin:22px 0 22px; }
-.split p { color:var(--mid); max-width:440px; }
-.big1 { display:flex; justify-content:flex-end; align-items:flex-start; gap:10px; margin-top:14px; direction:ltr; }
-.big1 span { font:200 clamp(110px,12vw,170px)/.85 "Jost",sans-serif; color:var(--ink); }
-.big1 small { font:400 15px "Jost",sans-serif; letter-spacing:.3em; color:var(--red); margin-top:10px; }
-
-/* Method */
-.rules { display:grid; grid-template-columns:repeat(3,1fr); counter-reset:r; }
-.rules div { padding:30px 34px 0; border-inline-start:1px solid var(--line); border-top:1px solid var(--line); }
-.rules div:first-child { border-inline-start:0; padding-inline-start:0; }
-.rules .lat { font-size:22px; color:var(--red-text); }
-.rules h3, .rules h4 { font:500 28px "Cairo",sans-serif; margin:10px 0 8px; }
-.rules p { color:var(--mid); font-size:15px; }
-
-/* Photo band */
-.band { height:70vh; min-height:420px; background:url(assets/img/mentor.jpg) center 40%/cover; filter:grayscale(1) brightness(.55); }
+/* Common questions: native disclosure controls work without JavaScript. */
+.faq-layout { display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr); gap:90px; align-items:start; }
+.faq-heading h2 { font:500 clamp(36px,4.1vw,56px)/1.35 "Cairo",sans-serif; margin-bottom:16px; }
+.faq-heading p { color:var(--mid); font-size:16px; }
+.faq-list { min-width:0; border-top:1px solid var(--red); }
+.faq-item { border-bottom:1px solid var(--line); }
+.faq-item summary { display:flex; justify-content:space-between; align-items:center; gap:24px; padding:23px 0; min-height:76px; cursor:pointer; list-style:none; color:var(--ink); font-size:18px; line-height:1.8; }
+.faq-item summary::-webkit-details-marker { display:none; }
+.faq-item summary:hover { color:var(--ink2); }
+.faq-item summary:focus-visible { outline-offset:4px; }
+.faq-icon { flex:none; width:20px; height:20px; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; fill:none; }
+.faq-plus { transform-origin:center; transition:transform .2s, opacity .2s; }
+.faq-item[open] .faq-plus { transform:rotate(90deg); opacity:0; }
+.faq-item[open] .faq-icon { color:var(--red-text); }
+.faq-answer { padding:0 0 24px; max-width:64ch; color:var(--ink2); font-size:15px; line-height:1.95; }
+.faq-answer ul { list-style:none; margin-top:12px; display:grid; gap:7px; }
+.faq-answer li { display:flex; align-items:baseline; gap:12px; }
+.faq-answer li::before { content:""; width:5px; height:5px; flex:none; background:var(--dim); transform:translateY(-2px); }
+html[lang="en"] .faq-heading h2 { font-family:"Jost",sans-serif; }
 
 /* End */
 .end { padding:170px 0 140px; text-align:center; display:grid; justify-items:center; gap:26px; }
@@ -150,10 +106,6 @@ footer { border-top:1px solid var(--line); }
 footer .w { display:flex; justify-content:space-between; align-items:center; gap:24px; padding-top:28px; padding-bottom:40px; flex-wrap:wrap; }
 footer .lat { font-size:14px; letter-spacing:.3em; color:var(--ink2); }
 footer p { color:var(--dim); font-size:12.5px; max-width:520px; }
-
-/* Reveal */
-.rv { opacity:0; transform:translateY(24px); transition:opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); }
-.rv.in { opacity:1; transform:none; }
 
 /* ── Apply page ─────────────────────────────────────────── */
 [hidden] { display:none !important; }
@@ -258,23 +210,22 @@ footer p { color:var(--dim); font-size:12.5px; max-width:520px; }
   .tape.r { display:none; } .tape.l { left:-10px; opacity:.35; }
   .hero h1 { letter-spacing:.1em; }
   .sec { padding:84px 0; }
-  .sec-h, .fp-wrap, .split { grid-template-columns:1fr; gap:30px; }
-  .sec-h p { justify-self:start; } .sec-h { margin-bottom:44px; }
-  .reads, .rules { grid-template-columns:1fr; gap:38px; }
-  .read, .rules div { border-inline-start:0; padding-inline:0; }
-  .fp-wrap { margin-top:70px; } .fp { grid-template-columns:52px repeat(5,1fr); font-size:10.5px; }
-  .list a { grid-template-columns:44px 1fr; gap:4px 16px; padding:26px 0; }
-  .list p { grid-column:2; } .list .st { grid-column:2; text-align:right; direction:rtl; } .list .st.wait::before { margin:0 0 0 10px; }
-  .list h3 { font-size:28px; } .list .n { font-size:24px; }
-  .list .peek { display:none; }
-  .band { height:46vh; }
+
+  .faq-layout { grid-template-columns:1fr; gap:32px; }
+  .faq-heading h2 { font-size:36px; margin-bottom:10px; }
+  .faq-heading p { font-size:15px; }
+  .faq-item summary { padding:20px 0; min-height:70px; font-size:17px; gap:20px; }
+  .faq-answer { font-size:14px; padding-bottom:22px; }
+  .end-actions { flex-direction:column; width:100%; max-width:360px; }
+  .end-actions a { width:100%; }
+
   .end { padding:110px 0 90px; }
 }
 @media (prefers-reduced-motion:reduce) {
   html { scroll-behavior:auto; }
   .tape > div, .tape .tape-volume, .step, .done { animation:none; }
   .tape .tape-volume { opacity:.6; text-shadow:none; }
-  .rv { opacity:1; transform:none; transition:none; }
+
   .pick span::before, .ap-progress li::before { transition:none; }
 }
 
@@ -283,11 +234,11 @@ html[lang="en"] body { font-family:"Jost",sans-serif; font-size:17px; }
 html[lang="en"] .b-solid, html[lang="en"] .b-ghost,
 html[lang="en"] .apply-link, html[lang="en"] .f input,
 html[lang="en"] .f select, html[lang="en"] .f textarea { font-family:"Jost",sans-serif; }
-html[lang="en"] .sec-h h2, html[lang="en"] .read h3,
+
 html[lang="en"] .done h2, html[lang="en"] .ap-sum h2,
 html[lang="en"] .ap-head h1, html[lang="en"] .end h2 { font-family:"Jost",sans-serif; }
-html[lang="en"] .read .lat, html[lang="en"] .ap-head { text-align:left; }
-html[lang="en"] .fp-note { direction:ltr; }
+ html[lang="en"] .ap-head { text-align:left; }
+
 html[lang="en"] .f select { padding-left:0; padding-right:24px; background-position:right center; }
 html[lang="en"] .prog-cta > span, html[lang="en"] .text-link > span { transform:scaleX(-1); }
 
@@ -299,3 +250,18 @@ html[lang="en"] .prog-cta > span, html[lang="en"] .text-link > span { transform:
   nav .nav-toggle { padding:8px; font-size:12px; }
   nav .apply-link { padding:9px 8px; font-size:11px; }
 }
+
+/* Final actions continue to the dedicated course page or the consultation form. */
+.end-actions { display:flex; justify-content:center; align-items:center; gap:14px; }
+.end .end-actions a { min-height:56px; display:inline-flex; justify-content:center; align-items:center; gap:24px; margin-top:0; padding:15px 24px; font-size:15px; }
+.end .end-primary { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+.end .end-primary:hover { background:#d8dadd; border-color:#d8dadd; }
+.end .end-secondary { background:transparent; color:var(--ink); }
+.end .end-secondary:hover { background:var(--ink); color:var(--bg); }
+.end-actions svg { width:20px; height:20px; flex:none; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+html[dir="ltr"] .end-actions svg { transform:scaleX(-1); }
+ html[lang="en"] .end-actions a { font-family:"Jost",sans-serif; }
+@media (prefers-reduced-motion:reduce) { .faq-plus { transition:none; } }
+
+.end { padding-inline:44px; }
+@media (max-width:860px) { .end { padding-inline:20px; } }

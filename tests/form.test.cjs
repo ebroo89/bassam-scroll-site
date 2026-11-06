@@ -5,6 +5,7 @@ const test = require('node:test');
 const vm = require('node:vm');
 
 const appSource = fs.readFileSync(path.join(__dirname, '..', 'app.js'), 'utf8');
+const visibilityApi = require('../visibility.js');
 
 // These tests exercise app.js through its DOM events. The small DOM adapter
 // models only the elements used by the site; browser layout is checked separately.
@@ -63,9 +64,26 @@ function createPage(options = {}) {
   const defaultFields = {
     name: 'Test Applicant', phone: '+971 50 123 4567', email: 'test@example.invalid',
     country: '', level: 'beginner', market: 'indices', goal: '', topic: '',
-    slot: 'الصبح', tv_user: '', company: '',
+    slot: 'الصبح', tv_user: '', company: '', course: '', indicator_interest: '', preferred_month: '',
   };
   const fields = Object.fromEntries(Object.entries(defaultFields).map(([name, value]) => [name, Object.assign(new Element(), { name, value })]));
+  // This select starts with only its blank option. Like a native select, a
+  // value assigned before a matching option exists cannot remain selected.
+  const preferredMonthSelect = fields.preferred_month;
+  let selectedMonth = '';
+  preferredMonthSelect.children = [Object.assign(new Element(), { value: '' })];
+  Object.defineProperty(preferredMonthSelect, 'value', {
+    enumerable: true,
+    get() { return selectedMonth; },
+    set(value) {
+      const requested = String(value);
+      selectedMonth = this.children.some(option => option.value === requested) ? requested : '';
+    },
+  });
+  preferredMonthSelect.replaceChildren = function (...children) {
+    Element.prototype.replaceChildren.call(this, ...children);
+    selectedMonth = children[0]?.value || '';
+  };
   fields.consent = Object.assign(new Element(), { name: 'consent', type: 'checkbox', checked: true, value: 'on' });
   form.elements = fields;
   const programs = ['private', 'group', 'consult', 'indicator'].map((value) => {
@@ -81,6 +99,13 @@ function createPage(options = {}) {
     form.queries.set(`input[name=program][value="${value}"]`, input);
     return input;
   });
+  const programChoices = programs.map(input => {
+    const choice = new Element();
+    choice.dataset.programChoice = input.value;
+    choice.queries.set('input', input);
+    return choice;
+  });
+  document.selections.set('[data-program-choice]', programChoices);
   const errors = Object.fromEntries(['name', 'phone', 'email', 'tv_user', 'consent'].map((name) => {
     const error = Object.assign(new Element(), { id: `${name}-error`, hidden: true, dataset: { errorFor: name } });
     fields[name].setAttribute('aria-describedby', error.id);
@@ -96,8 +121,8 @@ function createPage(options = {}) {
     return step;
   });
   const conditional = [
-    ['consult', [fields.topic, fields.slot]], ['indicator', [fields.tv_user]],
-    ['private group', [fields.goal]], ['group', []],
+    ['consult', [fields.topic, fields.slot]], ['indicator', [fields.tv_user, fields.indicator_interest]],
+    ['private group', [fields.goal]], ['group', [fields.course]], ['private', [fields.preferred_month]],
   ].map(([forPrograms, controls]) => {
     const wrapper = new Element();
     wrapper.dataset.for = forPrograms;
@@ -116,6 +141,7 @@ function createPage(options = {}) {
     '#nav', '[data-back]', '[data-next]', '[data-submit]', '.form-msg',
     '[data-sum-img]', '[data-sum-k]', '[data-sum-title]', '[data-sum-text]', '[data-sum-price]',
     '[data-done-text]', '[data-done-title]', '[data-preview-notice]', '[data-nav-toggle]', '[data-nav-links]',
+    '[data-visibility-notice]', '.ap-sum',
   ]) {
     nodes[selector] = new Element();
     document.queries.set(selector, nodes[selector]);
@@ -124,6 +150,8 @@ function createPage(options = {}) {
   const done = Object.assign(new Element(), { hidden: true });
   nodes['[data-done-title]'].textContent = 'وصل طلبك، شكرًا.';
   nodes['[data-preview-notice]'].hidden = true;
+  nodes['[data-visibility-notice]'].hidden = true;
+  document.selections.set('[data-visibility-notice]', [nodes['[data-visibility-notice]']]);
   document.queries.set('#applyDone', done);
   if (options.withForm !== false) document.queries.set('#applyForm', form);
   const contactList = new Element();
@@ -151,7 +179,7 @@ function createPage(options = {}) {
     },
     FormData: class {
       *[Symbol.iterator]() {
-        const selected = programs.find((radio) => radio.checked);
+        const selected = programs.find((radio) => radio.checked && !radio.disabled);
         if (selected) yield ['program', selected.value];
         for (const field of Object.values(fields)) {
           if (!field.disabled && (field.type !== 'checkbox' || field.checked)) yield [field.name, field.value];
@@ -164,12 +192,105 @@ function createPage(options = {}) {
       return { ok: true, status: 200, json: async () => ({ ok: true }) };
     },
   };
-  const page = { context, document, form, fields, programs, errors, headings, steps, progress, nodes, done, contactList, globals, calls };
-  page.start = () => vm.runInNewContext(appSource, context, { filename: 'app.js' });
+  const page = { context, document, form, fields, programs, programChoices, errors, headings, steps, progress, nodes, done, contactList, globals, calls };
+  page.start = () => {
+    if (Object.hasOwn(options, 'visibility')) {
+      context.window.MB_VISIBILITY = visibilityApi.create(options.visibility, context.window.MB.courses || []);
+      context.window.MB_VISIBILITY.apply(document);
+    }
+    return vm.runInNewContext(appSource, context, { filename: 'app.js' });
+  };
   page.next = () => nodes['[data-next]'].dispatch('click');
   page.submit = () => form.dispatch('submit');
   return page;
 }
+
+const courseConfig = {
+  courses: [
+    {
+      id: 'foundations', type: 'course', title: 'التأسيس', price: 349,
+      level: 'للمبتدئ', summary: 'ابدأ بفهم السوق وإدارة المخاطر.',
+      topics: ['أساسيات السوق'], includes: ['علم نفس التداول'], edge: false,
+    },
+    {
+      id: 'order-flow', type: 'course', title: 'السيولة وتدفّق الأوامر', price: 899,
+      level: 'للمتوسط', summary: 'اقرأ السيولة وتنفيذ الصفقات.',
+      topics: ['Footprint', 'Bookmap'], includes: ['علم نفس التداول', 'بناء الأفضلية'], edge: true,
+    },
+  ],
+};
+
+test('a valid course query preselects the group course and its summary', () => {
+  const page = createPage({
+    url: 'https://example.invalid/apply.html?course=order-flow',
+    hash: '#group', config: courseConfig,
+  });
+  page.start();
+  assert.equal(page.fields.course.value, 'order-flow');
+  assert.equal(page.programs.find((radio) => radio.checked).value, 'group');
+  assert.equal(page.nodes['[data-sum-title]'].textContent, 'السيولة وتدفّق الأوامر');
+  assert.equal(page.nodes['[data-sum-text]'].textContent, 'اقرأ السيولة وتنفيذ الصفقات.');
+  assert.equal(page.nodes['[data-sum-price]'].textContent, '$899');
+});
+
+test('an invalid course query keeps the current group-offer summary', () => {
+  const page = createPage({
+    url: 'https://example.invalid/apply.html?course=unknown-course',
+    hash: '#group', config: courseConfig,
+  });
+  page.start();
+  assert.equal(page.fields.course.value, '');
+  assert.equal(page.nodes['[data-sum-title]'].textContent, 'From Zero to Champ');
+});
+
+test('changing a group course updates the summary without leaving the current step', async () => {
+  const page = createPage({ hash: '#group', config: courseConfig });
+  page.start();
+  page.fields.course.value = 'foundations';
+  await page.form.dispatch('change', { target: page.fields.course });
+  assert.equal(page.nodes['[data-sum-title]'].textContent, 'التأسيس');
+  assert.equal(page.nodes['[data-sum-price]'].textContent, '$349');
+  assert.equal(page.steps[1].hidden, false);
+});
+
+test('a group submission includes its valid course identifier', async () => {
+  const page = createPage({
+    endpoint: '/api/apply.php',
+    url: 'https://example.invalid/apply.html?course=order-flow',
+    hash: '#group', config: courseConfig,
+  });
+  page.start();
+  await page.next();
+  await page.submit();
+  assert.equal(page.calls.length, 1);
+  const payload = JSON.parse(page.calls[0].request.body);
+  assert.equal(payload.program, 'group');
+  assert.equal(payload.course, 'order-flow');
+});
+
+test('switching away from group omits the course and preserves it when returning', async () => {
+  const page = createPage({
+    endpoint: '/api/apply.php',
+    url: 'https://example.invalid/apply.html?course=order-flow',
+    hash: '#group', config: courseConfig,
+  });
+  page.start();
+  const consult = page.programs.find((radio) => radio.value === 'consult');
+  await page.form.dispatch('change', { target: consult });
+  assert.equal(page.fields.course.disabled, true);
+  assert.equal(page.fields.course.value, 'order-flow');
+  assert.equal(page.nodes['[data-sum-title]'].textContent, 'استشارات');
+  const group = page.programs.find((radio) => radio.value === 'group');
+  await page.form.dispatch('change', { target: group });
+  assert.equal(page.fields.course.disabled, false);
+  assert.equal(page.nodes['[data-sum-title]'].textContent, 'السيولة وتدفّق الأوامر');
+  await page.form.dispatch('change', { target: consult });
+  await page.next();
+  await page.submit();
+  const payload = JSON.parse(page.calls[0].request.body);
+  assert.equal(payload.program, 'consult');
+  assert.equal(Object.hasOwn(payload, 'course'), false);
+});
 
 test('an empty endpoint visibly labels the form as a preview', () => {
   const page = createPage();
@@ -307,13 +428,13 @@ test('missing consent is identified and focused', async () => {
   assert.equal(page.document.activeElement, page.fields.consent);
 });
 
-test('an indicator request requires its TradingView username', async () => {
+test('an indicator interest request accepts an optional TradingView username', async () => {
   const page = createPage({ hash: '#indicator' });
   page.start();
   await page.next();
   await page.submit();
-  assert.equal(page.fields.tv_user.getAttribute('aria-invalid'), 'true');
-  assert.equal(page.document.activeElement, page.fields.tv_user);
+  assert.equal(page.fields.tv_user.getAttribute('aria-invalid'), 'false');
+  assert.equal(page.done.hidden, false);
 });
 
 test('an in-flight submission cannot send the same application twice', async () => {
@@ -430,7 +551,7 @@ test('a stalled request times out and restores the form for a retry', async () =
 
 for (const [url, expectedImage] of [
   ['https://example.invalid/index.html', 'https://example.invalid/assets/img/bassam.jpg'],
-  ['file:///C:/Users/MBT/Documents/ChatGPT/WEBSITE/bassam-scroll-site/index.html', 'file:///C:/Users/MBT/Documents/ChatGPT/WEBSITE/bassam-scroll-site/assets/img/bassam.jpg'],
+  ['file:///C:/site/index.html', 'file:///C:/site/assets/img/bassam.jpg'],
 ]) {
   test(`the existing relative portrait remains visible when opened from ${new URL(url).protocol}`, () => {
     assert.equal(fs.existsSync(path.join(__dirname, '..', 'assets', 'img', 'bassam.jpg')), true);
@@ -445,7 +566,7 @@ for (const [url, expectedImage] of [
 
 test('opening a local document does not permit file URLs for the endpoint, proof or contacts', async () => {
   const page = createPage({
-    url: 'file:///C:/Users/MBT/Documents/ChatGPT/WEBSITE/bassam-scroll-site/apply.html',
+    url: 'file:///C:/site/apply.html',
     endpoint: 'file:///C:/requests.json',
     config: { award: { proofUrl: 'file:///C:/result.html' }, telegram: 'file:///C:/contact.html' },
   });
@@ -459,3 +580,273 @@ test('opening a local document does not permit file URLs for the endpoint, proof
   assert.equal(proof.hidden, true);
   assert.equal(page.contactList.hidden, true);
 });
+
+
+test('a legacy consultation focus leaves the visitor free to choose a topic', () => {
+  const page = createPage({ url: 'https://example.invalid/apply.html?focus=rules', hash: '#consult' });
+  page.start();
+  assert.equal(page.fields.topic.value, '');
+});
+
+test('an unknown consultation focus leaves the topic empty', () => {
+  const page = createPage({ url: 'https://example.invalid/apply.html?focus=unknown', hash: '#consult' });
+  page.start();
+  assert.equal(page.fields.topic.value, '');
+});
+
+test('a tool query prefills only supported indicator categories', () => {
+  const page = createPage({ url: 'https://example.invalid/apply.html?tool=options', hash: '#indicator' });
+  page.start();
+  assert.equal(page.fields.indicator_interest.value, 'options');
+  const unknown = createPage({ url: 'https://example.invalid/apply.html?tool=unknown', hash: '#indicator' });
+  unknown.start();
+  assert.equal(unknown.fields.indicator_interest.value, '');
+});
+
+test('indicator requests include a supported category and preserve an optional username', async () => {
+  const page = createPage({ endpoint: '/api/apply.php', hash: '#indicator' });
+  page.start();
+  page.fields.indicator_interest.value = 'signals';
+  page.fields.tv_user.value = 'trader_name';
+  await page.next();
+  await page.submit();
+  const payload = JSON.parse(page.calls[0].request.body);
+  assert.equal(payload.indicator_interest, 'signals');
+  assert.equal(payload.tv_user, 'trader_name');
+});
+
+test('other programs do not submit a previously selected indicator category', async () => {
+  const page = createPage({ endpoint: '/api/apply.php', hash: '#indicator' });
+  page.start();
+  page.fields.indicator_interest.value = 'options';
+  await page.form.dispatch('change', { target: page.programs.find(radio => radio.value === 'private') });
+  await page.next();
+  await page.submit();
+  const payload = JSON.parse(page.calls[0].request.body);
+  assert.equal(Object.hasOwn(payload, 'indicator_interest'), false);
+});
+
+const enrollmentContext = { window: {} };
+vm.runInNewContext(fs.readFileSync(path.join(__dirname, '..', 'config.js'), 'utf8'), enrollmentContext);
+const enrollmentConfig = { courses: enrollmentContext.window.MB.courses };
+
+test('waitlisted course requests display their status and submit waitlist intent', async () => {
+  const page = createPage({ endpoint: '/api/apply.php', hash: '#group',
+    url: 'https://example.invalid/apply.html?course=order-flow', config: enrollmentConfig });
+  page.start();
+  assert.equal(page.nodes['[data-sum-price]'].textContent, 'قائمة الانتظار');
+  await page.next();
+  await page.submit();
+  assert.equal(JSON.parse(page.calls[0].request.body).enrollment_intent, 'waitlist');
+});
+
+test('the open starter bundle submits enrollment intent at its discounted price', async () => {
+  const page = createPage({ endpoint: '/api/apply.php', hash: '#group',
+    url: 'https://example.invalid/apply.html?course=zero-intermediate', config: enrollmentConfig });
+  page.start();
+  assert.equal(page.nodes['[data-sum-price]'].textContent, '$1,490');
+  await page.next();
+  await page.submit();
+  const payload = JSON.parse(page.calls[0].request.body);
+  assert.equal(payload.course, 'zero-intermediate');
+  assert.equal(payload.enrollment_intent, 'enroll');
+  assert.match(page.nodes['[data-done-text]'].textContent, /استلمنا طلب التسجيل/);
+  assert.doesNotMatch(page.nodes['[data-done-text]'].textContent, /قائمة الانتظار/);
+});
+
+test('retry after rate limiting retains the selected offer action', async () => {
+  const page = createPage({ endpoint: '/api/apply.php', hash: '#group',
+    url: 'https://example.invalid/apply.html?course=order-flow', config: enrollmentConfig,
+    fetch: async () => ({ ok: false, status: 429, json: async () => ({}) }) });
+  page.start();
+  await page.next();
+  await page.submit();
+  assert.equal(page.nodes['[data-submit]'].textContent, 'انضم لقائمة الانتظار');
+  assert.equal(page.nodes['[data-submit]'].disabled, false);
+});
+
+// Capacity comes from the configured booked month, so these assertions do not
+// depend on the date when the test suite is run (and cover the year boundary).
+const privateScheduleConfig = { privateTraining: { fullyBookedMonth: '2026-11' } };
+
+for (const month of ['2026-12', '2027-01']) {
+  test(`a private request can preselect the permitted future month ${month}`, () => {
+    const page = createPage({
+      url: `https://example.invalid/apply.html?month=${month}`, hash: '#private',
+      config: privateScheduleConfig,
+    });
+    page.start();
+    assert.equal(page.fields.preferred_month.value, month);
+    assert.equal(page.fields.preferred_month.disabled, false);
+    const options = page.fields.preferred_month.children;
+    assert.deepEqual(Array.from(options, option => option.value), ['', '2026-11', '2026-12', '2027-01']);
+    assert.equal(options.find(option => option.value === '2026-11').disabled, true);
+    assert.equal(options.find(option => option.value === month).disabled, false);
+  });
+}
+
+for (const month of ['2026-11', '2026-10', '2027-02', '2026-13', 'unknown']) {
+  test(`an unavailable or invalid private month is not preselected: ${month}`, () => {
+    const page = createPage({
+      url: `https://example.invalid/apply.html?month=${month}`, hash: '#private',
+      config: privateScheduleConfig,
+    });
+    page.start();
+    assert.equal(page.fields.preferred_month.value, '');
+  });
+}
+
+test('a private application submits a valid preferred month identifier', async () => {
+  const page = createPage({
+    endpoint: '/api/apply.php', hash: '#private',
+    url: 'https://example.invalid/apply.html?month=2027-01', config: privateScheduleConfig,
+  });
+  page.start();
+  await page.next();
+  await page.submit();
+  assert.equal(page.calls.length, 1);
+  const payload = JSON.parse(page.calls[0].request.body);
+  assert.equal(payload.program, 'private');
+  assert.equal(payload.preferred_month, '2027-01');
+});
+
+for (const month of ['2026-11', '2027-02', 'not-a-month']) {
+  test(`a private application omits an invalid manually supplied month: ${month}`, async () => {
+    const page = createPage({ endpoint: '/api/apply.php', hash: '#private', config: privateScheduleConfig });
+    page.start();
+    page.fields.preferred_month.value = month;
+    await page.next();
+    await page.submit();
+    assert.equal(page.calls.length, 1);
+    assert.equal(Object.hasOwn(JSON.parse(page.calls[0].request.body), 'preferred_month'), false);
+  });
+}
+
+test('switching programs preserves the private month but omits it from a consultation', async () => {
+  const page = createPage({
+    endpoint: '/api/apply.php', hash: '#private',
+    url: 'https://example.invalid/apply.html?month=2026-12', config: privateScheduleConfig,
+  });
+  page.start();
+  const consult = page.programs.find(radio => radio.value === 'consult');
+  const privateProgram = page.programs.find(radio => radio.value === 'private');
+  await page.form.dispatch('change', { target: consult });
+  assert.equal(page.fields.preferred_month.disabled, true);
+  assert.equal(page.fields.preferred_month.value, '2026-12');
+  await page.form.dispatch('change', { target: privateProgram });
+  assert.equal(page.fields.preferred_month.disabled, false);
+  assert.equal(page.fields.preferred_month.value, '2026-12');
+  await page.form.dispatch('change', { target: consult });
+  await page.next();
+  await page.submit();
+  const payload = JSON.parse(page.calls[0].request.body);
+  assert.equal(payload.program, 'consult');
+  assert.equal(Object.hasOwn(payload, 'preferred_month'), false);
+});
+
+test('changing language rebuilds month labels without losing the stable selected identifier', async () => {
+  const page = createPage({
+    hash: '#private', url: 'https://example.invalid/apply.html?month=2027-01',
+    config: privateScheduleConfig,
+  });
+  page.start();
+  await page.document.dispatch('site:languagechange', { detail: { language: 'en' } });
+  assert.equal(page.fields.preferred_month.value, '2027-01');
+  assert.deepEqual(Array.from(page.fields.preferred_month.children, option => option.value), ['', '2026-11', '2026-12', '2027-01']);
+  await page.document.dispatch('site:languagechange', { detail: { language: 'ar' } });
+  assert.equal(page.fields.preferred_month.value, '2027-01');
+});
+
+test('limited visibility defaults to Champ and exposes only the two enabled program choices', () => {
+  const page = createPage({ hash: '', config: enrollmentConfig, visibility: { programs: { private: false, indicator: false } } });
+  page.start();
+  assert.equal(page.programs.find(radio => radio.checked).value, 'group');
+  assert.equal(page.fields.course.value, 'champ');
+  assert.deepEqual(page.fields.course.children.map(option => option.value), ['champ']);
+  assert.equal(page.nodes['[data-sum-title]'].textContent, 'From Zero to Champ');
+  assert.equal(page.nodes['[data-sum-price]'].textContent, '$2,490');
+  assert.deepEqual(page.programChoices.filter(choice => !choice.hidden).map(choice => choice.dataset.programChoice), ['group', 'consult']);
+  for (const id of ['private', 'indicator']) assert.equal(page.programs.find(radio => radio.value === id).disabled, true);
+});
+
+for (const hiddenProgram of ['private', 'indicator']) {
+  test(`a direct hidden ${hiddenProgram} link offers the visible programs instead`, () => {
+    const page = createPage({ hash: `#${hiddenProgram}`, config: enrollmentConfig, visibility: { programs: { private: false, indicator: false } } });
+    page.start();
+    assert.equal(page.programs.find(radio => radio.checked).value, 'group');
+    assert.equal(page.nodes['[data-sum-title]'].textContent, 'From Zero to Champ');
+    assert.equal(page.steps[0].hidden, false);
+    assert.equal(page.nodes['[data-visibility-notice]'].hidden, false);
+  });
+}
+
+test('a hidden course query is replaced by the visible offer and cannot expose its summary', () => {
+  const page = createPage({ hash: '#group', visibility: { programs: { private: false, indicator: false } }, config: enrollmentConfig,
+    url: 'https://example.invalid/apply.html?course=foundations' });
+  page.start();
+  assert.equal(page.fields.course.value, 'champ');
+  assert.equal(page.nodes['[data-sum-title]'].textContent, 'From Zero to Champ');
+  assert.equal(page.nodes['[data-visibility-notice]'].hidden, false);
+  assert.equal(page.steps[0].hidden, false);
+});
+
+test('the visible Champ offer still submits its course and enrollment intent', async () => {
+  const page = createPage({ endpoint: '/api/apply.php', hash: '#group', visibility: { programs: { private: false, indicator: false } }, config: enrollmentConfig,
+    url: 'https://example.invalid/apply.html?course=champ' });
+  page.start();
+  await page.next();
+  await page.submit();
+  assert.equal(page.calls.length, 1);
+  const payload = JSON.parse(page.calls[0].request.body);
+  assert.equal(payload.program, 'group');
+  assert.equal(payload.course, 'champ');
+  assert.equal(payload.enrollment_intent, 'enroll');
+});
+
+test('a tampered hidden program cannot submit despite re-enabling its radio', async () => {
+  const page = createPage({ endpoint: '/api/apply.php', hash: '#group', visibility: { programs: { private: false, indicator: false } }, config: enrollmentConfig });
+  page.start();
+  await page.next();
+  const hiddenRadio = page.programs.find(radio => radio.value === 'private');
+  hiddenRadio.disabled = false;
+  hiddenRadio.checked = true;
+  await page.submit();
+  assert.equal(page.calls.length, 0);
+  assert.equal(page.done.hidden, true);
+  assert.match(page.nodes['.form-msg'].textContent, /غير متاح/);
+});
+
+test('a tampered hidden course identifier is blocked before submission', async () => {
+  const page = createPage({ endpoint: '/api/apply.php', hash: '#group', visibility: { programs: { private: false, indicator: false } }, config: enrollmentConfig });
+  page.start();
+  await page.next();
+  page.fields.course.value = 'foundations';
+  await page.submit();
+  assert.equal(page.calls.length, 0);
+  assert.equal(page.done.hidden, true);
+  assert.match(page.nodes['.form-msg'].textContent, /غير متاح/);
+});
+
+test('with no visible programs the form cannot submit and explains availability', async () => {
+  const page = createPage({ endpoint: '/api/apply.php', hash: '', config: enrollmentConfig,
+    visibility: { sections: { programs: false } } });
+  page.start();
+  assert.equal(page.form.hidden, true);
+  assert.equal(page.programs.every(radio => radio.disabled), true);
+  assert.equal(page.nodes['[data-visibility-notice]'].hidden, false);
+  assert.match(page.nodes['[data-visibility-notice]'].textContent, /لا توجد برامج/);
+  await page.submit();
+  assert.equal(page.calls.length, 0);
+});
+
+for (const focus of ["pressure", "discipline", "review"]) {
+  test(`the legacy ${focus} link keeps the question blank and sends the visitor's wording`, async () => {
+    const page = createPage({ endpoint: '/api/apply.php', hash: '#consult', url: `https://example.invalid/apply.html?focus=${focus}` });
+    page.start();
+    assert.equal(page.fields.topic.value, '');
+    page.fields.topic.value = 'My own example and question';
+    await page.next();
+    await page.submit();
+    assert.equal(JSON.parse(page.calls[0].request.body).topic, 'My own example and question');
+  });
+}

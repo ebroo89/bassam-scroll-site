@@ -8,7 +8,7 @@ const source = fs.readFileSync(path.join(__dirname, '..', 'i18n.js'), 'utf8');
 const dictionary = fs.readFileSync(path.join(__dirname, '..', 'translations.js'), 'utf8');
 
 // A presentation-only DOM adapter. Browser rendering is verified separately.
-function createPage({ url = 'https://example.invalid/index.html', saved = 'ar', storageUnavailable = false } = {}) {
+function createPage({ url = 'https://example.invalid/index.html', saved = 'ar', storageUnavailable = false, linkHref = 'apply.html#consult' } = {}) {
   function text(value, parentElement) {
     return { nodeType: 3, nodeValue: value, parentElement };
   }
@@ -48,12 +48,12 @@ function createPage({ url = 'https://example.invalid/index.html', saved = 'ar', 
     return root.childNodes.flatMap(child => child.nodeType === 3 ? [child] : textNodes(child));
   }
   const html = element('html');
-  const heading = element('h2', 'قراءة السوق تبدأ من تفاصيل التنفيذ.', { 'data-words': '' });
-  const copy = element('p', '7 سنوات من الخبرة في التداول');
-  const summary = element('h3', 'دورة خاصة');
+  const heading = element('h2', 'قراءة السوق تبدأ بفهم بيئته.', { 'data-words': '' });
+  const copy = element('p', 'سبع سنوات من الخبرة في التداول');
+  const summary = element('h3', 'تدريب خاص');
   const error = element('p');
   const toggle = element('button', 'EN', { 'data-language-toggle': '', translate: 'no' });
-  const link = element('a', 'اختر برنامجك', { href: 'apply.html#consult' });
+  const link = element('a', 'اختر برنامجك', { href: linkHref });
   const input = element('input', '', { placeholder: 'الاسم الكامل (مطلوب)', 'aria-label': 'الاسم الكامل (مطلوب)' });
   input.value = 'اسم المستخدم لا يترجم';
   const notes = element('textarea', 'نص شخصي');
@@ -119,7 +119,7 @@ test('URL language takes priority and translates document text and accessible at
   const page = createPage({ url: 'https://example.invalid/index.html?lang=en', saved: 'ar' });
   assert.equal(page.document.documentElement.lang, 'en');
   assert.equal(page.document.documentElement.dir, 'ltr');
-  assert.equal(page.copy.textContent, '7 years of trading experience');
+  assert.equal(page.copy.textContent, 'Seven years of trading experience');
   assert.equal(page.input.getAttribute('placeholder'), 'Full name (required)');
   assert.equal(page.input.getAttribute('aria-label'), 'Full name (required)');
   assert.equal(page.meta.getAttribute('content'), 'Main navigation');
@@ -139,25 +139,55 @@ test('language round trip preserves form values, slot values, and linked program
   assert.equal(new URL(page.location.href).searchParams.get('v'), 'first');
   page.click();
   assert.equal(page.document.documentElement.dir, 'rtl');
-  assert.equal(page.copy.textContent, '7 سنوات من الخبرة في التداول');
+  assert.equal(page.copy.textContent, 'سبع سنوات من الخبرة في التداول');
   assert.equal(page.slot.textContent, 'الصبح');
   assert.equal(page.input.value, 'اسم المستخدم لا يترجم');
   assert.equal(page.link.getAttribute('href'), 'apply.html?lang=ar#consult');
 });
 
+test('language changes rewrite standalone course links without dropping the course identifier', () => {
+  const page = createPage({ linkHref: 'course.html?course=champ&lang=ar' });
+  page.click();
+  let link = new URL(page.link.getAttribute('href'), page.location.href);
+  assert.equal(link.pathname, '/course.html');
+  assert.equal(link.searchParams.get('course'), 'champ');
+  assert.equal(link.searchParams.get('lang'), 'en');
+  page.click();
+  link = new URL(page.link.getAttribute('href'), page.location.href);
+  assert.equal(link.searchParams.get('course'), 'champ');
+  assert.equal(link.searchParams.get('lang'), 'ar');
+});
+
+test('switching language on a standalone course page preserves its course and enrollment link', () => {
+  const page = createPage({
+    url: 'https://example.invalid/course.html?course=champ&lang=ar',
+    linkHref: 'apply.html?course=champ&lang=ar#group',
+  });
+  page.click();
+  const location = new URL(page.location.href);
+  const enrollment = new URL(page.link.getAttribute('href'), location);
+  assert.equal(location.pathname, '/course.html');
+  assert.equal(location.searchParams.get('course'), 'champ');
+  assert.equal(location.searchParams.get('lang'), 'en');
+  assert.equal(enrollment.pathname, '/apply.html');
+  assert.equal(enrollment.searchParams.get('course'), 'champ');
+  assert.equal(enrollment.searchParams.get('lang'), 'en');
+  assert.equal(enrollment.hash, '#group');
+});
+
 test('new form errors and summary text translate and restore their current Arabic source', () => {
   const page = createPage({ saved: 'en' });
   page.error.textContent = 'اكتب اسمك الكامل.';
-  page.summary.textContent = 'الدورة الجماعية';
+  page.summary.textContent = 'مسار تدريبي متكامل';
   page.mutate(page.error);
   page.mutate(page.summary);
   assert.equal(page.error.textContent, 'Enter your full name.');
-  assert.equal(page.summary.textContent, 'Group course');
+  assert.equal(page.summary.textContent, 'A comprehensive learning programme');
   page.mutate(page.error);
   assert.equal(page.error.textContent, 'Enter your full name.');
   page.click();
   assert.equal(page.error.textContent, 'اكتب اسمك الكامل.');
-  assert.equal(page.summary.textContent, 'الدورة الجماعية');
+  assert.equal(page.summary.textContent, 'مسار تدريبي متكامل');
 });
 
 test('word-split headings retain full phrase translation across language changes', () => {
@@ -165,10 +195,10 @@ test('word-split headings retain full phrase translation across language changes
   page.wrapHeading();
   page.document.addEventListener('site:languagechange', () => page.wrapHeading());
   page.click();
-  assert.equal(page.heading.textContent.trim(), 'Read the market through execution details.');
+  assert.equal(page.heading.textContent.trim(), 'Reading the market starts with understanding its environment.');
   assert.equal(page.heading.childNodes.every(node => node.tagName === 'span'), true);
   page.click();
-  assert.equal(page.heading.textContent.trim(), 'قراءة السوق تبدأ من تفاصيل التنفيذ.');
+  assert.equal(page.heading.textContent.trim(), 'قراءة السوق تبدأ بفهم بيئته.');
 });
 
 test('blocked local storage keeps the language toggle usable', () => {

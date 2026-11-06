@@ -91,10 +91,6 @@ function createPage({ width = 1200, height = 800, reduced = false, empty = false
     selectors.set(selector, [...(selectors.get(selector) || []), node]);
     return node;
   };
-  const programs = [];
-  let programSection;
-  let previous;
-  let next;
   if (!empty) {
     add('[data-progress-bar]', 'progress');
     add('[data-pin="hero"]', 'hero', 0, 1600);
@@ -103,45 +99,17 @@ function createPage({ width = 1200, height = 800, reduced = false, empty = false
     add('[data-hero-rule]', 'hero-rule');
     add('[data-hero-say]', 'saying');
     add('[data-hero-portrait] img', 'portrait');
-    add('.marquee', 'marquee', 1800);
-    add('[data-pin="reads"]', 'reads', 2200, 2200);
-    add('[data-panel]', 'panel-1');
-    add('[data-panel]', 'panel-2');
-    add('[data-panel]', 'panel-3');
-    add('.steps-bar i', 'read-progress-1');
-    add('.steps-bar i', 'read-progress-2');
-    add('.steps-bar i', 'read-progress-3');
-    programSection = add('[data-pin="progs"]', 'programs', 4500, 3200);
-    for (let index = 0; index < 4; index++) {
-      const card = add('[data-prog]', `program-${index}`);
-      const image = add('[data-prog] .prog-img i', `program-image-${index}`);
-      const link = element(`program-link-${index}`);
-      link.parentElement = card;
-      card.childrenMap.set('.prog-img i', [image]);
-      card.childrenMap.set('a, button, input, select, textarea, [tabindex]', [link]);
-      programs.push(card);
-    }
-    add('[data-prog-now]', 'program-number');
-    previous = add('[data-program-prev]', 'previous');
-    next = add('[data-program-next]', 'next');
-    for (let index = 0; index < 4; index++) {
-      const jump = add('[data-program-go]', `jump-${index}`);
-      jump.dataset.programGo = String(index);
-    }
-    add('[data-pin="award"]', 'award', 1500, 2000);
-    add('[data-aw-photo]', 'award-photo');
-    add('[data-aw-photo] i', 'award-image');
-    add('[data-aw-one]', 'award-one');
-    add('[data-aw-rank]', 'award-rank');
-    add('[data-rules]', 'rules', 7600);
-    add('[data-rules-line]', 'rules-line');
+    add('[data-hero-fade]', 'hero-copy');
+    add('.pin-hero .tape', 'left-tape');
+    add('.pin-hero .tape', 'right-tape');
     const band = add('[data-band] i', 'band');
     band.parentElement = element('band-wrapper', 7900);
     add('[data-end]', 'end', 8500);
     add('[data-end-rule]', 'end-rule');
+    add('.words, .up', 'closing-copy');
   }
   const media = new Map();
-  for (const [query, matches] of [['(prefers-reduced-motion: reduce)', reduced], ['(max-width: 860px)', width <= 860], ['(max-height: 680px)', height <= 680]]) {
+  for (const [query, matches] of [['(prefers-reduced-motion: reduce)', reduced], ['(max-width: 1024px)', width <= 1024], ['(max-height: 740px)', height <= 740]]) {
     media.set(query, Object.assign(eventTarget(), { matches }));
   }
   context = {
@@ -173,7 +141,7 @@ function createPage({ width = 1200, height = 800, reduced = false, empty = false
   function settle(limit = 250) { let count = 0; while (count < limit && frame()) count++; return count; }
   function setReduced(matches) { const query = media.get('(prefers-reduced-motion: reduce)'); query.matches = matches; query.dispatch('change'); }
   vm.runInNewContext(source, context, { filename: 'motion.js' });
-  return { context, document, programs, programSection, previous, next, events, frames, frame, settle, dispatch, setReduced, find: selector => document.querySelector(selector) };
+  return { context, document, events, frames, frame, settle, dispatch, setReduced, find: selector => document.querySelector(selector) };
 }
 
 test('animation settles without requesting frames while the page is idle', () => {
@@ -196,41 +164,33 @@ test('all geometry is measured before animation styles are written', () => {
   assert.equal(page.events.slice(firstWrite).some(event => event.type === 'read'), false);
 });
 
-test('only the visible desktop program is available to focus and assistive technology', () => {
-  const page = createPage();
-  page.settle();
-  assert.deepEqual(page.programs.map(card => card.inert), [false, true, true, true]);
-  assert.equal(page.programs[1].getAttribute('aria-hidden'), 'true');
-  page.next.dispatch('click');
-  page.settle();
-  assert.deepEqual(page.programs.map(card => card.inert), [true, false, true, true]);
-  assert.ok(page.context.lastScroll.top > page.programSection.top);
-  page.previous.dispatch('click');
-  page.settle();
-  assert.deepEqual(page.programs.map(card => card.inert), [false, true, true, true]);
-});
-
-test('mobile flow leaves every program available without scroll animation transforms', () => {
+test('mobile flow leaves the hero readable without scroll transforms', () => {
   const page = createPage({ width: 390 });
   page.settle();
   assert.equal(page.document.body.classList.contains('motion-flow'), true);
-  assert.deepEqual(page.programs.map(card => card.inert), [false, false, false, false]);
-  assert.equal(page.programs[1].style.transform, '');
+  assert.equal(page.find('[data-hero-in]').inert, false);
+  assert.equal(page.find('[data-hero-name]').style.transform, '');
+  assert.equal(page.find('[data-hero-name]').style.opacity, '');
+  assert.equal(page.find('.words, .up').classList.contains('in'), true);
 });
 
-test('changing reduced motion clears animation styles and re-enables every program', () => {
+test('changing reduced motion clears hero styles and restores access', () => {
   const page = createPage();
+  page.context.scrollY = 760;
+  page.dispatch('scroll');
   page.settle();
-  assert.notEqual(page.programs[1].style.transform, '');
+  assert.equal(page.find('[data-hero-in]').inert, true);
+  assert.notEqual(page.find('[data-hero-name]').style.opacity, '');
   page.setReduced(true);
   page.settle();
   assert.equal(page.document.body.classList.contains('motion-reduced'), true);
-  assert.deepEqual(page.programs.map(card => card.inert), [false, false, false, false]);
-  assert.equal(page.programs[1].style.transform, '');
+  assert.equal(page.find('[data-hero-in]').inert, false);
+  assert.equal(page.find('[data-hero-name]').style.opacity, '');
+  assert.equal(page.find('[data-band] i').style.transform, '');
   page.setReduced(false);
   page.settle();
   assert.equal(page.document.body.classList.contains('motion-reduced'), false);
-  assert.deepEqual(page.programs.map(card => card.inert), [false, true, true, true]);
+  assert.equal(page.find('[data-hero-in]').inert, true);
 });
 
 test('partial pages gracefully skip missing animation elements', () => {
@@ -238,66 +198,74 @@ test('partial pages gracefully skip missing animation elements', () => {
   assert.doesNotThrow(() => page.settle());
 });
 
-test('short viewports use the readable program flow', () => {
-  const page = createPage({ height: 740 });
-  page.settle();
-  assert.equal(page.document.body.classList.contains('motion-flow'), true);
-  assert.deepEqual(page.programs.map(card => card.inert), [false, false, false, false]);
-});
+for (const viewport of [{ width: 1200, height: 740 }, { width: 1024, height: 768 }]) {
+  test(`compact ${viewport.width} by ${viewport.height} viewport uses readable flow`, () => {
+    const page = createPage(viewport);
+    page.settle();
+    assert.equal(page.document.body.classList.contains('motion-flow'), true);
+    assert.equal(page.find('[data-hero-in]').inert, false);
+    assert.equal(page.find('[data-hero-name]').style.opacity, '');
+  });
+}
 
-test('tablet-width screens use the readable program flow at 1024 by 768', () => {
-  const page = createPage({ width: 1024, height: 768 });
-  page.settle();
-  assert.equal(page.document.body.classList.contains('motion-flow'), true);
-  assert.deepEqual(page.programs.map(card => card.inert), [false, false, false, false]);
-});
-
-test('desktop scenes remain pinned when the viewport has enough space', () => {
+test('desktop hero remains animated when the viewport has enough space', () => {
   const page = createPage({ width: 1280, height: 800 });
   page.settle();
   assert.equal(page.document.body.classList.contains('motion-flow'), false);
-  assert.deepEqual(page.programs.map(card => card.inert), [false, true, true, true]);
+  assert.equal(page.find('[data-hero-name]').style.opacity, '1');
 });
 
-test('hero controls become inert after the hero content has faded', () => {
+test('hero controls become inert after fading and recover when scrolling back', () => {
   const page = createPage();
   page.context.scrollY = 760;
   page.dispatch('scroll');
   page.settle();
   assert.equal(page.find('[data-hero-in]').inert, true);
+  assert.equal(page.find('[data-hero-name]').style.opacity, '0');
+  assert.equal(page.find('[data-hero-fade]').style.opacity, '0');
   page.context.scrollY = 0;
   page.dispatch('scroll');
   page.settle();
   assert.equal(page.find('[data-hero-in]').inert, false);
+  assert.equal(page.find('[data-hero-name]').style.opacity, '1');
 });
 
-test('reading progress writes CSS custom properties through the style API', () => {
+test('the photo band and closing divider advance with their visible sections', () => {
   const page = createPage();
-  page.context.scrollY = 2900;
+  page.settle();
+  assert.match(page.find('[data-band] i').style.transform, /scale\(1\.300\)/);
+  assert.equal(page.find('[data-end-rule]').style.width, '0px');
+  page.context.scrollY = 8500;
   page.dispatch('scroll');
   page.settle();
-  assert.equal(page.find('.steps-bar i').style.getPropertyValue('--f'), '100.0%');
+  assert.match(page.find('[data-band] i').style.transform, /scale\(1\.000\)/);
+  assert.equal(page.find('[data-end-rule]').style.width, '220px');
 });
 
-test('scrolling forward moves focus only after the next program becomes available', () => {
+test('page progress reaches the end in both animated and reduced-motion modes', () => {
+  for (const reduced of [false, true]) {
+    const page = createPage({ reduced });
+    page.context.scrollY = page.document.documentElement.scrollHeight - page.context.innerHeight;
+    page.dispatch('scroll');
+    page.settle();
+    assert.equal(page.find('[data-progress-bar]').style.transform, 'scaleX(1)');
+  }
+});
+
+test('hidden tabs stop requesting animation frames and resume when visible', () => {
   const page = createPage();
   page.settle();
-  const firstLink = page.programs[0].querySelector('a, button, input, select, textarea, [tabindex]');
-  const secondLink = page.programs[1].querySelector('a, button, input, select, textarea, [tabindex]');
-  firstLink.focus();
-  page.context.scrollY = 5400;
+  page.context.scrollY = 300;
   page.dispatch('scroll');
+  assert.equal(page.frames.size, 1);
+  page.document.hidden = true;
+  page.document.dispatch('visibilitychange');
+  assert.equal(page.frames.size, 0);
+  page.dispatch('scroll');
+  assert.equal(page.frames.size, 0);
+  page.document.hidden = false;
+  page.document.dispatch('visibilitychange');
+  assert.equal(page.frames.size, 1);
   page.settle();
-  assert.equal(page.document.activeElement, secondLink);
-  assert.equal(secondLink.parentElement.inert, false);
-});
-
-test('direct program navigation marks the selected program for assistive technology', () => {
-  const page = createPage();
-  page.settle();
-  const jumpButtons = page.document.querySelectorAll('[data-program-go]');
-  jumpButtons[2].dispatch('click');
-  page.settle();
-  assert.deepEqual(jumpButtons.map(button => button.getAttribute('aria-pressed')), ['false', 'false', 'true', 'false']);
-  assert.equal(page.programs[2].getAttribute('aria-hidden'), 'false');
+  assert.equal(page.frames.size, 0);
 });

@@ -1,0 +1,75 @@
+/* A bilingual wordmark drawn with real type, so Arabic always stays correct. */
+.brand-wordmark,
+#nav .brand-wordmark,
+footer .brand-wordmark {
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  flex:none;
+  width:max-content;
+  max-width:100%;
+  min-height:44px;
+  color:var(--ink);
+  text-decoration:none;
+  text-transform:none;
+  letter-spacing:normal;
+  direction:rtl;
+  vertical-align:middle;
+}
+.brand-wordmark .brand-sign {
+  width:27px;
+  height:32px;
+  flex:none;
+  overflow:visible;
+  color:inherit;
+}
+.brand-wordmark .brand-sign-accent { stroke:var(--red); }
+.brand-wordmark .brand-type {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1px;
+  white-space:nowrap;
+}
+.brand-wordmark .brand-ar {
+  font:700 20px/1.45 "Cairo",sans-serif;
+  letter-spacing:0;
+  direction:rtl;
+  color:inherit;
+}
+.brand-wordmark .brand-en {
+  font:400 8px/1.5 "Jost",sans-serif;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  direction:ltr;
+  color:var(--ink2);
+}
+.brand-wordmark:focus-visible { outline:2px solid var(--ink); outline-offset:5px; }
+@media (max-width:600px) {
+  #nav .brand-wordmark { gap:7px; }
+  #nav .brand-wordmark .brand-sign { width:22px; height:27px; }
+  #nav .brand-wordmark .brand-ar { font-size:17px; }
+  #nav .brand-wordmark .brand-en { font-size:7px; letter-spacing:.09em; }
+}
+
+html[lang="en"] .brand-wordmark .brand-ar { font-size:11px; order:2; }
+html[lang="en"] .brand-wordmark .brand-en { font-size:13px; letter-spacing:.02em; color:var(--ink); font-weight:500; }
+@media (max-width:600px) {
+  html[lang="en"] #nav .brand-wordmark .brand-sign { width:17px; }
+  html[lang="en"] #nav .brand-wordmark .brand-en { font-size:10px; letter-spacing:0; }
+  html[lang="en"] #nav .brand-wordmark .brand-ar { font-size:10px; }
+}
+
+/* Dark-only site; retain accessible language and mobile navigation controls. */
+html { color-scheme:dark; }
+.language-toggle { min-width:44px; min-height:44px; }
+#nav .mobile-nav-action { display:none; }
+@media (max-width:860px) {
+  #nav .w { padding-inline:16px; gap:8px; flex-wrap:nowrap; }
+  #nav .brand-group, .course-page #nav .brand-group { gap:6px; }
+  #nav.nav-ready .w > .apply-link { display:none; }
+  #nav .mobile-nav-action { display:flex; }
+  #nav .language-toggle { min-width:44px; font-size:11px; }
+  #nav .nav-toggle { min-width:44px; }
+  .course-page #nav .apply-link { padding:8px; font-size:11px; text-align:center; min-height:44px; }
+}

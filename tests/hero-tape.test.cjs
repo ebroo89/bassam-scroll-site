@@ -1,5 +1,4 @@
 const assert = require('node:assert/strict');
-const { createHash } = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
@@ -23,13 +22,11 @@ function renderBackground({ hidden = false } = {}) {
       },
     },
   }));
-  const footprint = { innerHTML: '' };
   const hero = {};
   const document = {
     hidden,
     addEventListener(name, handler) { listeners.set(name, handler); },
     querySelector(selector) {
-      if (selector === '[data-fp]') return footprint;
       if (selector === '.hero') return hero;
       return null;
     },
@@ -46,7 +43,6 @@ function renderBackground({ hidden = false } = {}) {
   });
   return {
     tracks,
-    footprint,
     setHidden(value) {
       document.hidden = value;
       listeners.get('visibilitychange')();
@@ -102,14 +98,6 @@ test('each price row carries varied, nonnegative integer bid and ask volumes', (
     assert.ok(new Set(rows.map((row) => row.bid)).size > 4);
     assert.ok(new Set(rows.map((row) => row.ask)).size > 4);
   }
-});
-
-test('background changes preserve the standalone footprint from the first version', () => {
-  const { footprint } = renderBackground();
-  // Captured from app.js at 8ee5636 with the same red/grey tracks and empty config.
-  const baseline = '0e16ed6f3bf2c59fe44cea805634afb9f8cb8aa4938340f7bb098dc5a1ca54e8';
-  const actual = createHash('sha256').update(footprint.innerHTML).digest('hex');
-  assert.equal(actual, baseline);
 });
 
 test('document visibility pauses both tracks and resumes them when visible', () => {

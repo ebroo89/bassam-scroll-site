@@ -1,0 +1,27 @@
+/* A native course page, using the same content and visual system as the website. */
+.course-page .course-page-nav .w { justify-content:space-between; }
+.course-page #programs .prog-copy { width:100%; max-width:none; }
+.course-page #programs.course-programs { border-top:0; padding-top:118px; padding-bottom:80px; }
+.course-page .course-back { display:inline-flex; align-items:center; width:fit-content; margin-bottom:28px; }
+.course-page .course-detail-layout { align-items:start; }
+.course-page .course-detail-copy h1 { font:600 38px/1.4 "Cairo",sans-serif; color:var(--ink); margin:0; text-wrap:balance; }
+.course-page:lang(en) .course-detail-copy h1 { font-family:"Jost",sans-serif; font-weight:500; }
+.course-page .course-outcomes-heading { font-family:inherit; font-size:16px; font-weight:500; line-height:1.8; margin-top:22px; }
+.course-page .course-inclusions h2 { font-family:inherit; font-size:15px; font-weight:500; line-height:1.8; }
+.course-page .prog-foot { margin-top:24px; }
+.course-page .course-unavailable { min-height:55vh; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:20px; }
+.course-page .course-unavailable h1 { font-size:32px; font-weight:600; line-height:1.5; }
+.course-page .course-unavailable p { color:var(--ink2); }
+.course-page [hidden] { display:none !important; }
+@media (max-width:780px) {
+  .course-page #programs.course-programs { padding-top:100px; padding-bottom:54px; }
+  .course-page .course-back { margin-bottom:22px; }
+  .course-page .course-detail-copy h1 { font-size:30px; }
+}
+@media (max-width:600px) {
+  .course-page .brand-group { gap:10px; }
+  .course-page .course-page-nav .lat { font-size:13px; letter-spacing:.1em; }
+  .course-page .course-page-nav .apply-link { font-size:11px; padding:9px; }
+  .course-page .course-detail-copy h1 { font-size:29px; }
+  .course-page .course-unavailable h1 { font-size:27px; }
+}
