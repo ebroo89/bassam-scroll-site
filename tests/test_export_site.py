@@ -19,7 +19,7 @@ class ExportSiteTests(unittest.TestCase):
             self.assertEqual(count, len(list(p for p in output.rglob("*") if p.is_file())))
             for forbidden in [".git", "dashboard.html", "dashboard.js", "serve.py", "tests", "README.md", "site-visibility.json", "config.py"]:
                 self.assertFalse((output / forbidden).exists(), forbidden)
-            for page in ["index.html", "course.html", "apply.html", "pay.html", "book.html"]:
+            for page in ["index.html", "course.html", "apply.html", "book.html"]:
                 text = (output / page).read_text(encoding="utf-8")
                 resources = re.findall(r'(?:src|href)="([^"?]+\.(?:js|css))\?v=([a-f0-9]{12})"', text)
                 self.assertTrue(resources, page)

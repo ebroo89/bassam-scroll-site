@@ -32,7 +32,8 @@ window.MB = {
     "discountLabel": "خصم نحو 20%",
     "fullyBookedMonth": "2026-11",
     "status": "مواعيد هذا الشهر مكتملة",
-    "note": "اختر من الأشهر القادمة لننسّق موعدك معك."
+    "note": "اختر من الأشهر القادمة لننسّق موعدك معك.",
+    "action": "نسّق موعدًا قادمًا"
   },
 
   // USD tuition and enrollment availability for each offer.
@@ -238,11 +239,12 @@ window.MB = {
   // Empty means a clearly labelled local demonstration with no delivery.
   webhookUrl: "",
 
-  // Programmes offered on the application form. The course, private training and consultations are paid on pay.html instead;
-  // older links with #group or #consult still open their form.
-  applicationPrograms: ["indicator"],
+  // Programmes offered on the application form. Consultations are booked on book.html instead;
+  // older links with #consult still open their form.
+  applicationPrograms: ["group", "private", "indicator"],
 
-  // Consultation booking (book.html): the visitor picks a slot of the consultation calendar, then pays on pay.html.
+  // Consultation booking (book.html): the visitor picks a slot of the consultation calendar and leaves their details;
+  // the page then points them to WhatsApp to confirm.
   // Live only when `endpoint` is set to the relay (api/book.php) on https; until then it is a labelled demo with
   // generated slots that sends nothing. Remove test:true before launch.
   booking: {
@@ -253,23 +255,8 @@ window.MB = {
     durationMin: 90,
   },
 
-  // Crypto payment (pay.html). It stays a labelled preview that shows no wallet until BOTH the TRC20
-  // address and the proof endpoint are set. The endpoint must store the receipt and return JSON { ok: true }.
-  cryptoPayment: {
-    asset: "USDT",
-    network: "TRC20 (Tron)",
-    address: "TGfvW2PFG4GQoypQX4ofuAWD2oXaVbNjag",
-    webhookUrl: "",
-    // Demo only: shows this placeholder (deliberately not a valid TRON address) while no real address is set.
-    // Remove both lines, or set test: false, before launch.
-    test: true,
-    testAddress: "TTestAddressDoNotSendFundsHere0000",
-    // Offers with a fixed price that can be paid: "champ" (course price), "private" and "consult" (prices above).
-    offers: ["champ", "private", "consult"],
-  },
-
   // Contact
-  whatsapp: "",   // international format without +, e.g. "9715xxxxxxxx"
+  whatsapp: "971547836322",   // international format without +, e.g. "9715xxxxxxxx"
   // Number of the "Not sure which programme fits?" chat button. Optional: falls back to `whatsapp`; the section stays hidden without a number.
   supportWhatsapp: "",
   telegram: "",   // e.g. "https://t.me/xxxx"

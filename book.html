@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>احجز موعد الاستشارة | محمد بسام</title>
-<meta name="description" content="اختر موعد استشارتك مع محمد بسام (90 دقيقة)، ثم انتقل إلى الدفع بعملة USDT.">
+<meta name="description" content="اختر موعد استشارتك مع محمد بسام (90 دقيقة)، واترك بياناتك. نتواصل معك على واتساب لتأكيد التفاصيل.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#050607">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,11 +11,10 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="courses.css">
 <link rel="stylesheet" href="brand.css">
-<link rel="stylesheet" href="pay.css">
 <link rel="stylesheet" href="book.css">
 <link rel="stylesheet" href="accents.css">
 </head>
-<body class="apply-page pay-page book-page">
+<body class="apply-page book-page">
 <a class="skip-link" href="#main-content">انتقل إلى اختيار الموعد</a>
 
 <nav id="nav" aria-label="التنقل الرئيسي"><div class="w">
@@ -27,16 +26,16 @@
   <header class="ap-head">
     <span class="rule"></span>
     <h1>احجز موعد الاستشارة</h1>
-    <p>اختر اليوم والوقت المناسبين لك، واترك بياناتك. بعدها تنتقل إلى الدفع بعملة USDT لتثبيت الحجز.</p>
+    <p>اختر اليوم والوقت المناسبين لك، واترك بياناتك. نثبّت لك الموعد، ثم نتواصل معك على واتساب لتأكيد التفاصيل.</p>
   </header>
-  <p class="preview-notice pay-test-notice" data-book-demo role="note" hidden><strong>وضع التجربة</strong>المواعيد المعروضة تجريبية، والصفحة لا ترسل أي بيانات ولا تحجز أي موعد.</p>
+  <p class="preview-notice book-demo-notice" data-book-demo role="note" hidden><strong>وضع التجربة</strong>المواعيد المعروضة تجريبية، والصفحة لا ترسل أي بيانات ولا تحجز أي موعد.</p>
   <p class="form-note" data-book-unavailable role="status" hidden>الاستشارات غير متاحة للحجز حاليًا. اختر برنامجك من <a href="index.html#programs">صفحة البرامج</a>.</p>
   <noscript><p class="form-note">فعّل JavaScript في متصفحك لاختيار الموعد.</p></noscript>
 
   <div data-book-flow hidden>
-    <ol class="ap-progress pay-progress book-progress" aria-label="خطوات الحجز">
-      <li class="on" aria-current="step"><span>01</span>الموعد</li>
-      <li><span>02</span>الدفع</li>
+    <ol class="ap-progress book-progress" aria-label="خطوات الحجز">
+      <li class="on" aria-current="step" data-book-step="1"><span>01</span>الموعد</li>
+      <li data-book-step="2"><span>02</span>التأكيد</li>
     </ol>
 
     <div class="ap-grid">
@@ -63,10 +62,23 @@
           <div class="hp" aria-hidden="true"><input name="company" tabindex="-1" autocomplete="off"></div>
 
           <div class="form-nav">
-            <button type="submit" class="b-solid" data-submit>ثبّت الموعد وانتقل للدفع</button>
+            <button type="submit" class="b-solid" data-submit>ثبّت الموعد</button>
           </div>
           <p class="form-msg" role="status" aria-live="polite" aria-atomic="true"></p>
         </form>
+
+        <section class="done" data-book-done aria-labelledby="book-done-title" hidden>
+          <span class="rule"></span>
+          <h2 id="book-done-title" data-book-done-title tabindex="-1">حجزنا لك الموعد.</h2>
+          <p class="book-done-time">موعدك المبدئي: <b data-book-done-time></b></p>
+          <p>نتواصل معك لتأكيد التفاصيل.</p>
+          <p data-book-done-demo hidden>هذه معاينة فقط: لم نحجز موعدًا ولم نرسل بياناتك.</p>
+          <div class="done-contact" data-book-done-contact hidden>
+            <p>للتواصل السريع، راسلنا على واتساب:</p>
+            <a class="help-button" data-book-done-whatsapp href="#" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20l1.3-4.2A8 8 0 1 1 8.4 18.8L4 20z"/><path d="M9.2 9.3c.2 2.2 2.3 4.3 4.5 4.5l1.2-1.1-1.7-1-.8.6c-.7-.3-1.4-1-1.7-1.7l.6-.8-1-1.7-1.1 1.2z"/></svg><span>تواصل معنا على واتساب</span><b dir="ltr" translate="no" data-book-done-whatsapp-number></b></a>
+          </div>
+          <a href="index.html" class="b-ghost">العودة للموقع</a>
+        </section>
       </section>
 
       <aside class="ap-sum" aria-label="ملخص الحجز">
@@ -74,8 +86,7 @@
         <span>جلسة لمدة 90 دقيقة</span>
         <h2>استشارات</h2>
         <div class="book-chosen" data-book-chosen aria-live="polite"><span>الموعد المختار</span><b data-book-chosen-text>لم تختر موعدًا بعد</b></div>
-        <div class="sum-price"><span>المبلغ</span><span dir="ltr" translate="no" data-book-amount></span></div>
-        <p class="pay-sum-note">يُثبَّت الحجز بعد الدفع والتحقق من التحويل. الموعد محجوز لك أثناء الدفع.</p>
+        <p class="book-sum-note">نحجز لك الموعد مبدئيًا، ونتواصل معك على واتساب لتأكيده.</p>
       </aside>
     </div>
   </div>

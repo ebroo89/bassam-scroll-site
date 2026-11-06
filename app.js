@@ -66,6 +66,7 @@
   fill("[data-private-discount]", privateTraining.discountLabel || "");
   fill("[data-private-status]", privateTraining.status || "");
   fill("[data-private-note]", privateTraining.note || "");
+  fill("[data-private-action]", privateTraining.action || "ناقش هدفك من التدريب");
   // The booked month is explicit business data; future months are requests, not confirmed slots.
   const bookedMonth = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(privateTraining.fullyBookedMonth || "");
   const privateMonths = bookedMonth ? Array.from({ length: 3 }, (_, offset) => {
@@ -108,11 +109,13 @@
     const selection = $("[data-private-selection]");
     if (selection) selection.hidden = !selected;
     fill("[data-private-selected-month]", selected ? privateMonthLabel(selected) : "");
-    // The chosen month rides along to the payment page (pay.js adds it to the link).
-    const payLink = $("[data-private-pay]");
-    if (payLink) {
-      if (selected) payLink.dataset.payMonth = selected.id; else delete payLink.dataset.payMonth;
-      if (typeof window !== "undefined") window.MB_PAY_LINKS?.();
+    const link = $("[data-private-apply]");
+    if (link) {
+      const url = new URL("apply.html", location.href);
+      url.searchParams.set("lang", document.documentElement?.lang || "ar");
+      if (selected) url.searchParams.set("month", selected.id);
+      url.hash = "private";
+      link.href = url.href;
     }
   };
   if (privateCalendar) {
@@ -172,6 +175,8 @@
   });
   updateHelp();
   document.addEventListener("site:languagechange", updateHelp);
+  // "+971 54 783 6322": how the number is shown next to the WhatsApp buttons.
+  const waDisplay = (digits) => /^971\d{9}$/.test(digits) ? `+971 ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8)}` : `+${digits}`;
 
   // Decorative footprint levels, duplicated with matching pulse phases.
   const heroTapes = $$("[data-tape]");
@@ -344,8 +349,17 @@
       item.textContent = topic;
       return item;
     }));
-    // Enrolment is the pay box at the end of the page, after the curriculum.
+    // The top button leads to the enrolment box at the end of the page, after the curriculum.
     $("[data-course-apply]", page).href = "#course-enroll";
+    // The registration form for this course, from the box at the end of the page.
+    const formLink = $("[data-course-form]", page);
+    if (formLink) {
+      const apply = new URL("apply.html", location.href);
+      apply.searchParams.set("course", course.id);
+      apply.searchParams.set("lang", document.documentElement.lang || "ar");
+      apply.hash = "group";
+      formLink.href = apply.href;
+    }
     $("[data-course-detail]", page).hidden = false;
     if (typeof window !== "undefined") window.MB_CURRICULUM?.show(course.id);
   };
@@ -446,7 +460,6 @@
       $$("[data-course-type]", catalogue).forEach((button) => {
         button.setAttribute("aria-pressed", String(button.dataset.courseType === courseType));
       });
-      if (typeof window !== "undefined") window.MB_PAY_LINKS?.();
     };
 
     catalogue.addEventListener("click", (event) => {
@@ -681,6 +694,20 @@
   addEventListener("hashchange", () => { if (!form.hidden && !sending) fromHash(true); });
   fromHash();
 
+  // After sending: point the visitor to WhatsApp for a quick reply (hidden without a number in config.js).
+  const doneContact = $("[data-done-contact]");
+  const showDoneContact = () => {
+    if (!doneContact || !supportNumber) return;
+    const link = $("[data-done-whatsapp]", doneContact);
+    const url = new URL(`https://wa.me/${supportNumber}`);
+    url.searchParams.set("text", document.documentElement.lang === "en"
+      ? "Hello, I just sent my request through the website."
+      : "مرحبًا، أرسلت طلبي للتو عبر الموقع.");
+    link.href = url.href;
+    link.target = "_blank";
+    $("[data-done-whatsapp-number]", doneContact).textContent = waDisplay(supportNumber);
+    doneContact.hidden = false;
+  };
   const DONE = {
     private: "سنراجع طلبك ونتواصل معك لتنسيق موعد تدريب قادم.",
     group: "استلمنا طلب التسجيل. سنتواصل معك لاستكمال الخطوات.",
@@ -754,6 +781,7 @@
         : DONE[d.program];
       form.hidden = true;
       done.hidden = false;
+      showDoneContact();
       prog.forEach((li) => { li.classList.remove("on"); li.classList.add("done"); li.removeAttribute("aria-current"); });
       if (doneTitle) doneTitle.focus();
     } catch (err) {

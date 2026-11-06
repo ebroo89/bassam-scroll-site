@@ -1,5 +1,9 @@
 /* Consultation booking page: day chips + time grid, in the same dark/red language as the pay page. */
 .book-progress { grid-template-columns:repeat(2,1fr); }
+.book-demo-notice { border-color:var(--red); }
+.book-sum-note { font-size:13px !important; }
+.done-contact { display:grid; gap:12px; justify-items:start; margin:22px 0; }
+.done-contact p { color:var(--ink2); font-size:14.5px; }
 .book-tz { font-size:13px; color:var(--mid); margin-bottom:18px; }
 .book-days { display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; scroll-snap-type:x proximity; }
 .book-day { flex:none; scroll-snap-align:start; display:grid; gap:2px; justify-items:center; min-width:92px; padding:12px 14px; border:1px solid var(--line); background:var(--surface,var(--bg2)); color:var(--ink2); font:500 14px/1.4 "Cairo",sans-serif; cursor:pointer; transition:background .2s, border-color .2s, color .2s; }

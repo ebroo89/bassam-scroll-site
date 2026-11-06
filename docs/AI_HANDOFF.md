@@ -27,11 +27,9 @@ Public pages load `config.js` -> `site-visibility.js` -> `visibility.js` -> `app
 
 `app.js` handles shared configuration, cards, service choices and forms. `motion.*` handles hero/end transitions; `edge.*` the process loop; `market-section.*` the three illustration panels. Market values are synthetic educational illustrations, with no live feed connection. `learning-guide.js` uses local deterministic recommendations and can substitute a visible bundle only when it covers the required content.
 
-## Crypto payment
+## Payment
 
-`pay.html?offer=champ|private|consult` shows the USDT (TRC20) amount and wallet, then a proof-of-payment form (name, email, phone, optional TxID, receipt upload, confirmation). Amounts come from the existing prices: the `champ` course price and `prices.private` / `prices.consult`. An offer is payable only when it is listed in `cryptoPayment.offers`, visible, open and has a fixed price. `pay.js` also sets the "pay with crypto" links (`data-pay-link`) on the home, course and application pages and hides them for offers that cannot be paid.
-
-The wallet is shown only when both the address and the proof endpoint are configured, so nobody can pay without being able to send the proof. Success requires a JSON `{ "ok": true }` acknowledgement; the page never says the payment is confirmed. The endpoint (an n8n webhook to GoHighLevel, kept outside this repository) must store the receipt and re-validate every field.
+Nothing is paid on the site. Crypto payment (USDT TRC20) was built and then removed on 2026-11-07 because it is not allowed for this business; do not reintroduce it. Every offer goes through a form or the consultation booking page, and after sending, the visitor sees a WhatsApp button (`config.js` → `whatsapp`, `supportWhatsapp` overrides it) so the team can follow up. The old pieces are in git history (branch `feature/crypto-payment`) and archived outside the repo.
 
 ## Editing content and visibility
 
@@ -76,4 +74,4 @@ The source repository includes tests, documentation, dashboard, server, exporter
 
 ## Consultation booking
 
-`book.html` / `book.js` / `book.css` let a visitor pick a consultation slot (Dubai time, Monday–Friday 09:00–19:00, 90 minutes) and continue to `pay.html?offer=consult`. `config.js` → `booking` holds `endpoint` (relay `api/book.php`), `test` (demo with generated slots, nothing sent), `days`, `timezone`, `durationMin`. The chosen slot travels in `sessionStorage` key `mb-consult-booking`; `pay.js` (`savedBooking`) redirects to the booking page when it is missing or already in the past. Update `translations.js` for every Arabic string on `book.html`/`book.js` (a test enforces it). The server side (n8n workflows, GHL calendar/opportunity/custom fields) is documented in `محمد بسام/n8n/SETUP-BOOKING.md`.
+`book.html` / `book.js` / `book.css` let a visitor pick a consultation slot (Dubai time, Monday–Friday 09:00–19:00, 90 minutes) and leave their details. The booking is held and the page then shows a WhatsApp button so the team can confirm. `config.js` → `booking` holds `endpoint` (relay `api/book.php`), `test` (demo with generated slots, nothing sent), `days`, `timezone`, `durationMin`. Update `translations.js` for every Arabic string on `book.html`/`book.js` (a test enforces it). The server side (n8n workflows, GHL calendar/opportunity/custom fields) is documented in `محمد بسام/n8n/SETUP-BOOKING.md`.
