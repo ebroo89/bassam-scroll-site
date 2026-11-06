@@ -63,6 +63,8 @@ test('the wallet is shown only when both address and endpoint are configured', (
   const live = pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'https://n8n.example.com/webhook/pay' }), LIVE_LOCATION);
   assert.deepEqual(live, { live: true, address: ADDRESS, endpoint: 'https://n8n.example.com/webhook/pay' });
   assert.equal(pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'javascript:alert(1)' }), LIVE_LOCATION).live, false);
+  assert.equal(pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'http://173.212.244.120:5678/webhook/pay' }), LIVE_LOCATION).live, false);
+  assert.equal(pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'api/pay.php' }), LIVE_LOCATION).live, true);
   assert.equal(pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'api/pay.php' }), { href: 'http://127.0.0.1:8766/pay.html', hostname: '127.0.0.1' }).live, false);
 });
 

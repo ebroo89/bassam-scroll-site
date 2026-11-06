@@ -61,7 +61,9 @@
     const endpoint = httpUrl(rawEndpoint, location.href);
     const localPreview = /^(localhost|127\.0\.0\.1|\[?::1\]?)$/.test(location.hostname) && !/^https?:/i.test(rawEndpoint);
     const address = validTronAddress(pay.address) ? text(pay.address) : "";
-    return { live: !!(address && endpoint && !localPreview), address, endpoint };
+    // An https page cannot post to a plain-http endpoint (mixed content), so the proof would never arrive.
+    const blocked = /^https:/i.test(location.href) && /^http:/i.test(endpoint);
+    return { live: !!(address && endpoint && !localPreview && !blocked), address, endpoint };
   }
 
   function proofErrors(fields, file) {
