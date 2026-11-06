@@ -159,6 +159,23 @@
     container.hidden = contacts.length === 0;
   });
 
+  // "Not sure which programme fits?": opens a WhatsApp chat with the support team (supportWhatsapp, else whatsapp).
+  // The section stays hidden without a valid number. The first message follows the page language.
+  const supportNumber = [C.supportWhatsapp, C.whatsapp].map((value) => normalizePhone(value).replace(/^\+/, "")).find((value) => /^[1-9]\d{7,14}$/.test(value));
+  const updateHelp = () => $$("[data-help]").forEach((box) => {
+    const link = $("[data-help-whatsapp]", box);
+    box.hidden = !supportNumber;
+    if (!supportNumber || !link) return;
+    const url = new URL(`https://wa.me/${supportNumber}`);
+    url.searchParams.set("text", document.documentElement.lang === "en"
+      ? "Hello, I need help choosing the right program."
+      : "مرحبًا، أحتاج مساعدة في اختيار البرنامج المناسب.");
+    link.href = url.href;
+    link.target = "_blank";
+  });
+  updateHelp();
+  document.addEventListener("site:languagechange", updateHelp);
+
   // Decorative footprint levels, duplicated with matching pulse phases.
   const heroTapes = $$("[data-tape]");
   heroTapes.forEach((el, streamIndex) => {

@@ -271,6 +271,8 @@ window.MB = {
 
   // Contact
   whatsapp: "",   // international format without +, e.g. "9715xxxxxxxx"
+  // Number of the "Not sure which programme fits?" chat button. Optional: falls back to `whatsapp`; the section stays hidden without a number.
+  supportWhatsapp: "",
   telegram: "",   // e.g. "https://t.me/xxxx"
   instagram: "",
   email: "",

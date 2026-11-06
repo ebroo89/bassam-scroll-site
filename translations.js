@@ -450,5 +450,8 @@ window.MB_TRANSLATIONS = {
   "رجوع لتغيير الموعد": "Back to change the time",
   "احجز موعدك وادفع (USDT)": "Book your time and pay (USDT)",
   "تختار موعدك أولًا، ثم تدفع بعملة USDT وترفع صورة الإيصال. يتحقّق الفريق من التحويل ويؤكّد لك الموعد.": "You choose your time first, then pay in USDT and upload your receipt. The team checks the transfer and confirms your time.",
+  "لست متأكدًا أي برنامج يناسبك؟": "Not sure which program fits you?",
+  "راسل فريق الدعم على واتساب، وسيردّ عليك ويساعدك على اختيار الأنسب لمستواك وهدفك.": "Message the support team on WhatsApp. They will reply and help you choose what suits your level and goal.",
+  "تواصل معنا على واتساب": "Contact us on WhatsApp",
   "تجريبي · لا تحوّل عليه": "Test · do not send"
 };
