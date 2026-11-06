@@ -13,8 +13,9 @@
 <link rel="stylesheet" href="edge.css">
 <link rel="stylesheet" href="market-section.css">
 <link rel="stylesheet" href="courses.css">
-<link rel="stylesheet" href="learning-guide.css">
 <link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="pay.css">
+<link rel="stylesheet" href="accents.css">
 </head>
 <body class="motion">
 <a class="skip-link" href="#main-content">انتقل إلى المحتوى</a>
@@ -25,7 +26,7 @@
   <div class="brand-group"><a href="index.html" class="lat" data-brand-name title="الصفحة الرئيسية">محمد بسام</a><button type="button" class="language-toggle" data-language-toggle translate="no" lang="en" aria-label="Switch to English">EN</button></div>
   <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-links">القائمة</button>
   <div class="links" id="site-links" data-nav-links><a href="#reads">المنهج</a><a href="#programs">البرامج</a><a href="#edge">بناء الأفضلية</a></div>
-  <a href="apply.html" class="apply-link">اختر برنامجك</a>
+  <a href="#programs" class="apply-link">اختر برنامجك</a>
 </div></nav>
 
 <!-- 1 · Hero: pinned; the name opens up and hands over to the statement -->
@@ -152,44 +153,7 @@
       <div class="progs-top w">
         <div><h2>اختر طريقة التعلّم المناسبة لك.</h2><p class="programs-intro" data-programs-intro>تعلّم ضمن From Zero to Champ، أو اختر التدريب الخاص أو الاستشارة بحسب هدفك.</p></div>
         <div class="program-jump" role="group" aria-label="انتقل إلى برنامج"><button type="button" data-program-tab="group" aria-pressed="true">From Zero to Champ</button><button type="button" data-program-tab="private" aria-pressed="false">تدريب خاص</button><button type="button" data-program-tab="consult" aria-pressed="false">استشارات</button><button type="button" data-program-tab="indicator" aria-pressed="false">مؤشرات</button></div>
-<details class="learning-guide" data-learning-guide>
-  <summary>
-    <span>ساعدني أختار<small>سؤالان لتحديد نقطة البداية</small></span>
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-  </summary>
-  <form class="learning-guide-form" novalidate>
-    <fieldset data-guide-question>
-      <legend tabindex="-1">أين أنت الآن في التداول؟</legend>
-      <div class="guide-options guide-experience">
-        <label><input type="radio" name="guide-experience" value="new"><span>أبدأ من الصفر</span></label>
-        <label><input type="radio" name="guide-experience" value="basic"><span>أعرف الأساسيات</span></label>
-        <label><input type="radio" name="guide-experience" value="experienced"><span>لدي خبرة في التطبيق</span></label>
-      </div>
-    </fieldset>
-    <fieldset data-guide-question hidden>
-      <legend tabindex="-1">ما الذي تريد العمل عليه؟</legend>
-      <div class="guide-options">
-        <label><input type="radio" name="guide-goal" value="foundations"><span>أرتّب أساسياتي</span></label>
-        <label><input type="radio" name="guide-goal" value="orderflow"><span>أقرأ السيولة وتدفّق الأوامر</span></label>
-        <label><input type="radio" name="guide-goal" value="options"><span>أفهم تدفّق الأوبشن</span></label>
-        <label><input type="radio" name="guide-goal" value="quant"><span>أختبر نظامًا وأطوّر أتمتته</span></label>
-        <label><input type="radio" name="guide-goal" value="private"><span>أتعلّم بشكل فردي</span></label>
-        <label><input type="radio" name="guide-goal" value="consult"><span>أناقش سؤالًا محدّدًا</span></label>
-      </div>
-    </fieldset>
-    <section class="guide-result" data-guide-result hidden aria-live="polite">
-      <p>نقطة البداية المقترحة لك</p>
-      <h3 data-guide-title tabindex="-1"></h3>
-      <p data-guide-reason></p>
-      <small>اقتراح مبدئي مبني على إجاباتك. راجع المحتوى والمتطلبات قبل التسجيل.</small>
-      <button type="button" class="b-solid" data-guide-open>استكشف هذا الخيار</button>
-    </section>
-    <div class="guide-controls">
-      <button type="button" class="b-ghost" data-guide-back hidden>رجوع</button>
-      <button type="submit" class="b-solid" data-guide-next disabled>متابعة</button>
-    </div>
-  </form>
-</details>
+
 
       </div>
       <div class="progs-deck">
@@ -237,9 +201,9 @@
           </div>
           <div class="prog-foot">
             <div class="prog-price"><span>سعر التدريب</span><div class="course-offer-line"><s dir="ltr" data-private-original>$10,000</s><span class="course-discount" data-private-discount>خصم نحو 20%</span></div><b dir="ltr" data-price="private">$7,990</b></div>
-            <a class="prog-cta" data-private-apply href="apply.html#private"><span data-private-action>نسّق موعدًا قادمًا</span><span aria-hidden="true">←</span></a>
-          </div>
-          <p class="service-terms">ننسّق محاور التدريب وعدد الجلسات ومدتها ونطاق المتابعة قبل تأكيد الموعد.</p>
+            <a class="pay-button pay-button-main" data-pay-link data-pay-offer="private" data-private-pay href="pay.html?offer=private" hidden><span>نسّق موعدًا قادمًا</span></a>
+            </div>
+          <p class="service-terms">بعد طلبك نتواصل معك على واتساب، وننسّق محاور التدريب وعدد الجلسات ومدتها والموعد والدفع.</p>
         </div>
       </article>
       <article class="prog on service-panel" data-program-panel="consult" hidden>
@@ -250,10 +214,10 @@
           <p class="consult-duration"><span aria-hidden="true">◷</span> <span>مدة الاستشارة 90 دقيقة</span></p>
           <p>احجز جلسة خاصة لطرح سؤالك أو مناقشة الموضوع الذي يشغلك في التداول. نخصّص الوقت لما تريد فهمه، ونراجع معًا ما لديك من أفكار أو أمثلة.</p>
           <div class="service-fit"><h4>قبل الجلسة</h4><p>حدّد ما تريد مناقشته، وجهّز سؤالك وأي مثال أو ملاحظات تساعد على توضيحه.</p></div>
-          <div class="service-fit"><h4>ماذا يحدث بعد التسجيل؟</h4><p>بعد التسجيل، يتواصل معك أحد أفراد الفريق لجمع المعلومات اللازمة وتنسيق موعد الجلسة.</p></div>
+          <div class="service-fit"><h4>ماذا يحدث بعد الحجز؟</h4><p>تختار موعدك وتترك بياناتك، ثم نتواصل معك على واتساب لتأكيد التفاصيل.</p></div>
           <div class="prog-foot">
             <div class="prog-price"><span>السعر</span><b data-price="consult"></b></div>
-            <a class="prog-cta" data-consult-apply href="apply.html#consult">احجز استشارة<span aria-hidden="true">←</span></a>
+            <a class="pay-button pay-button-main" data-pay-link data-pay-offer="consult" data-pay-target="book" href="book.html"><span>احجز موعدك</span></a>
           </div>
           <p class="service-terms">ينسّق الفريق معك الموعد وما يلزم تحضيره قبل الجلسة.</p>
         </div>
@@ -280,6 +244,19 @@
     </div>
   </section>
 
+  <!-- Not sure which programme fits? A direct WhatsApp chat with the support team (shown only once a number is set in config.js). -->
+  <section class="help-sec" data-help hidden aria-labelledby="help-title">
+    <div class="w">
+      <div class="help-box">
+        <div class="help-copy">
+          <h2 id="help-title">لست متأكدًا أي برنامج يناسبك؟</h2>
+          <p>راسل فريق الدعم على واتساب، وسيردّ عليك ويساعدك على اختيار الأنسب لمستواك وهدفك.</p>
+        </div>
+        <a class="help-button" data-help-whatsapp href="#" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20l1.3-4.2A8 8 0 1 1 8.4 18.8L4 20z"/><path d="M9.2 9.3c.2 2.2 2.3 4.3 4.5 4.5l1.2-1.1-1.7-1-.8.6c-.7-.3-1.4-1-1.7-1.7l.6-.8-1-1.7-1.1 1.2z"/></svg><span>تواصل معنا على واتساب</span></a>
+      </div>
+    </div>
+  </section>
+
   <!-- 7 · Common questions before choosing the course -->
   <section class="sec faq-sec" id="faq" data-site-section="rules" aria-labelledby="faq-heading"><div class="w faq-layout">
     <div class="faq-heading"><h2 id="faq-heading">أسئلة شائعة.</h2><p>ما تحتاج إلى معرفته قبل التسجيل.</p></div>
@@ -298,8 +275,8 @@
         <div class="faq-answer"><p>تجمع الدراسة بين لقاءات مباشرة ومحتوى مسجّل، مع متابعة جماعية.</p></div>
       </details>
       <details class="faq-item">
-        <summary><span>ماذا يحدث بعد إرسال طلب التسجيل؟</span><svg class="faq-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12H19"/><path class="faq-plus" d="M12 5V19"/></svg></summary>
-        <div class="faq-answer"><p>يتواصل معك الفريق لاستكمال التسجيل وتوضيح الخطوة التالية.</p></div>
+        <summary><span>كيف أسجّل؟</span><svg class="faq-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12H19"/><path class="faq-plus" d="M12 5V19"/></svg></summary>
+        <div class="faq-answer"><p>افتح صفحة المسار واقرأ محتواه، ثم اضغط «سجّل الآن» واترك بياناتك. يصلنا طلبك، وللدفع تواصل معنا على واتساب. لا يتم أي دفع عبر الموقع.</p></div>
       </details>
     </div>
   </div></section>
@@ -314,7 +291,7 @@
     <p class="up">تعرّف إلى ما ستتعلّمه في From Zero to Champ، أو احجز استشارة لمناقشة سؤالك.</p>
     <div class="end-actions up">
       <a href="course.html?course=champ&amp;lang=ar" class="end-primary"><span>استكشف From Zero to Champ</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4M10 6L4 12L10 18"/></svg></a>
-      <a href="apply.html?lang=ar#consult" class="end-secondary">احجز استشارة</a>
+      <a href="book.html?lang=ar" class="end-secondary">احجز استشارة</a>
     </div>
   </section>
 </main>
@@ -329,9 +306,9 @@
 <script src="site-visibility.js"></script>
 <script src="visibility.js"></script>
 <script src="app.js"></script>
+<script src="pay.js"></script>
 <script src="translations.js"></script>
 <script src="i18n.js"></script>
-<script src="learning-guide.js"></script>
 <script src="motion.js"></script>
 <script src="edge.js"></script>
 <script src="market-surface-motion.js"></script>

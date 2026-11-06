@@ -27,6 +27,10 @@ Public pages load `config.js` -> `site-visibility.js` -> `visibility.js` -> `app
 
 `app.js` handles shared configuration, cards, service choices and forms. `motion.*` handles hero/end transitions; `edge.*` the process loop; `market-section.*` the three illustration panels. Market values are synthetic educational illustrations, with no live feed connection. `learning-guide.js` uses local deterministic recommendations and can substitute a visible bundle only when it covers the required content.
 
+## Payment
+
+Nothing is paid on the site. Crypto payment (USDT TRC20) was built and then removed on 2026-11-07 because it is not allowed for this business; do not reintroduce it (a test in `tests/pay.test.cjs` guards against wallet, USDT and receipt upload). `pay.html`/`pay.js` is now the enrolment step: details (posted like the application form to `webhookUrl`), then «للدفع، تواصل معنا على واتساب» with the WhatsApp button (`config.js` → `whatsapp`, `supportWhatsapp` overrides). The course, private training (with `month`) and consultation (after `book.html`, no form) reach it through `[data-pay-link]` buttons; indicators use `apply.html`.
+
 ## Editing content and visibility
 
 Edit identity, prices, course records, dated availability, contacts and the submission URL in `config.js`. Some marketing and interface copy lives directly in HTML/JS. Add the matching English entry in `translations.js` whenever Arabic source text changes, including dynamic states and accessibility labels. `i18n.js` performs exact-source translation, observes inserted content, maintains RTL/LTR, and preserves language through `?lang=` and the optional `bassam-language` local-storage preference. Check both directions and switch languages after interacting with controls.
@@ -67,3 +71,7 @@ The source repository includes tests, documentation, dashboard, server, exporter
 4. Preserve the distinction between owner-confirmed hero claims and dated award metadata. The configuration records an October result checked on 2026-11-03 and still pending final audit; this technical handoff does not independently verify the claims.
 5. Payment checkout, student accounts and public administration are not implemented. Do not present them as available.
 6. Review/test the exported artifact and obtain the required authorization for the actual push/deployment action.
+
+## Consultation booking
+
+`book.html` / `book.js` / `book.css` let a visitor pick a consultation slot (Dubai time, Monday–Friday 09:00–19:00, 90 minutes) and leave their details. The booking is held and the visitor goes on to `pay.html?offer=consult`, which shows the time and the WhatsApp payment step. `config.js` → `booking` holds `endpoint` (relay `api/book.php`), `test` (demo with generated slots, nothing sent), `days`, `timezone`, `durationMin`. Update `translations.js` for every Arabic string on `book.html`/`book.js` (a test enforces it). The server side (n8n workflows, GHL calendar/opportunity/custom fields) is documented in `محمد بسام/n8n/SETUP-BOOKING.md`.

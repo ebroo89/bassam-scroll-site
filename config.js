@@ -239,8 +239,26 @@ window.MB = {
   // Empty means a clearly labelled local demonstration with no delivery.
   webhookUrl: "",
 
+  // Programmes offered on the application form. The course and private training enrol on pay.html (details, then
+  // payment arranged on WhatsApp; nothing is paid on the site), consultations on book.html. Older #group/#consult links still open.
+  applicationPrograms: ["indicator"],
+
+  // Consultation booking (book.html): the visitor picks a slot of the consultation calendar and leaves their details,
+  // then pay.html tells them to contact us on WhatsApp for the payment.
+  // Live only when `endpoint` is set to the relay (api/book.php) on https; until then it is a labelled demo with
+  // generated slots that sends nothing. Remove test:true before launch.
+  booking: {
+    endpoint: "",
+    test: true,
+    days: 14,
+    timezone: "Asia/Dubai",
+    durationMin: 90,
+  },
+
   // Contact
-  whatsapp: "",   // international format without +, e.g. "9715xxxxxxxx"
+  whatsapp: "971547836322",   // international format without +, e.g. "9715xxxxxxxx"
+  // Number of the "Not sure which programme fits?" chat button. Optional: falls back to `whatsapp`; the section stays hidden without a number.
+  supportWhatsapp: "",
   telegram: "",   // e.g. "https://t.me/xxxx"
   instagram: "",
   email: "",

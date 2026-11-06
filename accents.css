@@ -1,0 +1,98 @@
+/* Accent layer on the dark theme. Reading text stays on black; everything you can act on or pay for
+   (tabs, offers, prices, choices, form fields, FAQ rows) sits on a lifted surface, and the offer itself
+   carries a translucent tint of the brand red. Loaded after the page styles on every public page. */
+:root {
+  --surface:#0e1114;
+  --surface-2:#14181c;
+  --tint:rgba(217,20,20,.07);
+  --tint-2:rgba(217,20,20,.14);
+  --tint-3:rgba(217,20,20,.24);
+  --red-line:rgba(217,20,20,.45);
+  --lift:0 22px 44px -26px rgba(0,0,0,.95);
+}
+
+/* Navigation call to action */
+#nav .apply-link { border-color:var(--red-line); background:var(--tint-2); color:var(--ink); }
+#nav .apply-link:hover { background:var(--red); border-color:var(--red); color:#fff; }
+
+/* Programme switcher: a segmented control instead of bare text */
+#programs .program-jump { gap:8px; }
+.program-jump button { padding:10px 18px; border:1px solid var(--line); background:var(--surface); color:var(--ink2); font-size:14px; transition:background .2s, border-color .2s, color .2s; }
+.program-jump button:hover { border-color:rgba(255,255,255,.34); color:var(--ink); }
+.program-jump button[aria-pressed="true"], .program-jump button[aria-current="true"] { border-color:var(--red); background:var(--tint-3); color:#fff; }
+
+/* Course offer card */
+.course-card { background:linear-gradient(155deg, var(--tint-2), var(--tint) 42%, transparent 78%), var(--surface); border-color:var(--red-line); box-shadow:var(--lift); }
+@media (hover:hover) { .course-card:hover { border-color:var(--red); box-shadow:0 26px 50px -24px rgba(0,0,0,.95); } }
+.course-card-footer a.course-card-action { padding:10px 24px; background:var(--ink); color:var(--bg); border:1px solid var(--ink); font-weight:600; transition:background .2s, color .2s; }
+.course-card-footer a.course-card-action:hover { background:transparent; color:var(--ink); border-color:var(--ink); }
+
+/* Price + action block on service panels and the course page */
+#programs .service-panel .prog-foot, .course-catalog .prog-foot { max-width:none; padding:20px 22px; background:var(--tint); border:1px solid var(--red-line); }
+.prog-foot:has(.pay-button) { flex-wrap:wrap; }
+.prog-foot .pay-button { flex:1 0 100%; width:100%; margin:4px 0 0; }
+/* Button labels must not mirror in English: style.css flips every span inside .prog-cta (to turn the ← arrows). */
+.prog-cta > .cta-label, .prog-cta:hover > .cta-label, html[lang="en"] .prog-cta > .cta-label { transform:none; }
+
+/* Course page: the single enrolment box, after the curriculum */
+.course-enroll { margin-top:72px; padding:32px; background:linear-gradient(160deg, var(--tint-2), var(--tint) 45%, transparent 85%), var(--surface); border:1px solid var(--red-line); box-shadow:var(--lift); scroll-margin-top:100px; }
+.course-enroll h2 { font:600 28px/1.4 "Cairo",sans-serif; color:var(--ink); margin:0; }
+.course-enroll:lang(en) h2 { font-family:"Jost",sans-serif; font-weight:500; }
+.course-enroll > p { margin-top:10px; color:var(--ink2); line-height:1.9; max-width:62ch; }
+.course-page .course-enroll .prog-foot { margin-top:22px; padding:0; background:none; border:0; }
+/* Consultation: booking and paying are one action */
+.prog-foot .pay-button-main { flex:none; width:auto; margin:0; margin-inline-start:auto; }
+.service-fit { padding:16px 18px; background:var(--surface); border:1px solid var(--line); }
+.service-fit + .service-fit { margin-top:0; }
+.private-schedule { padding:18px; background:var(--surface); border:1px solid var(--line); }
+.private-month { background:var(--surface-2); }
+.private-month[aria-pressed="true"] { border-color:var(--red); background:var(--tint-3); }
+.private-month[aria-pressed="true"] .private-month-track { background:var(--red); }
+
+/* Help band: a direct WhatsApp chat when the visitor is unsure which programme fits */
+.help-sec { padding:8px 0 56px; }
+.help-box { display:flex; align-items:center; justify-content:space-between; gap:28px 40px; padding:30px 34px; background:linear-gradient(160deg, var(--tint-2), var(--tint) 45%, transparent 85%), var(--surface); border:1px solid var(--red-line); box-shadow:var(--lift); }
+.help-copy h2 { font:600 26px/1.5 "Cairo",sans-serif; color:var(--ink); margin:0; text-wrap:balance; }
+.help-copy p { margin-top:8px; max-width:56ch; color:var(--ink2); line-height:1.9; }
+.help-button { flex:none; display:inline-flex; align-items:center; gap:12px; min-height:54px; padding:12px 28px; background:var(--ink); color:var(--bg); border:1px solid var(--ink); font:600 15px/1.4 "Cairo",sans-serif; transition:background .2s, color .2s; }
+.help-button b { font:400 14px "Jost",sans-serif; opacity:.75; margin-inline-start:4px; white-space:nowrap; }
+.help-button svg { width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.help-button:hover { background:transparent; color:var(--ink); }
+.help-button:focus-visible { outline:2px solid var(--ink); outline-offset:4px; }
+.help-sec[hidden] { display:none; }
+
+/* FAQ rows */
+.faq-item summary { padding-inline:18px; transition:background .2s; }
+.faq-item summary:hover { background:var(--surface); color:var(--ink); }
+.faq-item[open] { background:var(--tint); }
+.faq-item[open] summary { color:#fff; }
+.faq-answer { padding-inline:18px; }
+
+/* Application and payment pages */
+.pick span { background:var(--surface); }
+.pick input:checked + span { box-shadow:inset 0 0 0 1px var(--red); }
+.f input:not([type="checkbox"]):not([type="radio"]), .f textarea { padding:12px 14px; background:var(--surface); border:1px solid var(--line); }
+.f select { padding-top:12px; padding-bottom:12px; padding-inline-start:14px; background-color:var(--surface); border:1px solid var(--line); }
+.f input:focus, .f select:focus, .f textarea:focus { border-color:var(--red-line); background-color:var(--surface-2); }
+.ap-sum { padding:22px; background:var(--surface); border:1px solid var(--line); border-top-color:var(--red-line); }
+.pay-facts div { padding:16px 18px; background:var(--tint); border:1px solid var(--red-line); }
+.pay-wallet { background:linear-gradient(160deg, var(--tint-2), transparent 70%), var(--surface); border-color:var(--red-line); }
+
+@media (max-width:600px) {
+  #programs .service-panel .prog-foot .pay-button { flex:none; }
+  .prog-foot .pay-button-main { width:100%; }
+}
+@media (max-width:760px) {
+  .program-jump button { padding:9px 14px; }
+  #programs .service-panel .prog-foot, .course-catalog .prog-foot { padding:18px 16px; }
+  .ap-sum { padding:16px; }
+  .help-sec { padding-bottom:40px; }
+  .help-box { flex-direction:column; align-items:stretch; padding:22px 18px; }
+  .help-copy h2 { font-size:22px; }
+  .help-button { justify-content:center; }
+  .course-enroll { margin-top:52px; padding:22px 18px; }
+  .course-enroll h2 { font-size:24px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .program-jump button, .faq-item summary, .course-card-footer a.course-card-action, .help-button { transition:none; }
+}

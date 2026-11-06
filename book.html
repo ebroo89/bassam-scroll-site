@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>احجز موعد الاستشارة | محمد بسام</title>
+<meta name="description" content="اختر موعد استشارتك مع محمد بسام (90 دقيقة)، ثم أكمل التسجيل. لا يتم أي دفع عبر الموقع.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#050607">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@200;300;400;500&family=Cairo:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="courses.css">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="pay.css">
+<link rel="stylesheet" href="book.css">
+<link rel="stylesheet" href="accents.css">
+</head>
+<body class="apply-page pay-page book-page">
+<a class="skip-link" href="#main-content">انتقل إلى اختيار الموعد</a>
+
+<nav id="nav" aria-label="التنقل الرئيسي"><div class="w">
+  <div class="brand-group"><a href="index.html" class="lat" data-brand-name title="الصفحة الرئيسية">محمد بسام</a><button type="button" class="language-toggle" data-language-toggle translate="no" lang="en" aria-label="Switch to English">EN</button></div>
+  <a href="index.html#programs" class="apply-link">رجوع للبرامج</a>
+</div></nav>
+
+<main class="ap w" id="main-content" tabindex="-1" data-book-page>
+  <header class="ap-head">
+    <span class="rule"></span>
+    <h1>احجز موعد الاستشارة</h1>
+    <p>اختر اليوم والوقت المناسبين لك، واترك بياناتك. بعدها نحجز لك الموعد، وللدفع تواصل معنا على واتساب.</p>
+  </header>
+  <p class="preview-notice pay-test-notice" data-book-demo role="note" hidden><strong>وضع التجربة</strong>المواعيد المعروضة تجريبية، والصفحة لا ترسل أي بيانات ولا تحجز أي موعد.</p>
+  <p class="form-note" data-book-unavailable role="status" hidden>الاستشارات غير متاحة للحجز حاليًا. اختر برنامجك من <a href="index.html#programs">صفحة البرامج</a>.</p>
+  <noscript><p class="form-note">فعّل JavaScript في متصفحك لاختيار الموعد.</p></noscript>
+
+  <div data-book-flow hidden>
+    <ol class="ap-progress pay-progress book-progress" aria-label="خطوات الحجز">
+      <li class="on" aria-current="step"><span>01</span>الموعد</li>
+      <li><span>02</span>الدفع عبر واتساب</li>
+    </ol>
+
+    <div class="ap-grid">
+      <section class="ap-main">
+        <form class="form" id="bookForm" novalidate>
+          <fieldset class="step">
+            <legend tabindex="-1">اختر الموعد</legend>
+            <p class="book-tz">كل المواعيد بتوقيت دبي (GMT+4).</p>
+            <div class="book-days" data-book-days role="group" aria-label="اختر اليوم"></div>
+            <div class="book-times" data-book-times role="group" aria-label="اختر الوقت"></div>
+            <p class="book-empty" data-book-empty role="status" hidden>لا توجد مواعيد متاحة حاليًا. جرّب لاحقًا أو تواصل معنا.</p>
+            <p class="field-error" data-error-for="slot" hidden></p>
+          </fieldset>
+
+          <fieldset class="step">
+            <legend>بياناتك</legend>
+            <div class="fields">
+              <label class="f"><span id="book-name-label">الاسم الكامل (مطلوب)</span><input name="name" required autocomplete="name" aria-labelledby="book-name-label" aria-invalid="false" aria-describedby="book-name-error"><span class="field-error" id="book-name-error" data-error-for="name" hidden></span></label>
+              <label class="f"><span id="book-email-label">البريد الإلكتروني (مطلوب)</span><input name="email" type="email" required autocomplete="email" dir="ltr" spellcheck="false" aria-labelledby="book-email-label" aria-invalid="false" aria-describedby="book-email-error"><span class="field-error" id="book-email-error" data-error-for="email" hidden></span></label>
+              <label class="f"><span id="book-phone-label">رقم الهاتف أو الواتساب (مطلوب)</span><input name="phone" type="tel" required inputmode="tel" autocomplete="tel" dir="ltr" placeholder="+971 50 123 4567" aria-labelledby="book-phone-label" aria-invalid="false" aria-describedby="book-phone-hint book-phone-error"><small id="book-phone-hint">أضف رمز الدولة لنسهّل التواصل معك.</small><span class="field-error" id="book-phone-error" data-error-for="phone" hidden></span></label>
+            </div>
+          </fieldset>
+
+          <div class="hp" aria-hidden="true"><input name="company" tabindex="-1" autocomplete="off"></div>
+
+          <div class="form-nav">
+            <button type="submit" class="b-solid" data-submit>ثبّت الموعد وأكمل</button>
+          </div>
+          <p class="form-msg" role="status" aria-live="polite" aria-atomic="true"></p>
+        </form>
+      </section>
+
+      <aside class="ap-sum" aria-label="ملخص الحجز">
+        <div class="sum-img" data-sum-img></div>
+        <span>جلسة لمدة 90 دقيقة</span>
+        <h2>استشارات</h2>
+        <div class="book-chosen" data-book-chosen aria-live="polite"><span>الموعد المختار</span><b data-book-chosen-text>لم تختر موعدًا بعد</b></div>
+        <div class="sum-price"><span>المبلغ</span><span dir="ltr" translate="no" data-book-amount></span></div>
+        <p class="pay-sum-note">لا يتم أي دفع عبر الموقع. ننسّق الدفع وتأكيد الموعد معك على واتساب.</p>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer><div class="w">
+  <span class="lat" data-name-en>Muhammad Bassam</span>
+  <div class="contact-links" data-contact-list aria-label="التواصل" hidden></div>
+  <p>التداول بالأسواق المالية فيه مخاطرة عالية، وممكن تخسر جزء من رأس مالك أو كله. المحتوى تعليمي ومش نصيحة استثمارية.</p>
+</div></footer>
+
+<script src="config.js"></script>
+<script src="site-visibility.js"></script>
+<script src="visibility.js"></script>
+<script src="app.js"></script>
+<script src="book.js"></script>
+<script src="translations.js"></script>
+<script src="i18n.js"></script>
+<script src="brand.js"></script>
+</body>
+</html>

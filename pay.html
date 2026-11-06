@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>إتمام التسجيل | محمد بسام</title>
+<meta name="description" content="أكمل تسجيلك في برامج محمد بسام. لا يتم أي دفع عبر الموقع، ننسّق الدفع معك على واتساب.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#050607">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@200;300;400;500&family=Cairo:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="courses.css">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="pay.css">
+<link rel="stylesheet" href="book.css">
+<link rel="stylesheet" href="accents.css">
+</head>
+<body class="apply-page pay-page">
+<a class="skip-link" href="#main-content">انتقل إلى خطوات التسجيل</a>
+
+<nav id="nav" aria-label="التنقل الرئيسي"><div class="w">
+  <div class="brand-group"><a href="index.html" class="lat" data-brand-name title="الصفحة الرئيسية">محمد بسام</a><button type="button" class="language-toggle" data-language-toggle translate="no" lang="en" aria-label="Switch to English">EN</button></div>
+  <a href="index.html#programs" class="apply-link" data-pay-back>رجوع للبرامج</a>
+</div></nav>
+
+<main class="ap w" id="main-content" tabindex="-1" data-pay-page>
+  <header class="ap-head">
+    <span class="rule"></span>
+    <h1>إتمام التسجيل</h1>
+    <p>اترك بياناتك ليصلنا طلبك. لا يتم أي دفع عبر الموقع، وللدفع تواصل معنا على واتساب.</p>
+  </header>
+  <p class="preview-notice pay-test-notice" data-pay-preview role="note" hidden><strong>وضع المعاينة</strong>الصفحة لا ترسل أي بيانات بعد.</p>
+  <p class="form-note" data-pay-unavailable role="status" hidden>هذا العرض غير متاح للتسجيل حاليًا. اختر برنامجك من <a href="index.html#programs">صفحة البرامج</a>.</p>
+  <noscript><p class="form-note">فعّل JavaScript في متصفحك لعرض خطوات التسجيل.</p></noscript>
+
+  <div data-pay-flow hidden>
+    <ol class="ap-progress pay-progress" data-progress aria-label="خطوات التسجيل">
+      <li class="on" aria-current="step"><span>01</span>بياناتك</li>
+      <li><span>02</span>الدفع عبر واتساب</li>
+    </ol>
+
+    <div class="ap-grid">
+      <section class="ap-main">
+        <form class="form" id="payForm" novalidate>
+          <fieldset class="step">
+            <legend tabindex="-1">بياناتك</legend>
+            <div class="fields">
+              <label class="f"><span id="pay-name-label">الاسم الكامل (مطلوب)</span><input name="name" required autocomplete="name" aria-labelledby="pay-name-label" aria-invalid="false" aria-describedby="pay-name-error"><span class="field-error" id="pay-name-error" data-error-for="name" hidden></span></label>
+              <label class="f"><span id="pay-email-label">البريد الإلكتروني (مطلوب)</span><input name="email" type="email" required autocomplete="email" dir="ltr" spellcheck="false" aria-labelledby="pay-email-label" aria-invalid="false" aria-describedby="pay-email-error"><span class="field-error" id="pay-email-error" data-error-for="email" hidden></span></label>
+              <label class="f"><span id="pay-phone-label">رقم الهاتف أو الواتساب (مطلوب)</span><input name="phone" type="tel" required inputmode="tel" autocomplete="tel" dir="ltr" placeholder="+971 50 123 4567" aria-labelledby="pay-phone-label" aria-invalid="false" aria-describedby="pay-phone-hint pay-phone-error"><small id="pay-phone-hint">أضف رمز الدولة لنسهّل التواصل معك.</small><span class="field-error" id="pay-phone-error" data-error-for="phone" hidden></span></label>
+            </div>
+          </fieldset>
+
+          <div class="hp" aria-hidden="true"><input name="company" tabindex="-1" autocomplete="off"></div>
+
+          <div class="form-nav">
+            <button type="submit" class="b-solid" data-submit>أرسل طلبي وأكمل</button>
+          </div>
+          <p class="form-msg" role="status" aria-live="polite" aria-atomic="true"></p>
+        </form>
+
+        <section class="step pay-transfer" data-pay-contact aria-labelledby="pay-contact-title" hidden>
+          <h2 class="legend" id="pay-contact-title" tabindex="-1">للدفع، تواصل معنا على واتساب</h2>
+          <p class="pay-sent" data-pay-sent hidden>استلمنا طلبك، شكرًا.</p>
+          <p class="pay-sent" data-pay-sent-preview hidden>هذه معاينة فقط: لم نرسل بياناتك.</p>
+          <dl class="pay-facts">
+            <div><dt>المبلغ</dt><dd dir="ltr" translate="no" data-pay-amount></dd></div>
+            <div><dt>طريقة الدفع</dt><dd>بالتنسيق على واتساب</dd></div>
+          </dl>
+          <div class="pay-wallet">
+            <span class="pay-wallet-label">راسلنا على واتساب، ويرسل لك الفريق طريقة الدفع ويؤكّد تسجيلك.</span>
+            <a class="help-button pay-whatsapp" data-pay-whatsapp href="#" rel="noopener"><span>تواصل معنا على واتساب</span><b dir="ltr" translate="no" data-pay-whatsapp-number></b></a>
+          </div>
+          <ul class="pay-rules">
+            <li>لا يتم أي دفع عبر الموقع.</li>
+            <li>يكتمل تسجيلك بعد التواصل مع الفريق على واتساب.</li>
+          </ul>
+          <a href="index.html" class="b-ghost">العودة للموقع</a>
+        </section>
+      </section>
+
+      <aside class="ap-sum" aria-label="ملخص التسجيل">
+        <div class="sum-img" data-sum-img></div>
+        <span data-sum-k></span>
+        <h2 data-sum-title></h2>
+        <p data-sum-text></p>
+        <div class="book-chosen" data-pay-booking hidden><span>موعد استشارتك</span><b data-pay-booking-text></b></div>
+        <div class="book-chosen" data-pay-month hidden><span>الشهر المطلوب للتدريب</span><b data-pay-month-text translate="no"></b></div>
+        <div class="sum-price"><span>المبلغ</span><span dir="ltr" translate="no" data-pay-amount></span></div>
+        <p class="pay-sum-note">لا يتم أي دفع عبر الموقع. ننسّق الدفع معك على واتساب.</p>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer><div class="w">
+  <span class="lat" data-name-en>Muhammad Bassam</span>
+  <div class="contact-links" data-contact-list aria-label="التواصل" hidden></div>
+  <p>التداول بالأسواق المالية فيه مخاطرة عالية، وممكن تخسر جزء من رأس مالك أو كله. المحتوى تعليمي ومش نصيحة استثمارية.</p>
+</div></footer>
+
+<script src="config.js"></script>
+<script src="site-visibility.js"></script>
+<script src="visibility.js"></script>
+<script src="app.js"></script>
+<script src="pay.js"></script>
+<script src="translations.js"></script>
+<script src="i18n.js"></script>
+<script src="brand.js"></script>
+</body>
+</html>
