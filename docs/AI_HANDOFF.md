@@ -73,3 +73,7 @@ The source repository includes tests, documentation, dashboard, server, exporter
 4. Preserve the distinction between owner-confirmed hero claims and dated award metadata. The configuration records an October result checked on 2026-11-03 and still pending final audit; this technical handoff does not independently verify the claims.
 5. Payment checkout, student accounts and public administration are not implemented. Do not present them as available.
 6. Review/test the exported artifact and obtain the required authorization for the actual push/deployment action.
+
+## Consultation booking
+
+`book.html` / `book.js` / `book.css` let a visitor pick a consultation slot (Dubai time, Monday–Friday 09:00–19:00, 90 minutes) and continue to `pay.html?offer=consult`. `config.js` → `booking` holds `endpoint` (relay `api/book.php`), `test` (demo with generated slots, nothing sent), `days`, `timezone`, `durationMin`. The chosen slot travels in `sessionStorage` key `mb-consult-booking`; `pay.js` (`savedBooking`) redirects to the booking page when it is missing or already in the past. Update `translations.js` for every Arabic string on `book.html`/`book.js` (a test enforces it). The server side (n8n workflows, GHL calendar/opportunity/custom fields) is documented in `محمد بسام/n8n/SETUP-BOOKING.md`.

@@ -13,7 +13,8 @@ python -B serve.py --port 8766
 - Website: http://127.0.0.1:8766/index.html?lang=ar
 - English: http://127.0.0.1:8766/index.html?lang=en
 - Course: http://127.0.0.1:8766/course.html?course=champ&lang=ar
-- Crypto payment: http://127.0.0.1:8766/pay.html?offer=champ&lang=ar (`champ`, `private` or `consult`)
+- Crypto payment: http://127.0.0.1:8766/pay.html?offer=champ&lang=ar (`champ` or `private`; `consult` first needs a slot from `book.html`)
+- Consultation booking: http://127.0.0.1:8766/book.html?lang=ar
 - Local dashboard: http://127.0.0.1:8766/dashboard.html
 
 `serve.py` listens only on loopback. It is a development server, not a production backend. A plain static server can display the public website but cannot save dashboard changes.
@@ -34,6 +35,7 @@ Hidden courses and bundles remain in `config.js` so the dashboard can restore th
 | Identity, prices, course content, contact details, delivery URL | `config.js` |
 | Course cards, service choices, form behaviour | `app.js` |
 | Crypto payment page, pay links, proof-of-payment upload | `pay.html`, `pay.js`, `pay.css`; settings in `config.js` → `cryptoPayment` |
+| Consultation booking (pick a slot, then pay) | `book.html`, `book.js`, `book.css`; settings in `config.js` → `booking` |
 | Course modules | `course-curriculum.js`, `course-curriculum.css` |
 | Saved visibility | `site-visibility.json`; mirrored into `site-visibility.js` by the dashboard server |
 | Visibility filtering | `visibility.js` |
@@ -62,6 +64,7 @@ JavaScript tests exercise logic with a small DOM adapter. Python tests exercise 
 ## Before public launch
 
 - `webhookUrl` is empty: the form is a clearly labelled local preview and **sends no application**. A production endpoint must validate submitted fields, apply appropriate abuse controls, and acknowledge success with JSON `{ "ok": true }`. Never put provider secrets in `config.js`. HTTP errors, unacknowledged responses and timeouts must not show success.
+- Consultation booking (`book.html`) shows generated sample slots and sends nothing until `booking.endpoint` is set (https; on PHP hosting use the relay `api/book.php`, which forwards `GET ?days=N` for the free slots and `POST` JSON `{name,email,phone,slot}` to n8n). The slot is chosen first and kept in `sessionStorage` (`mb-consult-booking`); `pay.html?offer=consult` redirects to `book.html` without one, prefills the contact details and shows the chosen time. Only the consultation (and only while `visibility` allows it) can be booked. GHL holds the booking as «Consultation Booked» until the payment proof moves it to «Consultation Paid».
 - Crypto payment (`pay.html`) is a labelled preview until **both** `cryptoPayment.address` (a TRC20 USDT address) and `cryptoPayment.webhookUrl` are set; until then no wallet is shown and nothing is sent. The page sends the name, email, phone, optional TxID and the receipt image (JPG/PNG/WEBP/PDF, 5 MB) as `multipart/form-data`, and shows success only on JSON `{ "ok": true }`. The endpoint must be https (an https page cannot post to plain http, so the page stays in preview otherwise; on PHP hosting a relay such as `api/pay.php` solves this) and must re-validate the file and fields. The site never confirms a payment: the team verifies each transfer on-chain before confirming enrolment.
 - Contact values are blank. Add only owner-approved channels.
 - Public pages retain `noindex, nofollow` during review. Decide when to remove this at launch.

@@ -93,7 +93,7 @@
       const target = new URL(href, location.href);
       if (
         target.origin !== location.origin ||
-        !/\/(?:index|apply|course|pay)\.html$/.test(target.pathname)
+        !/\/(?:index|apply|course|pay|book)\.html$/.test(target.pathname)
       )
         return;
       target.searchParams.set("lang", language);

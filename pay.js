@@ -13,7 +13,15 @@
     consult: { program: "consult", k: "جلسة لمدة 90 دقيقة", title: "استشارات", img: "assets/img/consult-review.jpg" },
   };
 
+  const BOOKING_KEY = "mb-consult-booking"; // written by book.js
   const text = (value) => typeof value === "string" ? value.trim() : "";
+  // The slot chosen on book.html, while it is still in the future; consultations are paid only after choosing one.
+  const savedBooking = (storage) => {
+    try {
+      const booking = JSON.parse(storage.getItem(BOOKING_KEY) || "null");
+      return booking && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(text(booking.slot)) && Date.parse(booking.slot) > Date.now() ? booking : null;
+    } catch { return null; }
+  };
   const normalizePhone = (value) => text(value)
     .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 0x660))
     .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 0x6f0))
@@ -118,10 +126,16 @@
       }
       return kind;
     };
+    // data-pay-target="book": the consultation button leads to the slot picker first, and from there to payment.
+    const bookHref = () => {
+      const url = new URL("book.html", window.location.href);
+      url.searchParams.set("lang", lang());
+      return url.href;
+    };
     const updateLinks = () => $$("[data-pay-link]").forEach((link) => {
       const offer = payOffer(offerFor(link), C, visibility);
       link.hidden = !offer;
-      if (offer) link.href = payHref(offer.id); else link.removeAttribute("href");
+      if (offer) link.href = link.dataset.payTarget === "book" ? bookHref() : payHref(offer.id); else link.removeAttribute("href");
     });
     updateLinks();
     $("#applyForm")?.addEventListener("change", updateLinks);
@@ -131,6 +145,12 @@
     const page = $("[data-pay-page]");
     if (!page) return;
     const offer = payOffer(new URL(window.location.href).searchParams.get("offer"), C, visibility);
+    // A consultation is paid for after choosing its slot; without one, go and choose.
+    let booking = null;
+    if (offer && offer.id === "consult") {
+      booking = savedBooking(window.sessionStorage);
+      if (!booking) { window.location.replace(bookHref()); return; }
+    }
     const mode = payMode(C, window.location);
     $("[data-pay-preview]").hidden = mode.live || mode.test;
     $("[data-pay-test]").hidden = !mode.test;
@@ -140,6 +160,10 @@
 
     // The only way out of the page leads back to where the visitor came from: the course page or the programmes.
     const backLink = $("[data-pay-back]");
+    if (backLink && offer.id === "consult") {
+      backLink.href = bookHref();
+      backLink.textContent = "رجوع لتغيير الموعد";
+    }
     if (backLink && offer.id === "champ") {
       const course = new URL("course.html", window.location.href);
       course.searchParams.set("course", offer.id);
@@ -184,6 +208,19 @@
     const msg = $(".form-msg", form), submit = $("[data-submit]", form), back = $("[data-back]", form);
     // Same label in every mode; the test/preview notice and the result screen say that nothing was sent.
     const submitLabel = "أرسل إثبات الدفع";
+    // The booked consultation: shown in the summary, and the contact details are carried over.
+    const bookingBox = $("[data-pay-booking]");
+    if (booking && bookingBox) {
+      const render = () => {
+        const when = new Date(booking.slot).toLocaleDateString(lang() === "en" ? "en-GB" : "ar-AE-u-nu-latn",
+          { timeZone: "Asia/Dubai", weekday: "long", day: "numeric", month: "long" });
+        $("[data-pay-booking-text]").textContent = `${when} · ${booking.slot.slice(11, 16)}`;
+      };
+      render();
+      document.addEventListener("site:languagechange", render);
+      bookingBox.hidden = false;
+      ["name", "email", "phone"].forEach((key) => { if (form.elements[key] && booking[key]) form.elements[key].value = booking[key]; });
+    }
     submit.textContent = submitLabel;
     const fieldNames = ["name", "email", "phone", "txid", "receipt", "consent"];
     let sending = false;
@@ -252,6 +289,7 @@
           : "هذه معاينة فقط. لم نرسل بياناتك أو صورة الإيصال، ولم نسجّل أي دفعة.";
         form.hidden = true;
         done.hidden = false;
+        try { window.sessionStorage.removeItem(BOOKING_KEY); } catch { /* nothing to clear */ }
         prog.forEach((li) => { li.classList.remove("on"); li.classList.add("done"); li.removeAttribute("aria-current"); });
         $("[data-pay-done-title]").focus();
       } catch {
@@ -266,5 +304,5 @@
     });
   }
 
-  return { RECEIPT_TYPES, RECEIPT_MAX_BYTES, usdAmount, validTronAddress, validTxid, payOffer, payMode, proofErrors, proofFields, mount };
+  return { RECEIPT_TYPES, RECEIPT_MAX_BYTES, usdAmount, validTronAddress, validTxid, payOffer, payMode, savedBooking, proofErrors, proofFields, mount };
 });

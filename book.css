@@ -1,0 +1,25 @@
+/* Consultation booking page: day chips + time grid, in the same dark/red language as the pay page. */
+.book-progress { grid-template-columns:repeat(2,1fr); }
+.book-tz { font-size:13px; color:var(--mid); margin-bottom:18px; }
+.book-days { display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; scroll-snap-type:x proximity; }
+.book-day { flex:none; scroll-snap-align:start; display:grid; gap:2px; justify-items:center; min-width:92px; padding:12px 14px; border:1px solid var(--line); background:var(--surface,var(--bg2)); color:var(--ink2); font:500 14px/1.4 "Cairo",sans-serif; cursor:pointer; transition:background .2s, border-color .2s, color .2s; }
+.book-day b { font:500 22px/1 "Jost",sans-serif; color:var(--ink); }
+.book-day small { font-size:12px; color:var(--mid); }
+.book-day:hover { border-color:rgba(255,255,255,.34); color:var(--ink); }
+.book-day[aria-pressed="true"] { border-color:var(--red); background:rgba(217,20,20,.24); color:#fff; }
+.book-day[aria-pressed="true"] small { color:#fff; }
+.book-day:focus-visible, .book-time:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+.book-times { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px; margin-top:20px; }
+.book-time { min-height:48px; border:1px solid var(--line); background:var(--surface,var(--bg2)); color:var(--ink); font:400 17px "Jost",sans-serif; cursor:pointer; transition:background .2s, border-color .2s; }
+.book-time:hover { border-color:rgba(255,255,255,.34); }
+.book-time[aria-pressed="true"] { border-color:var(--red); background:rgba(217,20,20,.24); color:#fff; }
+.book-empty { margin-top:18px; color:var(--ink2); font-size:14.5px; }
+.book-chosen { display:grid; gap:4px; padding:14px 16px; border:1px solid var(--red-line,var(--line)); background:rgba(217,20,20,.07); }
+.book-chosen span { font-size:13px; color:var(--mid); }
+.book-chosen b { font-weight:500; font-size:16px; color:var(--ink); }
+.book-times[hidden], .book-days[hidden], .book-empty[hidden] { display:none; }
+@media (max-width:760px) {
+  .book-day { min-width:84px; padding:10px 12px; }
+  .book-times { grid-template-columns:repeat(3,1fr); }
+}
+@media (prefers-reduced-motion:reduce) { .book-day, .book-time { transition:none; } }

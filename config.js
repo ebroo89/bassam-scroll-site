@@ -243,6 +243,17 @@ window.MB = {
   // older links with #group or #consult still open their form.
   applicationPrograms: ["private", "indicator"],
 
+  // Consultation booking (book.html): the visitor picks a slot of the consultation calendar, then pays on pay.html.
+  // Live only when `endpoint` is set to the relay (api/book.php) on https; until then it is a labelled demo with
+  // generated slots that sends nothing. Remove test:true before launch.
+  booking: {
+    endpoint: "",
+    test: true,
+    days: 14,
+    timezone: "Asia/Dubai",
+    durationMin: 90,
+  },
+
   // Crypto payment (pay.html). It stays a labelled preview that shows no wallet until BOTH the TRC20
   // address and the proof endpoint are set. The endpoint must store the receipt and return JSON { ok: true }.
   cryptoPayment: {
