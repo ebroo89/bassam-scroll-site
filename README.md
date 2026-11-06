@@ -62,6 +62,8 @@ JavaScript tests exercise logic with a small DOM adapter. Python tests exercise 
 
 ## Before public launch
 
+**Go-live steps (hosting with PHP, relays, config): [`docs/GO_LIVE.md`](docs/GO_LIVE.md).** The PHP relays are in `api/`; the n8n address goes in `api/relay-config.php` on the host only (git-ignored).
+
 - `webhookUrl` is empty: the form is a clearly labelled local preview and **sends no application**. A production endpoint must validate submitted fields, apply appropriate abuse controls, and acknowledge success with JSON `{ "ok": true }`. Never put provider secrets in `config.js`. HTTP errors, unacknowledged responses and timeouts must not show success.
 - Help band under the programmes («لست متأكدًا أي برنامج يناسبك؟», `index.html`, `[data-help]`): a button that opens a WhatsApp chat with the support team, with a first message in the page language. It uses `config.js` → `supportWhatsapp` (international format without `+`), else `whatsapp`, and the section stays hidden until one of them is a valid number.
 - Private training is a request: the programmes panel's button opens the application form (with the month chosen there as `month`).

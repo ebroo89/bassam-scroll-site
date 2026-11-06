@@ -17,6 +17,8 @@ PUBLIC_FILES = (
     "market-section.js", "market-section.css", "market-surface-motion.js",
     "market-strike-motion.js", "market-footprint-motion.js", "footprint-visual.js",
     "pay.js", "pay.css", "book.js", "book.css", "accents.css",
+    # PHP relays to n8n (the n8n address lives in api/relay-config.php on the host, never in git).
+    "api/apply.php", "api/book.php", "api/relay-config.example.php",
 )
 ASSET_TYPES = {".jpg", ".jpeg", ".png", ".webp", ".svg", ".ico", ".woff", ".woff2"}
 LOCAL_RESOURCE = re.compile(r'((?:src|href)=")([^"?]+\.(?:js|css))(?:\?[^"#]*)?(")')
