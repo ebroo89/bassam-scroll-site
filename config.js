@@ -246,6 +246,10 @@ window.MB = {
     network: "TRC20 (Tron)",
     address: "",
     webhookUrl: "",
+    // Demo only: shows this placeholder (deliberately not a valid TRON address) while no real address is set.
+    // Remove both lines, or set test: false, before launch.
+    test: true,
+    testAddress: "TTestAddressDoNotSendFundsHere0000",
     // Offers with a fixed price that can be paid: "champ" (course price), "private" and "consult" (prices above).
     offers: ["champ", "private", "consult"],
   },

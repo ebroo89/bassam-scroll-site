@@ -30,6 +30,7 @@
     <p>حوّل المبلغ بعملة USDT على شبكة TRC20، ثم أرسل صورة الإيصال لنؤكّد تسجيلك.</p>
   </header>
   <p class="preview-notice" data-pay-preview role="note" hidden><strong>وضع المعاينة</strong>لم يُفعَّل الدفع بعد. لا يظهر عنوان محفظة، ولا ترسل الصفحة أي بيانات. لا تحوّل أي مبلغ الآن.</p>
+  <p class="preview-notice pay-test-notice" data-pay-test role="note" hidden><strong>وضع التجربة</strong>العنوان المعروض تجريبي وغير صالح للتحويل، والنموذج لا يرسل أي بيانات. لا تحوّل أي مبلغ.</p>
   <p class="form-note" data-pay-unavailable role="status" hidden>هذا العرض غير متاح للدفع حاليًا. اختر برنامجك من <a href="index.html#programs">صفحة البرامج</a>.</p>
   <noscript><p class="form-note">فعّل JavaScript في متصفحك لعرض خطوات الدفع.</p></noscript>
 
@@ -48,7 +49,7 @@
             <div><dt>العملة والشبكة</dt><dd dir="ltr" translate="no" data-pay-network></dd></div>
           </dl>
           <div class="pay-wallet">
-            <span class="pay-wallet-label">عنوان المحفظة</span>
+            <span class="pay-wallet-label">عنوان المحفظة <b class="pay-test-tag" data-pay-test-tag hidden>تجريبي · لا تحوّل عليه</b></span>
             <code dir="ltr" translate="no" data-pay-address hidden></code>
             <p class="pay-wallet-missing" data-pay-address-missing>سيظهر عنوان المحفظة هنا عند تفعيل الدفع.</p>
             <button type="button" class="b-ghost pay-copy" data-pay-copy hidden>انسخ العنوان</button>

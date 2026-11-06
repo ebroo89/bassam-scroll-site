@@ -63,7 +63,11 @@
     const address = validTronAddress(pay.address) ? text(pay.address) : "";
     // An https page cannot post to a plain-http endpoint (mixed content), so the proof would never arrive.
     const blocked = /^https:/i.test(location.href) && /^http:/i.test(endpoint);
-    return { live: !!(address && endpoint && !localPreview && !blocked), address, endpoint };
+    const live = !!(address && endpoint && !localPreview && !blocked);
+    // Demo mode: shows a placeholder address so the page can be reviewed. It never sends anything, and it is
+    // ignored once a real address is set. Placeholders must not be valid base58 so no wallet accepts them.
+    const testAddress = !live && pay.test === true && !validTronAddress(pay.testAddress) ? text(pay.testAddress) : "";
+    return { live, test: !!testAddress, address: live ? address : testAddress, endpoint };
   }
 
   function proofErrors(fields, file) {
@@ -127,7 +131,8 @@
     if (!page) return;
     const offer = payOffer(new URL(window.location.href).searchParams.get("offer"), C, visibility);
     const mode = payMode(C, window.location);
-    $("[data-pay-preview]").hidden = mode.live;
+    $("[data-pay-preview]").hidden = mode.live || mode.test;
+    $("[data-pay-test]").hidden = !mode.test;
     $("[data-pay-unavailable]").hidden = !!offer;
     $("[data-pay-flow]").hidden = !offer;
     if (!offer) return;
@@ -142,11 +147,13 @@
     $$("[data-pay-amount]").forEach((el) => { el.textContent = `${formatAmount(offer.amount)} ${asset}`; });
     $$("[data-pay-network]").forEach((el) => { el.textContent = `${asset} · ${network}`; });
     const address = $("[data-pay-address]");
-    address.textContent = mode.live ? mode.address : "";
-    address.hidden = !mode.live;
-    $("[data-pay-address-missing]").hidden = mode.live;
+    const shown = mode.live || mode.test;
+    address.textContent = shown ? mode.address : "";
+    address.hidden = !shown;
+    $("[data-pay-address-missing]").hidden = shown;
+    $("[data-pay-test-tag]").hidden = !mode.test;
     const copy = $("[data-pay-copy]"), copied = $("[data-pay-copied]");
-    copy.hidden = !mode.live;
+    copy.hidden = !shown;
     copy.addEventListener("click", async () => {
       try {
         await window.navigator.clipboard.writeText(mode.address);

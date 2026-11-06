@@ -61,11 +61,22 @@ test('the wallet is shown only when both address and endpoint are configured', (
   assert.equal(pay.payMode(siteConfig({ webhookUrl: 'https://n8n.example.com/webhook/pay' }), LIVE_LOCATION).live, false);
   assert.equal(pay.payMode(siteConfig({ address: 'not-an-address', webhookUrl: 'https://n8n.example.com/webhook/pay' }), LIVE_LOCATION).live, false);
   const live = pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'https://n8n.example.com/webhook/pay' }), LIVE_LOCATION);
-  assert.deepEqual(live, { live: true, address: ADDRESS, endpoint: 'https://n8n.example.com/webhook/pay' });
+  assert.deepEqual(live, { live: true, test: false, address: ADDRESS, endpoint: 'https://n8n.example.com/webhook/pay' });
   assert.equal(pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'javascript:alert(1)' }), LIVE_LOCATION).live, false);
   assert.equal(pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'http://173.212.244.120:5678/webhook/pay' }), LIVE_LOCATION).live, false);
   assert.equal(pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'api/pay.php' }), LIVE_LOCATION).live, true);
   assert.equal(pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'api/pay.php' }), { href: 'http://127.0.0.1:8766/pay.html', hostname: '127.0.0.1' }).live, false);
+});
+
+test('the demo placeholder shows an address but never sends, and a real address replaces it', () => {
+  const demo = pay.payMode(siteConfig(), LIVE_LOCATION);
+  assert.equal(demo.live, false);
+  assert.equal(demo.test, true);
+  assert.equal(pay.validTronAddress(demo.address), false);
+  assert.equal(pay.payMode(siteConfig({ test: false }), LIVE_LOCATION).test, false);
+  assert.equal(pay.payMode(siteConfig({ testAddress: ADDRESS }), LIVE_LOCATION).test, false);
+  const real = pay.payMode(siteConfig({ address: ADDRESS, webhookUrl: 'https://n8n.example.com/webhook/pay' }), LIVE_LOCATION);
+  assert.deepEqual([real.live, real.test, real.address], [true, false, ADDRESS]);
 });
 
 test('proof of payment requires contact details, a receipt and confirmation', () => {
