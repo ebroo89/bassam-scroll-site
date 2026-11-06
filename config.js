@@ -32,8 +32,7 @@ window.MB = {
     "discountLabel": "خصم نحو 20%",
     "fullyBookedMonth": "2026-11",
     "status": "مواعيد هذا الشهر مكتملة",
-    "note": "اختر من الأشهر القادمة لننسّق موعدك معك.",
-    "action": "نسّق موعدًا قادمًا"
+    "note": "اختر من الأشهر القادمة لننسّق موعدك معك."
   },
 
   // USD tuition and enrollment availability for each offer.
@@ -239,9 +238,9 @@ window.MB = {
   // Empty means a clearly labelled local demonstration with no delivery.
   webhookUrl: "",
 
-  // Programmes offered on the application form. The course and consultations are paid on pay.html instead;
+  // Programmes offered on the application form. The course, private training and consultations are paid on pay.html instead;
   // older links with #group or #consult still open their form.
-  applicationPrograms: ["private", "indicator"],
+  applicationPrograms: ["indicator"],
 
   // Consultation booking (book.html): the visitor picks a slot of the consultation calendar, then pays on pay.html.
   // Live only when `endpoint` is set to the relay (api/book.php) on https; until then it is a labelled demo with

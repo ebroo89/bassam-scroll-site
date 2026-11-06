@@ -66,7 +66,6 @@
   fill("[data-private-discount]", privateTraining.discountLabel || "");
   fill("[data-private-status]", privateTraining.status || "");
   fill("[data-private-note]", privateTraining.note || "");
-  fill("[data-private-action]", privateTraining.action || "ناقش هدفك من التدريب");
   // The booked month is explicit business data; future months are requests, not confirmed slots.
   const bookedMonth = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(privateTraining.fullyBookedMonth || "");
   const privateMonths = bookedMonth ? Array.from({ length: 3 }, (_, offset) => {
@@ -109,13 +108,11 @@
     const selection = $("[data-private-selection]");
     if (selection) selection.hidden = !selected;
     fill("[data-private-selected-month]", selected ? privateMonthLabel(selected) : "");
-    const link = $("[data-private-apply]");
-    if (link) {
-      const url = new URL("apply.html", location.href);
-      url.searchParams.set("lang", document.documentElement?.lang || "ar");
-      if (selected) url.searchParams.set("month", selected.id);
-      url.hash = "private";
-      link.href = url.href;
+    // The chosen month rides along to the payment page (pay.js adds it to the link).
+    const payLink = $("[data-private-pay]");
+    if (payLink) {
+      if (selected) payLink.dataset.payMonth = selected.id; else delete payLink.dataset.payMonth;
+      if (typeof window !== "undefined") window.MB_PAY_LINKS?.();
     }
   };
   if (privateCalendar) {

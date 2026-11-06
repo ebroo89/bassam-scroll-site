@@ -15,6 +15,8 @@
 
   const BOOKING_KEY = "mb-consult-booking"; // written by book.js
   const text = (value) => typeof value === "string" ? value.trim() : "";
+  // "2026-12": the month chosen for private training (empty when missing or malformed).
+  const validMonth = (value) => /^\d{4}-(0[1-9]|1[0-2])$/.test(text(value)) ? text(value) : "";
   // The slot chosen on book.html, while it is still in the future; consultations are paid only after choosing one.
   const savedBooking = (storage) => {
     try {
@@ -92,9 +94,10 @@
   }
 
   // Text fields sent with the receipt; the endpoint re-validates all of them.
-  function proofFields(fields, offer, config, page) {
+  function proofFields(fields, offer, config, page, month) {
     const pay = config.cryptoPayment || {};
     return {
+      ...(validMonth(month) ? { month: validMonth(month) } : {}),
       source: "mohammad-bassam-site", type: "crypto-payment", offer: offer.id, offer_title: offer.title,
       amount: String(offer.amount), asset: text(pay.asset) || "USDT", network: text(pay.network) || "TRC20",
       wallet: text(pay.address), name: text(fields.name), email: text(fields.email),
@@ -108,10 +111,11 @@
     const visibility = window.MB_VISIBILITY || null;
     const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
     const lang = () => document.documentElement.lang || "ar";
-    const payHref = (id) => {
+    const payHref = (id, month) => {
       const url = new URL("pay.html", window.location.href);
       url.searchParams.set("offer", id);
       url.searchParams.set("lang", lang());
+      if (month) url.searchParams.set("month", month);
       return url.href;
     };
 
@@ -135,7 +139,9 @@
     const updateLinks = () => $$("[data-pay-link]").forEach((link) => {
       const offer = payOffer(offerFor(link), C, visibility);
       link.hidden = !offer;
-      if (offer) link.href = link.dataset.payTarget === "book" ? bookHref() : payHref(offer.id); else link.removeAttribute("href");
+      // Private training: the month chosen on the programmes page (data-pay-month) goes along.
+      const month = offer && offer.id === "private" ? validMonth(link.dataset.payMonth) : "";
+      if (offer) link.href = link.dataset.payTarget === "book" ? bookHref() : payHref(offer.id, month); else link.removeAttribute("href");
     });
     updateLinks();
     $("#applyForm")?.addEventListener("change", updateLinks);
@@ -209,6 +215,18 @@
     // Same label in every mode; the test/preview notice and the result screen say that nothing was sent.
     const submitLabel = "أرسل إثبات الدفع";
     // The booked consultation: shown in the summary, and the contact details are carried over.
+    // Private training: the month asked for on the programmes page is shown and sent with the proof.
+    const trainingMonth = offer.id === "private" ? validMonth(new URL(window.location.href).searchParams.get("month")) : "";
+    const monthBox = $("[data-pay-month]");
+    if (trainingMonth && monthBox) {
+      const renderMonth = () => {
+        $("[data-pay-month-text]").textContent = new Date(`${trainingMonth}-15T12:00:00Z`).toLocaleDateString(
+          lang() === "en" ? "en-GB" : "ar-AE-u-nu-latn", { timeZone: "UTC", month: "long", year: "numeric" });
+      };
+      renderMonth();
+      document.addEventListener("site:languagechange", renderMonth);
+      monthBox.hidden = false;
+    }
     const bookingBox = $("[data-pay-booking]");
     if (booking && bookingBox) {
       const render = () => {
@@ -273,7 +291,7 @@
       try {
         if (mode.live) {
           const body = new window.FormData();
-          Object.entries(proofFields(fields, offer, C, window.location.href)).forEach(([key, value]) => body.append(key, value));
+          Object.entries(proofFields(fields, offer, C, window.location.href, trainingMonth)).forEach(([key, value]) => body.append(key, value));
           body.append("receipt", file, file.name);
           const controller = new window.AbortController();
           deadline = setTimeout(() => controller.abort(), 45000);
@@ -304,5 +322,5 @@
     });
   }
 
-  return { RECEIPT_TYPES, RECEIPT_MAX_BYTES, usdAmount, validTronAddress, validTxid, payOffer, payMode, savedBooking, proofErrors, proofFields, mount };
+  return { RECEIPT_TYPES, RECEIPT_MAX_BYTES, usdAmount, validTronAddress, validTxid, validMonth, payOffer, payMode, savedBooking, proofErrors, proofFields, mount };
 });

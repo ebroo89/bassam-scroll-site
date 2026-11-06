@@ -87,3 +87,13 @@ test('every Arabic string on the booking page has an English translation', () =>
   const missing = [...strings].filter((value) => !Object.hasOwn(dictionary, value));
   assert.deepEqual(missing, []);
 });
+
+test('the private training month rides along with the payment, only when it is a valid month', () => {
+  assert.equal(pay.validMonth('2026-12'), '2026-12');
+  assert.equal(pay.validMonth('2026-13'), '');
+  assert.equal(pay.validMonth('december'), '');
+  const config = { cryptoPayment: { address: 'x' } };
+  const offer = { id: 'private', title: 'تدريب خاص', amount: 7990 };
+  assert.equal(pay.proofFields({ name: 'A B', email: 'a@b.co', phone: '+971501234567' }, offer, config, 'p', '2026-12').month, '2026-12');
+  assert.equal('month' in pay.proofFields({ name: 'A B', email: 'a@b.co', phone: '+971501234567' }, offer, config, 'p', 'x'), false);
+});

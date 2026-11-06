@@ -312,9 +312,7 @@ window.MB_TRANSLATIONS = {
   "استلمنا طلب الانضمام لقائمة الانتظار. سنتواصل معك عند فتح التسجيل.": "We have received your waiting-list request. We will contact you when enrollment opens.",
   "استلمنا طلب التسجيل. سنتواصل معك لاستكمال الخطوات.": "We have received your enrollment request. We will contact you to complete the next steps.",
   "خصم نحو 20%": "About 20% off",
-  "نسّق موعدًا قادمًا": "Arrange a future date",
   "سعر التدريب": "Training price",
-  "ننسّق محاور التدريب وعدد الجلسات ومدتها ونطاق المتابعة قبل تأكيد الموعد.": "We agree the training focus, session count and length, and support scope before confirming the date.",
   "سنراجع طلبك ونتواصل معك لتنسيق موعد تدريب قادم.": "We will review your request and contact you to arrange a future training date.",
   "مواعيد هذا الشهر مكتملة": "This month is fully booked",
   "اختر من الأشهر القادمة لننسّق موعدك معك.": "Choose a future month so we can arrange your training with you.",
@@ -453,5 +451,7 @@ window.MB_TRANSLATIONS = {
   "لست متأكدًا أي برنامج يناسبك؟": "Not sure which program fits you?",
   "راسل فريق الدعم على واتساب، وسيردّ عليك ويساعدك على اختيار الأنسب لمستواك وهدفك.": "Message the support team on WhatsApp. They will reply and help you choose what suits your level and goal.",
   "تواصل معنا على واتساب": "Contact us on WhatsApp",
+  "بعد الدفع والتحقق منه، ننسّق معك محاور التدريب وعدد الجلسات ومدتها والموعد.": "After payment and its verification, we agree with you the training focus, number and length of sessions, and the date.",
+  "الشهر المطلوب للتدريب": "Requested training month",
   "تجريبي · لا تحوّل عليه": "Test · do not send"
 };
