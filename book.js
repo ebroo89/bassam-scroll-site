@@ -1,10 +1,12 @@
-/* Consultation booking: the visitor picks a slot of the consultation calendar and leaves contact details. The booking is
-   held in GoHighLevel as "Consultation Booked"; the page then points to WhatsApp so the team can confirm the details. */
+/* Consultation booking: the visitor picks a slot of the consultation calendar, leaves contact details, and goes on
+   to pay.html, which tells them to contact us on WhatsApp for the payment (nothing is paid on the site).
+   The booking is held in GoHighLevel as "Consultation Booked" until the team confirms it. */
 (function (root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
   if (root && root.document) api.mount(root);
 })(typeof window === "undefined" ? null : window, function () {
+  const STORE_KEY = "mb-consult-booking";
   const TZ = "Asia/Dubai";
   const DEMO_TIMES = ["09:00", "10:30", "12:00", "13:30", "15:00", "16:30"]; // 90 min each, inside 09:00–19:00
 
@@ -61,12 +63,10 @@
     return days.slice(0, Math.min(count, 10));
   }
 
-  // The WhatsApp number of the support team (supportWhatsapp, else whatsapp), digits only; "" when none is valid.
-  const whatsappDigits = (config = {}) => [config.supportWhatsapp, config.whatsapp]
-    .map((value) => normalizePhone(value).replace(/^\+/, "")).find((value) => /^[1-9]\d{7,14}$/.test(value)) || "";
-  const whatsappDisplay = (digits) => /^971\d{9}$/.test(digits)
-    ? `+971 ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8)}` : `+${digits}`;
-  const whatsappLink = (digits, message) => `https://wa.me/${digits}?text=${encodeURIComponent(message).replace(/%20/g, "+")}`;
+  const readBooking = (storage) => {
+    try { return JSON.parse(storage.getItem(STORE_KEY) || "null"); } catch { return null; }
+  };
+  const validBooking = (booking) => !!booking && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(text(booking.slot)) && Date.parse(booking.slot) > Date.now();
 
   function mount(window) {
     const document = window.document;
@@ -81,6 +81,7 @@
 
     const mode = bookMode(C, window.location);
     const open = !visibility || visibility.isProgramVisible("consult");
+    const amount = Number(String((C.prices || {}).consult || "").replace(/[^\d.]/g, ""));
     $("[data-book-unavailable]").hidden = open;
     $("[data-book-flow]").hidden = !open;
     $("[data-book-demo]").hidden = !mode.demo;
@@ -90,6 +91,7 @@
       $("[data-book-unavailable]").hidden = false;
       return;
     }
+    $$("[data-book-amount]").forEach((el) => { el.textContent = amount ? `$${amount.toLocaleString("en-US")}` : ""; });
     $("[data-sum-img]").style.backgroundImage = "url(assets/img/consult-review.jpg)";
 
     const form = $("#bookForm"), msg = $(".form-msg", form), submit = $("[data-submit]", form);
@@ -168,29 +170,6 @@
 
     document.addEventListener("site:languagechange", render);
 
-    // After the booking: the held time, and a WhatsApp button so the team can confirm quickly.
-    const doneBox = $("[data-book-done]");
-    const showDone = (booking) => {
-      $("[data-book-done-time]").textContent = `${fmt(booking.slot, { weekday: "long", day: "numeric", month: "long" })} · ${booking.time}`;
-      $("[data-book-done-demo]").hidden = !booking.demo;
-      const digits = whatsappDigits(C);
-      const contact = $("[data-book-done-contact]");
-      if (digits && contact) {
-        const when = `${booking.date} ${booking.time}`;
-        const link = $("[data-book-done-whatsapp]", contact);
-        link.href = whatsappLink(digits, lang() === "en"
-          ? `Hello, I booked a consultation on ${when} through the website.`
-          : `مرحبًا، حجزت موعد استشارة بتاريخ ${when} عبر الموقع.`);
-        link.target = "_blank";
-        $("[data-book-done-whatsapp-number]", contact).textContent = whatsappDisplay(digits);
-        contact.hidden = false;
-      }
-      form.hidden = true;
-      doneBox.hidden = false;
-      $$("[data-book-step]").forEach((li) => { li.classList.remove("on"); li.classList.add("done"); li.removeAttribute("aria-current"); });
-      $("[data-book-done-title]").focus();
-    };
-
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (sending) return;
@@ -230,7 +209,11 @@
           }
           if (!response.ok || result.ok !== true) throw new Error("not_saved");
         }
-        showDone(booking);
+        try { window.sessionStorage.setItem(STORE_KEY, JSON.stringify(booking)); } catch { /* the pay page asks again */ }
+        const next = new URL("pay.html", window.location.href);
+        next.searchParams.set("offer", "consult");
+        next.searchParams.set("lang", lang());
+        window.location.assign(next.href);
       } catch {
         msg.textContent = "تعذّر تثبيت الموعد. بياناتك باقية في النموذج، ويمكنك المحاولة مرة أخرى.";
       } finally {
@@ -242,5 +225,5 @@
     loadSlots();
   }
 
-  return { bookMode, bookErrors, demoDays, slotsUrl, whatsappDigits, whatsappDisplay, whatsappLink, mount };
+  return { STORE_KEY, bookMode, bookErrors, demoDays, slotsUrl, readBooking, validBooking, mount };
 });

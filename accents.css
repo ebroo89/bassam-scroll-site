@@ -1,4 +1,4 @@
-/* Accent layer on the dark theme. Reading text stays on black; everything you can act on
+/* Accent layer on the dark theme. Reading text stays on black; everything you can act on or pay for
    (tabs, offers, prices, choices, form fields, FAQ rows) sits on a lifted surface, and the offer itself
    carries a translucent tint of the brand red. Loaded after the page styles on every public page. */
 :root {
@@ -29,6 +29,8 @@
 
 /* Price + action block on service panels and the course page */
 #programs .service-panel .prog-foot, .course-catalog .prog-foot { max-width:none; padding:20px 22px; background:var(--tint); border:1px solid var(--red-line); }
+.prog-foot:has(.pay-button) { flex-wrap:wrap; }
+.prog-foot .pay-button { flex:1 0 100%; width:100%; margin:4px 0 0; }
 /* Button labels must not mirror in English: style.css flips every span inside .prog-cta (to turn the ← arrows). */
 .prog-cta > .cta-label, .prog-cta:hover > .cta-label, html[lang="en"] .prog-cta > .cta-label { transform:none; }
 
@@ -38,6 +40,8 @@
 .course-enroll:lang(en) h2 { font-family:"Jost",sans-serif; font-weight:500; }
 .course-enroll > p { margin-top:10px; color:var(--ink2); line-height:1.9; max-width:62ch; }
 .course-page .course-enroll .prog-foot { margin-top:22px; padding:0; background:none; border:0; }
+/* Consultation: booking and paying are one action */
+.prog-foot .pay-button-main { flex:none; width:auto; margin:0; margin-inline-start:auto; }
 .service-fit { padding:16px 18px; background:var(--surface); border:1px solid var(--line); }
 .service-fit + .service-fit { margin-top:0; }
 .private-schedule { padding:18px; background:var(--surface); border:1px solid var(--line); }
@@ -64,15 +68,19 @@
 .faq-item[open] summary { color:#fff; }
 .faq-answer { padding-inline:18px; }
 
-/* Application and booking pages */
+/* Application and payment pages */
 .pick span { background:var(--surface); }
 .pick input:checked + span { box-shadow:inset 0 0 0 1px var(--red); }
 .f input:not([type="checkbox"]):not([type="radio"]), .f textarea { padding:12px 14px; background:var(--surface); border:1px solid var(--line); }
 .f select { padding-top:12px; padding-bottom:12px; padding-inline-start:14px; background-color:var(--surface); border:1px solid var(--line); }
 .f input:focus, .f select:focus, .f textarea:focus { border-color:var(--red-line); background-color:var(--surface-2); }
 .ap-sum { padding:22px; background:var(--surface); border:1px solid var(--line); border-top-color:var(--red-line); }
+.pay-facts div { padding:16px 18px; background:var(--tint); border:1px solid var(--red-line); }
+.pay-wallet { background:linear-gradient(160deg, var(--tint-2), transparent 70%), var(--surface); border-color:var(--red-line); }
 
 @media (max-width:600px) {
+  #programs .service-panel .prog-foot .pay-button { flex:none; }
+  .prog-foot .pay-button-main { width:100%; }
 }
 @media (max-width:760px) {
   .program-jump button { padding:9px 14px; }

@@ -109,13 +109,11 @@
     const selection = $("[data-private-selection]");
     if (selection) selection.hidden = !selected;
     fill("[data-private-selected-month]", selected ? privateMonthLabel(selected) : "");
-    const link = $("[data-private-apply]");
-    if (link) {
-      const url = new URL("apply.html", location.href);
-      url.searchParams.set("lang", document.documentElement?.lang || "ar");
-      if (selected) url.searchParams.set("month", selected.id);
-      url.hash = "private";
-      link.href = url.href;
+    // The chosen month rides along to the enrolment page (pay.js adds it to the link).
+    const payLink = $("[data-private-pay]");
+    if (payLink) {
+      if (selected) payLink.dataset.payMonth = selected.id; else delete payLink.dataset.payMonth;
+      if (typeof window !== "undefined") window.MB_PAY_LINKS?.();
     }
   };
   if (privateCalendar) {
@@ -349,17 +347,8 @@
       item.textContent = topic;
       return item;
     }));
-    // The top button leads to the enrolment box at the end of the page, after the curriculum.
+    // Enrolment is the box at the end of the page, after the curriculum.
     $("[data-course-apply]", page).href = "#course-enroll";
-    // The registration form for this course, from the box at the end of the page.
-    const formLink = $("[data-course-form]", page);
-    if (formLink) {
-      const apply = new URL("apply.html", location.href);
-      apply.searchParams.set("course", course.id);
-      apply.searchParams.set("lang", document.documentElement.lang || "ar");
-      apply.hash = "group";
-      formLink.href = apply.href;
-    }
     $("[data-course-detail]", page).hidden = false;
     if (typeof window !== "undefined") window.MB_CURRICULUM?.show(course.id);
   };
@@ -460,6 +449,7 @@
       $$("[data-course-type]", catalogue).forEach((button) => {
         button.setAttribute("aria-pressed", String(button.dataset.courseType === courseType));
       });
+      if (typeof window !== "undefined") window.MB_PAY_LINKS?.();
     };
 
     catalogue.addEventListener("click", (event) => {

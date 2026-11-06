@@ -239,12 +239,12 @@ window.MB = {
   // Empty means a clearly labelled local demonstration with no delivery.
   webhookUrl: "",
 
-  // Programmes offered on the application form. Consultations are booked on book.html instead;
-  // older links with #consult still open their form.
-  applicationPrograms: ["group", "private", "indicator"],
+  // Programmes offered on the application form. The course and private training enrol on pay.html (details, then
+  // payment arranged on WhatsApp; nothing is paid on the site), consultations on book.html. Older #group/#consult links still open.
+  applicationPrograms: ["indicator"],
 
-  // Consultation booking (book.html): the visitor picks a slot of the consultation calendar and leaves their details;
-  // the page then points them to WhatsApp to confirm.
+  // Consultation booking (book.html): the visitor picks a slot of the consultation calendar and leaves their details,
+  // then pay.html tells them to contact us on WhatsApp for the payment.
   // Live only when `endpoint` is set to the relay (api/book.php) on https; until then it is a labelled demo with
   // generated slots that sends nothing. Remove test:true before launch.
   booking: {

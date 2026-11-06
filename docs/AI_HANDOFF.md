@@ -29,7 +29,7 @@ Public pages load `config.js` -> `site-visibility.js` -> `visibility.js` -> `app
 
 ## Payment
 
-Nothing is paid on the site. Crypto payment (USDT TRC20) was built and then removed on 2026-11-07 because it is not allowed for this business; do not reintroduce it. Every offer goes through a form or the consultation booking page, and after sending, the visitor sees a WhatsApp button (`config.js` → `whatsapp`, `supportWhatsapp` overrides it) so the team can follow up. The old pieces are in git history (branch `feature/crypto-payment`) and archived outside the repo.
+Nothing is paid on the site. Crypto payment (USDT TRC20) was built and then removed on 2026-11-07 because it is not allowed for this business; do not reintroduce it (a test in `tests/pay.test.cjs` guards against wallet, USDT and receipt upload). `pay.html`/`pay.js` is now the enrolment step: details (posted like the application form to `webhookUrl`), then «للدفع، تواصل معنا على واتساب» with the WhatsApp button (`config.js` → `whatsapp`, `supportWhatsapp` overrides). The course, private training (with `month`) and consultation (after `book.html`, no form) reach it through `[data-pay-link]` buttons; indicators use `apply.html`.
 
 ## Editing content and visibility
 
@@ -74,4 +74,4 @@ The source repository includes tests, documentation, dashboard, server, exporter
 
 ## Consultation booking
 
-`book.html` / `book.js` / `book.css` let a visitor pick a consultation slot (Dubai time, Monday–Friday 09:00–19:00, 90 minutes) and leave their details. The booking is held and the page then shows a WhatsApp button so the team can confirm. `config.js` → `booking` holds `endpoint` (relay `api/book.php`), `test` (demo with generated slots, nothing sent), `days`, `timezone`, `durationMin`. Update `translations.js` for every Arabic string on `book.html`/`book.js` (a test enforces it). The server side (n8n workflows, GHL calendar/opportunity/custom fields) is documented in `محمد بسام/n8n/SETUP-BOOKING.md`.
+`book.html` / `book.js` / `book.css` let a visitor pick a consultation slot (Dubai time, Monday–Friday 09:00–19:00, 90 minutes) and leave their details. The booking is held and the visitor goes on to `pay.html?offer=consult`, which shows the time and the WhatsApp payment step. `config.js` → `booking` holds `endpoint` (relay `api/book.php`), `test` (demo with generated slots, nothing sent), `days`, `timezone`, `durationMin`. Update `translations.js` for every Arabic string on `book.html`/`book.js` (a test enforces it). The server side (n8n workflows, GHL calendar/opportunity/custom fields) is documented in `محمد بسام/n8n/SETUP-BOOKING.md`.
