@@ -36,6 +36,9 @@
 #programs .service-panel .prog-foot, .course-catalog .prog-foot { max-width:none; padding:20px 22px; background:var(--tint); border:1px solid var(--red-line); }
 .prog-foot:has(.pay-button) { flex-wrap:wrap; }
 .prog-foot .pay-button { flex:1 0 100%; width:100%; margin:4px 0 0; }
+/* Button labels must not mirror in English: style.css flips every span inside .prog-cta (to turn the ← arrows). */
+.prog-cta > .cta-label, .prog-cta:hover > .cta-label, html[lang="en"] .prog-cta > .cta-label { transform:none; }
+
 /* Course page: the single enrolment box, after the curriculum */
 .course-enroll { margin-top:72px; padding:32px; background:linear-gradient(160deg, var(--tint-2), var(--tint) 45%, transparent 85%), var(--surface); border:1px solid var(--red-line); box-shadow:var(--lift); scroll-margin-top:100px; }
 .course-enroll h2 { font:600 28px/1.4 "Cairo",sans-serif; color:var(--ink); margin:0; }
