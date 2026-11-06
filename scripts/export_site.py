@@ -16,7 +16,7 @@ PUBLIC_FILES = (
     "learning-guide.js", "learning-guide.css", "site-visibility.js", "visibility.js",
     "market-section.js", "market-section.css", "market-surface-motion.js",
     "market-strike-motion.js", "market-footprint-motion.js", "footprint-visual.js",
-    "pay.js", "pay.css",
+    "pay.js", "pay.css", "accents.css",
 )
 ASSET_TYPES = {".jpg", ".jpeg", ".png", ".webp", ".svg", ".ico", ".woff", ".woff2"}
 LOCAL_RESOURCE = re.compile(r'((?:src|href)=")([^"?]+\.(?:js|css))(?:\?[^"#]*)?(")')

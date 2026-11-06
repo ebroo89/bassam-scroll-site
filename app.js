@@ -441,7 +441,6 @@
         const coin = document.createElement("span");
         coin.className = "pay-coin";
         coin.setAttribute("aria-hidden", "true");
-        coin.textContent = "₮";
         const payLabel = document.createElement("span");
         payLabel.textContent = "ادفع بالكريبتو (USDT)";
         payment.append(coin, payLabel);
